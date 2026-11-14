@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Flagrant : un jeu d'entraînement aux drapeaux du monde. Un drapeau, un chrono, tu tapes le nom.">
+<title>Flagrant</title>
+<link rel="canonical" href="https://flagrant-game.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flagrant">
+<meta property="og:description" content="Un drapeau, quelques secondes, son nom. Entraîne-toi à reconnaître les drapeaux du monde.">
+<meta property="og:url" content="https://flagrant-game.github.io/">
+<meta property="og:image" content="https://flagrant-game.github.io/og-image.png">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#E6E8EA">
+<style>
+@font-face{font-family:"Archivo";src:url(fonts/archivo-latin.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Archivo";src:url(fonts/archivo-latin-ext.woff2) format("woff2");font-weight:100 900;font-stretch:62% 125%;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+
+:root{
+  --ground:#E6E8EA;
+  --ink:#17202E;
+  --ink-2:#56606E;
+  --line:#C3C8CE;
+  --pole:#8E959E;
+  --signal:#F2B807;
+  --wrong:#C3261F;
+  --right:#16784A;
+  --field:#F4F5F6;
+}
+*{box-sizing:border-box}
+html{background:var(--ground);color:var(--ink);font-family:"Archivo",system-ui,sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+button{font:inherit;color:inherit}
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{width:100%;max-width:920px;margin:0 auto;padding:0 24px}
+
+/* En-tête */
+header{padding:22px 0 10px}
+header .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.mark{font-weight:900;font-stretch:62%;font-size:34px;letter-spacing:.01em;text-decoration:none;line-height:1;text-transform:uppercase}
+.mark:hover{text-decoration:none}
+nav{display:flex;gap:22px;font-size:16px}
+nav a{text-decoration:none;color:var(--ink-2)}
+nav a:hover,nav a[aria-current]{color:var(--ink);text-decoration:underline}
+main{flex:1;padding:28px 0 56px}
+
+/* Accueil + réglages */
+.home{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:56px;align-items:start}
+.home h1{font-weight:800;font-stretch:75%;font-size:46px;line-height:1.02;margin:6px 0 16px;letter-spacing:-.005em}
+.home .lead{color:var(--ink-2);margin:0 0 26px;max-width:34ch}
+.go{display:inline-block;background:var(--ink);color:#fff;border:0;border-radius:4px;padding:15px 26px;font-size:18px;font-weight:700;cursor:pointer}
+.go:hover{background:#2A3547}
+.go:disabled{background:var(--pole);cursor:not-allowed}
+.status{margin:14px 0 0;color:var(--ink-2);font-size:15px;font-variant-numeric:tabular-nums}
+.settings fieldset{border:0;margin:0 0 26px;padding:0}
+.settings legend{font-weight:700;font-size:15px;padding:0;margin-bottom:8px;display:flex;width:100%;justify-content:space-between;align-items:baseline}
+.settings legend button{background:none;border:0;padding:0;font-size:14px;color:var(--ink-2);font-weight:400;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.checks{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;border-top:1px solid var(--line)}
+.checks.one{grid-template-columns:1fr}
+.check{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer;font-size:16px}
+.check input{appearance:none;-webkit-appearance:none;margin:0;width:18px;height:18px;border:2px solid var(--ink);border-radius:2px;flex:none;display:grid;place-content:center;cursor:pointer;background:transparent}
+.check input:checked{background:var(--ink)}
+.check input:checked::after{content:"";width:9px;height:5px;border:solid #fff;border-width:0 0 2px 2px;transform:translateY(-1px) rotate(-45deg)}
+.check .n{margin-left:auto;color:var(--ink-2);font-variant-numeric:tabular-nums;font-size:14px}
+.seg{display:inline-flex;border:2px solid var(--ink);border-radius:4px;overflow:hidden;flex-wrap:wrap}
+.seg button{background:transparent;border:0;border-right:1px solid var(--line);padding:8px 14px;cursor:pointer;font-size:15px;font-variant-numeric:tabular-nums}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button:not([aria-pressed="true"]):hover{background:#D7DADE}
+
+/* Partie */
+.bar{display:flex;justify-content:space-between;align-items:baseline;font-variant-numeric:tabular-nums;color:var(--ink-2);font-size:16px;margin-bottom:8px}
+.bar b{color:var(--ink);font-weight:700}
+.bar .r{display:flex;gap:22px;align-items:baseline}
+.bar button{background:none;border:0;padding:0;color:var(--ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:15px}
+.stage{display:flex;justify-content:center;padding:26px 0 8px;min-height:var(--stage-h,330px)}
+.mast{position:relative}
+.pole{position:absolute;top:0;right:calc(100% + 2px);width:10px}
+.pole::before{content:"";position:absolute;top:-14px;left:-3px;width:16px;height:16px;border-radius:50%;background:var(--pole)}
+.pole .shaft{position:absolute;inset:0;background:var(--pole);border-radius:0 0 2px 2px;overflow:hidden}
+.pole .fill{position:absolute;left:0;right:0;bottom:0;height:100%;background:var(--signal);transform-origin:bottom}
+.pole.low .fill{background:var(--wrong)}
+.flag{display:block;margin-top:4px;filter:drop-shadow(0 0 .6px rgba(23,32,46,.55)) drop-shadow(0 3px 6px rgba(23,32,46,.12))}
+.answer{max-width:540px;margin:22px auto 0;text-align:center}
+.answer input{width:100%;background:transparent;border:0;border-bottom:3px solid var(--ink);border-radius:0;padding:8px 4px 10px;font:inherit;font-size:30px;font-weight:600;font-stretch:87%;text-align:center;color:var(--ink);outline:none}
+.answer input::placeholder{color:#9BA2AB;font-weight:400}
+.answer input.good{border-color:var(--right);color:var(--right)}
+.answer input:disabled{opacity:1}
+.answer .fb{min-height:30px;margin-top:12px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.fb.good{color:var(--right)} .fb.bad{color:var(--wrong)}
+.answer .keys{color:var(--ink-2);font-size:14px;margin-top:6px}
+kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:0 5px;background:var(--field)}
+.shake{animation:shake .28s}
+@keyframes shake{25%{transform:translateX(-7px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+
+/* Résultats */
+.score{font-weight:900;font-stretch:62%;font-size:120px;line-height:.9;margin:0;font-variant-numeric:tabular-nums}
+.score small{font-size:36px;font-weight:700;margin-left:6px}
+.summary{font-size:20px;margin:14px 0 4px}
+.record{color:var(--ink-2);margin:0 0 26px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.ghost{background:transparent;border:2px solid var(--ink);border-radius:4px;padding:13px 20px;font-size:17px;font-weight:600;cursor:pointer}
+.ghost:hover{background:#D7DADE}
+.ghost:disabled{opacity:.4;cursor:not-allowed}
+.missed h2{font-size:20px;margin:44px 0 6px}
+.missed p{color:var(--ink-2);margin:0 0 16px}
+.missgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 20px;list-style:none;padding:0;margin:0}
+.missgrid li{font-size:15px;line-height:1.3}
+.missgrid .thumb{height:64px;display:flex;align-items:flex-end;margin-bottom:8px}
+.missgrid img{max-height:64px;max-width:100%;filter:drop-shadow(0 0 .6px rgba(23,32,46,.55))}
+
+/* Pages de texte */
+.doc{max-width:66ch}
+.doc h1{font-weight:800;font-stretch:75%;font-size:42px;line-height:1.05;margin:6px 0 8px}
+.doc .date{color:var(--ink-2);margin:0 0 30px}
+.doc h2{font-size:20px;margin:34px 0 8px}
+.doc p,.doc li{margin:0 0 12px}
+.doc ul{padding-left:20px}
+.doc dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:6px 20px}
+.doc dt{font-weight:700}
+.doc dd{margin:0}
+.done{color:var(--right);font-weight:600;margin-left:12px}
+
+footer{border-top:1px solid var(--line);padding:20px 0 30px;font-size:14px;color:var(--ink-2)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between}
+footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
+
+@media (max-width:760px){
+  .home{grid-template-columns:1fr;gap:34px}
+  .home h1{font-size:38px}
+  .checks{grid-template-columns:1fr}
+  nav{gap:16px}
+  .score{font-size:92px}
+  .answer input{font-size:24px}
+}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="mark" href="#" id="home-link">Flagrant</a>
+    <nav aria-label="Principale">
+      <a href="#" data-route="">Jouer</a>
+      <a href="#regles" data-route="regles">Règles</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Accueil -->
+  <section id="v-home" class="home">
+    <div>
+      <h1>Un drapeau, quelques secondes, son nom.</h1>
+      <p class="lead">Entraîne-toi à reconnaître les drapeaux du monde. Tape le nom du pays : la réponse est validée dès qu'elle est juste.</p>
+      <button class="go" id="start">Lancer la partie</button>
+      <p class="status" id="status"></p>
+    </div>
+    <form class="settings" onsubmit="return false">
+      <fieldset>
+        <legend>Continents <button type="button" id="all-cont">Tout cocher</button></legend>
+        <div class="checks" id="f-cont"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Drapeaux inclus</legend>
+        <div class="checks one" id="f-cat"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Temps par drapeau</legend>
+        <div class="seg" id="f-time" role="group" aria-label="Temps par drapeau"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Longueur de la partie</legend>
+        <div class="seg" id="f-len" role="group" aria-label="Longueur de la partie"></div>
+      </fieldset>
+    </form>
+  </section>
+
+  <!-- Partie -->
+  <section id="v-game" class="hidden" aria-label="Partie en cours">
+    <div class="bar">
+      <span id="g-prog"></span>
+      <span class="r"><span>Série <b id="g-streak">0</b></span><span><b id="g-score">0</b> pts</span><button type="button" id="g-stop">Arrêter</button></span>
+    </div>
+    <div class="stage">
+      <div class="mast">
+        <div class="pole" id="pole" aria-hidden="true"><div class="shaft"><div class="fill" id="fill"></div></div></div>
+        <img class="flag" id="flag" alt="Drapeau à identifier">
+      </div>
+    </div>
+    <div class="answer">
+      <label for="ans" class="sr">Nom du pays</label>
+      <input id="ans" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Nom du pays" enterkeyhint="done">
+      <div class="fb" id="fb" aria-live="polite"></div>
+      <div class="keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> passe le drapeau.</div>
+    </div>
+  </section>
+
+  <!-- Résultats -->
+  <section id="v-end" class="hidden">
+    <p class="score" id="e-score"></p>
+    <p class="summary" id="e-sum"></p>
+    <p class="record" id="e-rec"></p>
+    <div class="actions">
+      <button class="go" id="again">Rejouer</button>
+      <button class="ghost" id="retry"></button>
+      <button class="ghost" id="back">Changer les réglages</button>
+    </div>
+    <div class="missed" id="e-missed">
+      <h2>À revoir</h2>
+      <p>Les drapeaux que tu n'as pas trouvés pendant cette partie.</p>
+      <ul class="missgrid" id="e-list"></ul>
+    </div>
+  </section>
+
+  <!-- Règles -->
+  <article id="v-regles" class="doc hidden">
+    <h1>Règles du jeu</h1>
+    <p class="date">Comment se joue une partie de Flagrant.</p>
+    <h2>Le principe</h2>
+    <p>Un drapeau apparaît en haut d'un mât. Le mât sert de chrono : la bande jaune descend à mesure que le temps passe et devient rouge dans le dernier quart. Tape le nom du pays ou du territoire avant qu'elle n'atteigne le bas.</p>
+    <h2>Répondre</h2>
+    <ul>
+      <li>La réponse est validée automatiquement dès que tu as tapé un nom correct, sans appuyer sur Entrée.</li>
+      <li>Les accents, les majuscules, les tirets et les articles ne comptent pas : « cote d'ivoire », « Côte-d'Ivoire » et « la côte d'ivoire » sont acceptés.</li>
+      <li>Les noms anglais et les noms courants marchent aussi : « USA », « RDC », « Birmanie », « Hollande », « Swaziland »…</li>
+      <li>Si tu fais une faute de frappe, appuie sur Entrée : une lettre de différence est tolérée (deux pour les noms longs). La tolérance ne s'applique jamais si ce que tu as tapé est le nom exact d'un autre pays : « Niger » ne vaut pas pour le Nigeria.</li>
+      <li>Échap passe le drapeau, qui compte alors comme raté.</li>
+    </ul>
+    <h2>Les points</h2>
+    <p>Chaque bonne réponse rapporte 10 points, plus jusqu'à 10 points de rapidité selon le temps qu'il restait. Ta série compte les bonnes réponses d'affilée et repart à zéro au premier raté. Le record est enregistré pour chaque combinaison de réglages.</p>
+    <h2>Les réglages</h2>
+    <p>Sur la page d'accueil, choisis les continents, les types de drapeaux, le temps par drapeau (de 5 à 30 secondes) et la longueur de la partie : 10, 20 ou 50 drapeaux, toute la sélection, ou une partie sans fin que tu arrêtes quand tu veux. Tes réglages sont gardés pour ta prochaine visite.</p>
+    <h2>Les drapeaux</h2>
+    <ul>
+      <li><strong>Pays membres de l'ONU et Vatican</strong> : les 193 États membres de l'ONU et le Vatican.</li>
+      <li><strong>États à reconnaissance limitée</strong> : Kosovo, Taïwan, Palestine, Sahara occidental, Abkhazie, Ossétie du Sud, Transnistrie, Somaliland et Chypre du Nord.</li>
+      <li><strong>Pays disparus</strong> : URSS, Yougoslavie, RDA, Zaïre, Yémen du Sud, Antilles néerlandaises et Artsakh.</li>
+      <li><strong>Territoires, régions et organisations</strong> : Groenland, Hong Kong, Porto Rico, Angleterre, Écosse, Union européenne, ONU et d'autres. Les territoires qui utilisent le même drapeau que leur pays, comme la Réunion, n'apparaissent pas.</li>
+    </ul>
+    <p>Quelques drapeaux sont presque identiques, comme le Tchad et la Roumanie ou Monaco et l'Indonésie. C'est voulu : ils font partie de l'entraînement.</p>
+  </article>
+
+  <!-- Conditions d'utilisation -->
+  <article id="v-conditions" class="doc hidden">
+    <h1>Conditions d'utilisation</h1>
+    <p class="date">En vigueur depuis le 13 novembre 2026.</p>
+    <h2>1. Objet</h2>
+    <p>Ces conditions encadrent l'utilisation de Flagrant, un jeu gratuit d'entraînement à la reconnaissance des drapeaux. Utiliser le site vaut acceptation de ces conditions.</p>
+    <h2>2. Accès</h2>
+    <p>Le site est gratuit et ne demande ni compte ni inscription. Il est fourni tel quel : l'éditeur peut le modifier, le suspendre ou l'arrêter à tout moment, sans préavis ni indemnité.</p>
+    <h2>3. Utilisation</h2>
+    <p>Tu peux utiliser Flagrant pour ton usage personnel, seul ou en classe. Tu t'engages à ne pas perturber son fonctionnement ni tenter d'accéder à ce qui n'est pas prévu pour toi.</p>
+    <h2>4. Contenus et exactitude</h2>
+    <p>Les drapeaux et les noms sont fournis à titre éducatif. Malgré le soin apporté, une erreur ou un drapeau dépassé reste possible. La présence d'un drapeau, son classement ou le nom choisi pour un territoire ne constituent pas une prise de position sur son statut politique ou international.</p>
+    <h2>5. Propriété intellectuelle</h2>
+    <p>Le nom Flagrant, la mise en page et le code du site appartiennent à son éditeur. Les images de drapeaux et la police de caractères restent soumises à leurs propres licences, détaillées dans les <a href="#mentions">mentions légales et crédits</a>.</p>
+    <h2>6. Données</h2>
+    <p>Flagrant ne collecte aucune donnée personnelle. Tes réglages et records restent dans ton navigateur. Le détail est dans la <a href="#confidentialite">politique de confidentialité</a>.</p>
+    <h2>7. Responsabilité</h2>
+    <p>L'éditeur ne peut être tenu responsable d'une indisponibilité du site, d'une perte de tes records locaux ou d'une erreur dans les contenus.</p>
+    <h2>8. Modification des conditions</h2>
+    <p>Ces conditions peuvent évoluer. La date en haut de la page indique la dernière mise à jour.</p>
+    <h2>9. Droit applicable</h2>
+    <p>Ces conditions sont soumises au droit français.</p>
+  </article>
+
+  <!-- Confidentialité -->
+  <article id="v-confidentialite" class="doc hidden">
+    <h1>Politique de confidentialité</h1>
+    <p class="date">En vigueur depuis le 13 novembre 2026.</p>
+    <h2>Ce que Flagrant collecte</h2>
+    <p>Rien. Il n'y a ni compte, ni formulaire, ni cookie, ni outil de mesure d'audience, ni publicité. Le site ne fait appel à aucun service extérieur : les drapeaux et la police sont servis par le site lui-même.</p>
+    <h2>Ce qui reste sur ton appareil</h2>
+    <p>Pour te faire gagner du temps, Flagrant garde dans ton navigateur (stockage local) :</p>
+    <ul>
+      <li>tes réglages : continents, types de drapeaux, temps et longueur de partie ;</li>
+      <li>tes records, un par combinaison de réglages.</li>
+    </ul>
+    <p>Ces informations ne quittent jamais ton appareil et personne d'autre n'y a accès. Elles disparaissent si tu vides les données de ton navigateur, ou avec ce bouton :</p>
+    <p><button class="ghost" id="wipe" type="button">Effacer mes données Flagrant</button><span class="done hidden" id="wiped">Réglages et records effacés.</span></p>
+    <h2>Hébergement</h2>
+    <p>Le site est hébergé par GitHub Pages (GitHub, Inc.). Comme l'indique GitHub, l'adresse IP de chaque visiteur est enregistrée et conservée à des fins de sécurité. Ce traitement relève de la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">déclaration de confidentialité de GitHub</a>.</p>
+    <h2>Tes droits</h2>
+    <p>Comme Flagrant ne détient aucune donnée personnelle te concernant, il n'y a rien à consulter, corriger ou supprimer de son côté. Pour une question liée à l'hébergement, tu peux contacter GitHub ou la CNIL (cnil.fr).</p>
+  </article>
+
+  <!-- Mentions légales -->
+  <article id="v-mentions" class="doc hidden">
+    <h1>Mentions légales et crédits</h1>
+    <p class="date">Mis à jour le 14 novembre 2026.</p>
+    <h2>Éditeur</h2>
+    <p>Flagrant est un site personnel, non professionnel et sans but lucratif, édité par un particulier. Conformément à l'article 1-1, II de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, dans sa rédaction issue de la loi du 21 mai 2024, l'éditeur a choisi de ne pas rendre publiques ses coordonnées, qui sont connues de l'hébergeur.</p>
+    <h2>Hébergeur</h2>
+    <dl>
+      <dt>Société</dt><dd>GitHub, Inc. (service GitHub Pages)</dd>
+      <dt>Adresse</dt><dd>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis</dd>
+      <dt>Téléphone</dt><dd>+1 877 448 4820</dd>
+      <dt>Site</dt><dd><a href="https://pages.github.com">pages.github.com</a></dd>
+    </dl>
+    <h2>Signaler une erreur</h2>
+    <p>Un drapeau faux ou un nom refusé alors qu'il devrait être accepté ? Signale-le sur <a href="https://github.com/flagrant-game/flagrant-game.github.io/issues">la page du projet sur GitHub</a>.</p>
+    <h2>Drapeaux</h2>
+    <ul>
+      <li>Drapeaux des pays et territoires : collection <a href="https://github.com/hampusborgos/country-flags">country-flags</a> de Hampus Borgos, placée dans le domaine public.</li>
+      <li>Drapeaux des États à reconnaissance limitée, des pays disparus, de l'ONU et de Sainte-Hélène : collection <a href="https://github.com/niemela/flags">flags</a> de Fredrik Niemelä, d'après des fichiers de Wikimedia Commons, dans le domaine public ou sous licence CC BY-SA selon le fichier. La source de chaque drapeau est indiquée dans cette collection.</li>
+    </ul>
+    <h2>Noms des pays</h2>
+    <p>Les noms français et anglais proviennent des données Unicode CLDR fournies par ton navigateur, complétées à la main par des noms courants.</p>
+    <h2>Police de caractères</h2>
+    <p>Archivo, dessinée par Omnibus-Type, sous licence SIL Open Font License 1.1.</p>
+    <h2>Inspiration</h2>
+    <p>Le principe de Flagrant s'inspire de PopSauce, un jeu de JKLM.fun. Flagrant est un projet indépendant, sans lien avec JKLM.fun ni avec ses auteurs.</p>
+  </article>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Flagrant, 2026</span>
+    <nav aria-label="Informations">
+      <a href="#regles">Règles</a>
+      <a href="#conditions">Conditions d'utilisation</a>
+      <a href="#confidentialite">Confidentialité</a>
+      <a href="#mentions">Mentions légales et crédits</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const FLAGS = [{"c":"rda","k":"disparu","r":1.6667,"o":"eu","n":["RDA (Allemagne de l'Est)"],"a":["RDA","Allemagne de l'Est","East Germany","GDR","DDR"]},{"c":"abkhazie","k":"limite","r":2.0,"o":"as","n":["Abkhazie"],"a":["Abkhazia","Abkhazie"]},{"c":"ossetie","k":"limite","r":2.0,"o":"as","n":["Ossétie du Sud"],"a":["South Ossetia","Ossetie","Ossétie du Sud-Alanie"]},{"c":"sh","k":"territoire","r":2.0},{"c":"urss","k":"disparu","r":2.0,"o":"eu","n":["URSS"],"a":["Union soviétique","USSR","Soviet Union","CCCP","Union des républiques socialistes soviétiques"]},{"c":"un","k":"territoire","r":1.5,"o":"ot","n":["Nations unies"],"a":["ONU","United Nations","Organisation des Nations unies"]},{"c":"yemen-sud","k":"disparu","r":1.5,"o":"as","n":["Yémen du Sud"],"a":["South Yemen","Yemen du Sud"]},{"c":"yougoslavie","k":"disparu","r":2.0,"o":"eu","n":["Yougoslavie"],"a":["Yugoslavia","RFSY","SFRY"]},{"c":"zaire","k":"disparu","r":1.5,"o":"af","n":["Zaïre"],"a":["Zaire"]},{"c":"ad","k":"pays","r":1.4286},{"c":"ae","k":"pays","r":2.0},{"c":"af","k":"pays","r":1.5},{"c":"ag","k":"pays","r":1.5},{"c":"ai","k":"territoire","r":2.0},{"c":"al","k":"pays","r":1.4},{"c":"am","k":"pays","r":2.0},{"c":"antilles-nl","k":"disparu","r":1.5,"o":"na","n":["Antilles néerlandaises"],"a":["Netherlands Antilles","Antilles neerlandaises"]},{"c":"ao","k":"pays","r":1.5},{"c":"aq","k":"territoire","r":1.5},{"c":"ar","k":"pays","r":1.6},{"c":"artsakh","k":"disparu","r":2.0,"o":"as","n":["Artsakh (Haut-Karabagh)"],"a":["Artsakh","Haut-Karabagh","Haut Karabakh","Nagorno-Karabakh","Karabakh"]},{"c":"as","k":"territoire","r":2.0},{"c":"at","k":"pays","r":1.5},{"c":"au","k":"pays","r":2.0},{"c":"aw","k":"territoire","r":1.5},{"c":"ax","k":"territoire","r":1.5294},{"c":"az","k":"pays","r":2.0},{"c":"ba","k":"pays","r":2.0},{"c":"bb","k":"pays","r":1.5},{"c":"bd","k":"pays","r":1.6667},{"c":"be","k":"pays","r":1.1538},{"c":"bf","k":"pays","r":1.5},{"c":"bg","k":"pays","r":1.6667},{"c":"bh","k":"pays","r":1.6667},{"c":"bi","k":"pays","r":1.6667},{"c":"bj","k":"pays","r":1.5},{"c":"bl","k":"territoire","r":1.5},{"c":"bm","k":"territoire","r":2.0},{"c":"bn","k":"pays","r":2.0},{"c":"bo","k":"pays","r":1.4666},{"c":"br","k":"pays","r":1.4286},{"c":"bs","k":"pays","r":2.0},{"c":"bt","k":"pays","r":1.5},{"c":"bw","k":"pays","r":1.5},{"c":"by","k":"pays","r":2.0},{"c":"bz","k":"pays","r":1.6667},{"c":"ca","k":"pays","r":2.0},{"c":"cc","k":"territoire","r":2.0},{"c":"cd","k":"pays","r":1.3333},{"c":"cf","k":"pays","r":1.5},{"c":"cg","k":"pays","r":1.5},{"c":"ch","k":"pays","r":1.0},{"c":"ci","k":"pays","r":1.5},{"c":"ck","k":"territoire","r":2.0},{"c":"cl","k":"pays","r":1.5},{"c":"cm","k":"pays","r":1.5},{"c":"cn","k":"pays","r":1.5},{"c":"co","k":"pays","r":1.5},{"c":"cr","k":"pays","r":1.6667},{"c":"cu","k":"pays","r":2.0},{"c":"cv","k":"pays","r":1.7},{"c":"cw","k":"territoire","r":1.5},{"c":"cx","k":"territoire","r":2.0},{"c":"cy","k":"pays","r":1.5},{"c":"cz","k":"pays","r":1.5},{"c":"de","k":"pays","r":1.6667},{"c":"dj","k":"pays","r":1.5},{"c":"dk","k":"pays","r":1.3214},{"c":"dm","k":"pays","r":2.0},{"c":"do","k":"pays","r":1.5},{"c":"dz","k":"pays","r":1.5},{"c":"ec","k":"pays","r":1.5},{"c":"ee","k":"pays","r":1.5714},{"c":"eg","k":"pays","r":1.5},{"c":"eh","k":"limite","r":2.0,"o":"af"},{"c":"er","k":"pays","r":2.0},{"c":"es","k":"pays","r":1.5},{"c":"et","k":"pays","r":2.0},{"c":"eu","k":"territoire","r":1.5,"o":"eu","n":["Union européenne"],"a":["UE","European Union"]},{"c":"fi","k":"pays","r":1.6364},{"c":"fj","k":"pays","r":2.0},{"c":"fk","k":"territoire","r":2.0},{"c":"fm","k":"pays","r":1.9},{"c":"fo","k":"territoire","r":1.375},{"c":"fr","k":"pays","r":1.5},{"c":"ga","k":"pays","r":1.3333},{"c":"gb-eng","k":"territoire","r":1.6667,"o":"eu","n":["Angleterre"],"a":["England"]},{"c":"gb-sct","k":"territoire","r":1.6667,"o":"eu","n":["Écosse"],"a":["Scotland"]},{"c":"gb-wls","k":"territoire","r":1.6667,"o":"eu","n":["Pays de Galles"],"a":["Wales"]},{"c":"gb","k":"pays","r":2.0},{"c":"gd","k":"pays","r":1.6667},{"c":"ge","k":"pays","r":1.5},{"c":"gg","k":"territoire","r":1.5},{"c":"gh","k":"pays","r":1.5},{"c":"gi","k":"territoire","r":2.0},{"c":"gl","k":"territoire","r":1.5},{"c":"gm","k":"pays","r":1.5},{"c":"gn","k":"pays","r":1.5},{"c":"gq","k":"pays","r":1.5},{"c":"gr","k":"pays","r":1.5},{"c":"gs","k":"territoire","r":2.0},{"c":"gt","k":"pays","r":1.6},{"c":"gu","k":"territoire","r":1.8636},{"c":"gw","k":"pays","r":2.0},{"c":"gy","k":"pays","r":1.6667},{"c":"hk","k":"territoire","r":1.5},{"c":"hn","k":"pays","r":2.0},{"c":"hr","k":"pays","r":2.0},{"c":"ht","k":"pays","r":1.6667},{"c":"hu","k":"pays","r":2.0},{"c":"id","k":"pays","r":1.5},{"c":"ie","k":"pays","r":2.0},{"c":"il","k":"pays","r":1.375},{"c":"im","k":"territoire","r":2.0},{"c":"in","k":"pays","r":1.5},{"c":"io","k":"territoire","r":2.0},{"c":"iq","k":"pays","r":1.5},{"c":"ir","k":"pays","r":1.75},{"c":"is","k":"pays","r":1.3889},{"c":"it","k":"pays","r":1.5},{"c":"je","k":"territoire","r":1.6667},{"c":"jm","k":"pays","r":2.0},{"c":"jo","k":"pays","r":2.0},{"c":"jp","k":"pays","r":1.5},{"c":"ke","k":"pays","r":1.5},{"c":"kg","k":"pays","r":1.6667},{"c":"kh","k":"pays","r":1.5625},{"c":"ki","k":"pays","r":2.0},{"c":"km","k":"pays","r":1.6667},{"c":"kn","k":"pays","r":1.5},{"c":"kp","k":"pays","r":2.0},{"c":"kr","k":"pays","r":1.5},{"c":"kw","k":"pays","r":2.0},{"c":"ky","k":"territoire","r":2.0},{"c":"kz","k":"pays","r":2.0},{"c":"la","k":"pays","r":1.5},{"c":"lb","k":"pays","r":1.5},{"c":"lc","k":"pays","r":2.0},{"c":"li","k":"pays","r":1.6667},{"c":"lk","k":"pays","r":2.0},{"c":"lr","k":"pays","r":1.9},{"c":"ls","k":"pays","r":1.5},{"c":"lt","k":"pays","r":1.6667},{"c":"lu","k":"pays","r":1.6667},{"c":"lv","k":"pays","r":2.0},{"c":"ly","k":"pays","r":2.0},{"c":"ma","k":"pays","r":1.5},{"c":"mc","k":"pays","r":1.25},{"c":"md","k":"pays","r":2.0},{"c":"me","k":"pays","r":2.0},{"c":"mg","k":"pays","r":1.5},{"c":"mh","k":"pays","r":1.9},{"c":"mk","k":"pays","r":2.0},{"c":"ml","k":"pays","r":1.5},{"c":"mm","k":"pays","r":1.5},{"c":"mn","k":"pays","r":2.0},{"c":"mo","k":"territoire","r":1.5},{"c":"mp","k":"territoire","r":2.0},{"c":"mr","k":"pays","r":1.5},{"c":"ms","k":"territoire","r":2.0},{"c":"mt","k":"pays","r":1.5},{"c":"mu","k":"pays","r":1.5},{"c":"mv","k":"pays","r":1.5},{"c":"mw","k":"pays","r":1.5},{"c":"mx","k":"pays","r":1.75},{"c":"my","k":"pays","r":2.0},{"c":"mz","k":"pays","r":1.5},{"c":"na","k":"pays","r":1.5},{"c":"nc","k":"territoire","r":2.0},{"c":"ne","k":"pays","r":1.1667},{"c":"nf","k":"territoire","r":2.0},{"c":"ng","k":"pays","r":2.0},{"c":"ni","k":"pays","r":1.6667},{"c":"nl","k":"pays","r":1.5},{"c":"no","k":"pays","r":1.375},{"c":"chypre-nord","k":"limite","r":1.5,"o":"eu","n":["Chypre du Nord"],"a":["Northern Cyprus","RTCN","TRNC","Republique turque de Chypre du Nord"]},{"c":"np","k":"pays","r":0.8203},{"c":"nr","k":"pays","r":2.0},{"c":"nu","k":"territoire","r":2.0},{"c":"nz","k":"pays","r":2.0},{"c":"om","k":"pays","r":2.0},{"c":"pa","k":"pays","r":1.5},{"c":"pe","k":"pays","r":1.5},{"c":"pf","k":"territoire","r":1.5},{"c":"pg","k":"pays","r":1.3333},{"c":"ph","k":"pays","r":2.0},{"c":"pk","k":"pays","r":1.5},{"c":"pl","k":"pays","r":1.6},{"c":"pn","k":"territoire","r":2.0},{"c":"pr","k":"territoire","r":1.5},{"c":"ps","k":"limite","r":2.0,"o":"as"},{"c":"pt","k":"pays","r":1.5},{"c":"pw","k":"pays","r":1.6},{"c":"py","k":"pays","r":1.8182},{"c":"qa","k":"pays","r":2.5455},{"c":"ro","k":"pays","r":1.5},{"c":"rs","k":"pays","r":1.5},{"c":"ru","k":"pays","r":1.5},{"c":"rw","k":"pays","r":1.5},{"c":"sa","k":"pays","r":1.5},{"c":"sb","k":"pays","r":2.0},{"c":"sc","k":"pays","r":2.0},{"c":"sd","k":"pays","r":2.0},{"c":"se","k":"pays","r":1.6},{"c":"sg","k":"pays","r":1.5},{"c":"si","k":"pays","r":2.0},{"c":"sk","k":"pays","r":1.5},{"c":"sl","k":"pays","r":1.5},{"c":"sm","k":"pays","r":1.3333},{"c":"sn","k":"pays","r":1.5},{"c":"so","k":"pays","r":1.5},{"c":"somaliland","k":"limite","r":2.0,"o":"af","n":["Somaliland"]},{"c":"sr","k":"pays","r":1.5},{"c":"ss","k":"pays","r":2.0},{"c":"st","k":"pays","r":2.0},{"c":"sv","k":"pays","r":1.7725},{"c":"sx","k":"territoire","r":1.5},{"c":"sy","k":"pays","r":1.5},{"c":"sz","k":"pays","r":1.5},{"c":"tc","k":"territoire","r":2.0},{"c":"td","k":"pays","r":1.5},{"c":"tf","k":"territoire","r":1.5},{"c":"tg","k":"pays","r":1.618},{"c":"th","k":"pays","r":1.5},{"c":"tj","k":"pays","r":2.0},{"c":"tk","k":"territoire","r":2.0},{"c":"tl","k":"pays","r":2.0},{"c":"tm","k":"pays","r":1.5},{"c":"tn","k":"pays","r":1.5},{"c":"to","k":"pays","r":2.0},{"c":"tr","k":"pays","r":1.5},{"c":"transnistrie","k":"limite","r":2.0,"o":"eu","n":["Transnistrie"],"a":["Transnistria","Pridnestrovie"]},{"c":"tt","k":"pays","r":1.6667},{"c":"tv","k":"pays","r":2.0},{"c":"tw","k":"limite","r":1.5,"o":"as"},{"c":"tz","k":"pays","r":1.5},{"c":"ua","k":"pays","r":1.5},{"c":"ug","k":"pays","r":1.5},{"c":"us","k":"pays","r":1.9},{"c":"uy","k":"pays","r":1.5},{"c":"uz","k":"pays","r":2.0},{"c":"va","k":"pays","r":1.0},{"c":"vc","k":"pays","r":1.5},{"c":"ve","k":"pays","r":1.5},{"c":"vg","k":"territoire","r":2.0},{"c":"vi","k":"territoire","r":1.5},{"c":"vn","k":"pays","r":1.5},{"c":"vu","k":"pays","r":1.6667},{"c":"wf","k":"territoire","r":1.5},{"c":"ws","k":"pays","r":2.0},{"c":"xk","k":"limite","r":1.4,"o":"eu","n":["Kosovo"]},{"c":"ye","k":"pays","r":1.5},{"c":"za","k":"pays","r":1.5},{"c":"zm","k":"pays","r":1.5},{"c":"zw","k":"pays","r":2.0}];
+
+/* ---------- Données ---------- */
+const CONT = {af:"Afrique", na:"Amérique du Nord et centrale", sa:"Amérique du Sud", as:"Asie", eu:"Europe", oc:"Océanie", ot:"Antarctique et ONU"};
+const C_LISTS = {
+ af:"dz ao bj bw bf bi cv cm cf td km cg cd ci dj eg gq er sz et ga gm gh gn gw ke ls lr ly mg mw ml mr mu ma mz na ne ng rw st sn sc sl so za ss sd tz tg tn ug zm zw eh sh io",
+ na:"ag bs bb bz ca cr cu dm do sv gd gt ht hn jm mx ni pa kn lc vc tt us ai aw bm vg ky cw gl ms pr sx tc vi bl",
+ sa:"ar bo br cl co ec gy py pe sr uy ve fk gs gf",
+ as:"af am az bh bd bt bn kh cn ge in id ir iq il jp jo kz kw kg la lb my mv mn mm np kp om pk ps ph qa sa sg kr lk sy tw tj th tl tr tm ae uz vn ye hk mo cc cx",
+ eu:"al ad at by be ba bg hr cy cz dk ee fi fr de gr hu is ie it xk lv li lt lu mt md mc me nl mk no pl pt ro ru sm rs sk si es se ch ua gb va ax fo gg gi im je",
+ oc:"au fj ki mh fm nr nz pw pg ws sb to tv vu as ck gu mp nc nf nu pf pn tk wf",
+ ot:"aq tf"
+};
+const CONT_OF = {};
+for (const k in C_LISTS) for (const c of C_LISTS[k].split(" ")) CONT_OF[c] = k;
+
+const CATS = {pays:"Pays membres de l'ONU et Vatican", limite:"États à reconnaissance limitée", disparu:"Pays disparus", territoire:"Territoires, régions et organisations"};
+
+const DISPLAY = {hk:"Hong Kong", mo:"Macao", ps:"Palestine", cd:"République démocratique du Congo", cg:"République du Congo",
+  va:"Vatican", tf:"Terres australes et antarctiques françaises", aq:"Antarctique", sh:"Sainte-Hélène", gs:"Géorgie du Sud-et-les îles Sandwich du Sud",
+  sx:"Saint-Martin (partie néerlandaise)", mm:"Birmanie (Myanmar)", tw:"Taïwan"};
+const ALIAS = {
+ us:"etats unis|usa|us|amerique|etats unis d amerique|united states", gb:"royaume uni|uk|grande bretagne|great britain",
+ cd:"rdc|rd congo|congo kinshasa|republique democratique du congo", cg:"congo|congo brazzaville|republique du congo",
+ ci:"cote d ivoire|ivory coast", cz:"tchequie|republique tcheque|czech republic", mk:"macedoine|macedoine du nord",
+ sz:"swaziland|eswatini", mm:"birmanie|myanmar|burma", tl:"timor oriental|timor leste|east timor", cv:"cap vert|cabo verde",
+ kp:"coree du nord", kr:"coree du sud|coree", va:"vatican|saint siege|cite du vatican", ps:"palestine|etat de palestine",
+ ae:"emirats arabes unis|eau|emirats|uae", fm:"micronesie", nl:"pays bas|hollande", tw:"taiwan|formose|republique de chine", ru:"russie",
+ ba:"bosnie|bosnie herzegovine", tt:"trinite et tobago|trinidad|trinidad et tobago", kn:"saint kitts et nevis|saint christophe et nieves|saint kitts",
+ vc:"saint vincent|saint vincent et les grenadines", st:"sao tome|sao tome et principe", ag:"antigua|antigua et barbuda",
+ gw:"guinee bissau", gq:"guinee equatoriale", pg:"papouasie|papouasie nouvelle guinee", do:"republique dominicaine",
+ cf:"centrafrique|republique centrafricaine", sb:"iles salomon|salomon", mh:"iles marshall|marshall", vg:"iles vierges britanniques",
+ vi:"iles vierges americaines|iles vierges des etats unis", tc:"turks et caicos|iles turques et caiques",
+ gs:"georgie du sud|georgie du sud et les iles sandwich du sud", io:"territoire britannique de l ocean indien|biot|chagos",
+ hk:"hong kong", mo:"macao|macau", pf:"polynesie|polynesie francaise", nc:"nouvelle caledonie",
+ eh:"sahara occidental|rasd|republique arabe sahraouie democratique", ax:"aland|iles aland", fo:"feroe|iles feroe",
+ mp:"mariannes du nord|iles mariannes du nord", cc:"iles cocos|cocos", cx:"ile christmas|christmas", nf:"ile norfolk|norfolk",
+ pn:"pitcairn|iles pitcairn", ck:"iles cook|cook", sx:"sint maarten|saint martin", fk:"malouines|iles malouines|falklands|falkland",
+ tf:"taaf|terres australes|terres australes francaises", sh:"sainte helene", aq:"antarctique|antarctica",
+ bn:"brunei|brunei darussalam", la:"laos", sy:"syrie", ir:"iran", md:"moldavie|moldova", vn:"vietnam|viet nam", bo:"bolivie",
+ tz:"tanzanie", de:"allemagne|germany", ky:"iles caimans|caimans|cayman", ws:"samoa", as:"samoa americaines", pr:"porto rico|puerto rico",
+ km:"comores", sa:"arabie saoudite|arabie", lc:"sainte lucie", im:"ile de man|man", gg:"guernesey", gl:"groenland",
+ by:"belarus|bielorussie", pw:"palau|palaos", sv:"el salvador|salvador", mu:"ile maurice|maurice", kg:"kirghizie|kirghizistan",
+ kz:"kazakstan", bl:"saint barthelemy|saint barth", wf:"wallis et futuna|wallis", gf:"guyane|guyane francaise", ai:"anguilla",
+ cw:"curacao", bm:"bermudes", ms:"montserrat", tk:"tokelau", nu:"niue", gi:"gibraltar", je:"jersey", gu:"guam"
+};
+
+const dnFr = new Intl.DisplayNames(["fr"], {type:"region"});
+const dnEn = new Intl.DisplayNames(["en"], {type:"region"});
+const regionName = (dn, c) => { try { const n = dn.of(c.toUpperCase()); return n && n.toUpperCase() !== c.toUpperCase() ? n : null } catch(e){ return null } };
+
+function norm(s){
+  return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()
+    .replace(/[’'`\-_.,()/]/g," ").replace(/[^a-z0-9 ]/g,"").replace(/\s+/g," ").trim()
+    .replace(/^(le|la|les|l|the) /,"");
+}
+const key = s => norm(s).replace(/ /g,"");
+
+for (const f of FLAGS){
+  const iso = /^[a-z]{2}$/.test(f.c);
+  const fr = (f.n || []).slice(), other = (f.a || []).slice();
+  if (iso){ const a = regionName(dnFr, f.c), b = regionName(dnEn, f.c); if (a) fr.push(a); if (b) other.push(b); }
+  f.name = DISPLAY[f.c] || fr[0] || other[0] || f.c.toUpperCase();
+  const acc = new Set();
+  const add = s => { if (!s) return; const k = key(s); if (k) acc.add(k);
+    const m = s.match(/^(.*?)\s*\((.*)\)\s*$/); if (m){ add(m[1]); add(m[2]); } };
+  [f.name, ...fr, ...other].forEach(add);
+  (ALIAS[f.c] || "").split("|").forEach(add);
+  f.acc = [...acc];
+  f.cont = f.o || CONT_OF[f.c] || "ot";
+  f.img = "flags/" + f.c + ".svg";
+}
+const BY_KEY = new Map();
+for (const f of FLAGS) for (const k of f.acc) if (!BY_KEY.has(k)) BY_KEY.set(k, f);
+
+function lev(a, b){
+  if (Math.abs(a.length - b.length) > 2) return 9;
+  let prev = Array.from({length:b.length+1}, (_, j) => j);
+  for (let i = 1; i <= a.length; i++){
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+
+/* ---------- Stockage local ---------- */
+const store = {
+  get(k, d){ try { const v = localStorage.getItem("flagrant:" + k); return v ? JSON.parse(v) : d } catch(e){ return d } },
+  set(k, v){ try { localStorage.setItem("flagrant:" + k, JSON.stringify(v)) } catch(e){} },
+  wipe(){ try { localStorage.removeItem("flagrant:settings"); localStorage.removeItem("flagrant:records") } catch(e){} }
+};
+const DEF = {cont:Object.keys(CONT), cats:["pays"], time:15, len:20};
+let S = Object.assign({}, DEF, store.get("settings", {}));
+const saveS = () => store.set("settings", S);
+const configKey = () => [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|");
+
+/* ---------- Réglages ---------- */
+const $ = id => document.getElementById(id);
+const pool = () => FLAGS.filter(f => S.cont.includes(f.cont) && S.cats.includes(f.k));
+const toggle = (arr, v) => arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v];
+
+function checkList(el, entries, selected, onToggle){
+  el.innerHTML = "";
+  for (const [val, label, n] of entries){
+    const row = document.createElement("label");
+    row.className = "check";
+    row.innerHTML = `<input type="checkbox"${selected.includes(val) ? " checked" : ""}><span></span><span class="n">${n}</span>`;
+    row.querySelector("span").textContent = label;
+    row.querySelector("input").addEventListener("change", () => { onToggle(val); saveS(); renderSettings(); });
+    el.appendChild(row);
+  }
+}
+function segment(el, entries, current, onPick){
+  el.innerHTML = "";
+  for (const [val, label] of entries){
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = label; b.setAttribute("aria-pressed", String(val === current));
+    b.addEventListener("click", () => { onPick(val); saveS(); renderSettings(); });
+    el.appendChild(b);
+  }
+}
+function renderSettings(){
+  const inCats = FLAGS.filter(f => S.cats.includes(f.k));
+  checkList($("f-cont"), Object.entries(CONT).map(([k, l]) => [k, l, inCats.filter(f => f.cont === k).length]), S.cont, v => S.cont = toggle(S.cont, v));
+  const inCont = FLAGS.filter(f => S.cont.includes(f.cont));
+  checkList($("f-cat"), Object.entries(CATS).map(([k, l]) => [k, l, inCont.filter(f => f.k === k).length]), S.cats, v => S.cats = toggle(S.cats, v));
+  segment($("f-time"), [5,8,10,15,20,30].map(t => [t, t + " s"]), S.time, v => S.time = v);
+  segment($("f-len"), [[10,"10"],[20,"20"],[50,"50"],[0,"Tous"],[-1,"Sans fin"]], S.len, v => S.len = v);
+  $("all-cont").textContent = S.cont.length === Object.keys(CONT).length ? "Tout décocher" : "Tout cocher";
+  const n = pool().length;
+  const rec = store.get("records", {})[configKey()];
+  if (!n){
+    $("status").textContent = S.cats.length ? "Aucun drapeau ne correspond : coche au moins un continent." : "Coche au moins un type de drapeaux.";
+  } else {
+    const len = S.len > 0 ? Math.min(S.len, n) : n;
+    $("status").textContent = (S.len === -1 ? `Partie sans fin sur ${n} drapeaux.` : `${len} drapeaux sur ${n} disponibles.`) + (rec ? ` Record : ${rec} points.` : "");
+  }
+  $("start").disabled = n === 0;
+}
+$("all-cont").addEventListener("click", () => {
+  S.cont = S.cont.length === Object.keys(CONT).length ? [] : Object.keys(CONT); saveS(); renderSettings();
+});
+
+/* ---------- Vues ---------- */
+const VIEWS = ["home","game","end","regles","conditions","confidentialite","mentions"];
+function show(v){
+  for (const x of VIEWS) $("v-" + x).classList.toggle("hidden", x !== v);
+  document.querySelectorAll("header nav a").forEach(a => {
+    const on = (a.dataset.route === "" && (v === "home")) || a.dataset.route === v;
+    on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current");
+  });
+  const titles = {regles:"Règles", conditions:"Conditions d'utilisation", confidentialite:"Confidentialité", mentions:"Mentions légales et crédits"};
+  document.title = titles[v] ? titles[v] + " | Flagrant" : "Flagrant";
+}
+function route(){
+  stopGame();
+  const h = location.hash.slice(1);
+  if (["regles","conditions","confidentialite","mentions"].includes(h)){ show(h); window.scrollTo(0, 0); }
+  else { show("home"); renderSettings(); }
+}
+window.addEventListener("hashchange", route);
+$("home-link").addEventListener("click", e => { if (!location.hash || location.hash === "#"){ e.preventDefault(); route(); } });
+document.querySelector('nav a[data-route=""]').addEventListener("click", e => { if (!location.hash || location.hash === "#"){ e.preventDefault(); route(); } });
+
+/* ---------- Partie ---------- */
+let G = null, raf = 0, nextTimer = 0;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]] } return a };
+
+function startGame(list, isReview){
+  if (!list.length) return;
+  let deck = shuffle(list.slice());
+  const endless = !isReview && S.len === -1;
+  if (!isReview && S.len > 0) deck = deck.slice(0, S.len);
+  G = {deck, base:list.slice(), endless, review:!!isReview, i:-1, score:0, streak:0, best:0, good:0, missed:[], cur:null, locked:true, tEnd:0};
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  show("game"); next();
+}
+function stopGame(){ cancelAnimationFrame(raf); clearTimeout(nextTimer); if (G) G.locked = true; }
+
+function sizeFlag(f){
+  const maxW = Math.min(480, window.innerWidth - 90), maxH = window.innerWidth < 600 ? 170 : 250;
+  let h = maxH, w = h * f.r;
+  if (w > maxW){ w = maxW; h = w / f.r; }
+  const img = $("flag");
+  img.style.width = Math.round(w) + "px"; img.style.height = Math.round(h) + "px";
+  $("pole").style.height = Math.round(maxH + 70) + "px";
+  document.querySelector(".stage").style.setProperty("--stage-h", Math.round(maxH + 104) + "px");
+}
+function next(){
+  G.i++;
+  if (G.i >= G.deck.length){
+    if (G.endless){ G.deck = shuffle(G.base.slice()); G.i = 0; } else return finish();
+  }
+  G.cur = G.deck[G.i]; G.locked = false;
+  sizeFlag(G.cur);
+  $("flag").src = G.cur.img;
+  const fl = $("flag"); if (!fl.complete) { G.locked = true; fl.onload = fl.onerror = () => { fl.onload = fl.onerror = null; if (G && G.cur && fl.src.endsWith(G.cur.img)) { G.locked = false; G.tEnd = performance.now() + S.time * 1000; } }; }
+  const fb = $("fb"); fb.textContent = ""; fb.className = "fb";
+  const a = $("ans"); a.value = ""; a.className = ""; a.disabled = false; a.focus();
+  const done = G.good + G.missed.length;
+  $("g-prog").innerHTML = G.endless ? `Drapeau <b>${done + 1}</b>` : `<b>${G.i + 1}</b> sur ${G.deck.length}`;
+  const nx = G.deck[G.i + 1]; if (nx) new Image().src = nx.img;
+  G.tEnd = performance.now() + S.time * 1000;
+  cancelAnimationFrame(raf); tick();
+}
+function tick(){
+  const left = G.tEnd - performance.now(), r = Math.max(0, left / (S.time * 1000));
+  $("fill").style.transform = `scaleY(${r})`;
+  $("pole").classList.toggle("low", r < .25);
+  if (left <= 0) return resolve(false);
+  raf = requestAnimationFrame(tick);
+}
+function resolve(ok){
+  if (!G || G.locked) return;
+  G.locked = true; cancelAnimationFrame(raf);
+  const fb = $("fb"), a = $("ans");
+  if (ok){
+    const left = Math.max(0, G.tEnd - performance.now()) / 1000;
+    const pts = 10 + Math.ceil(left / S.time * 10);
+    G.score += pts; G.streak++; G.good++; G.best = Math.max(G.best, G.streak);
+    fb.textContent = `${G.cur.name}, +${pts}`; fb.className = "fb good"; a.className = "good";
+  } else {
+    G.streak = 0; G.missed.push(G.cur);
+    fb.textContent = `C'était : ${G.cur.name}`; fb.className = "fb bad";
+  }
+  a.disabled = true;
+  $("g-score").textContent = G.score; $("g-streak").textContent = G.streak;
+  nextTimer = setTimeout(next, ok ? 850 : 1900);
+}
+function finish(){
+  stopGame();
+  const total = G.good + G.missed.length;
+  $("e-score").innerHTML = `${G.score}<small>pts</small>`;
+  $("e-sum").textContent = total ? `${G.good} trouvé${G.good > 1 ? "s" : ""} sur ${total}, meilleure série de ${G.best}.` : "Aucun drapeau joué.";
+  let recText = "";
+  if (!G.review && !G.endless && total === G.deck.length){
+    const recs = store.get("records", {}), k = configKey(), old = recs[k] || 0;
+    if (G.score > old){ recs[k] = G.score; store.set("records", recs); recText = old ? `Nouveau record, l'ancien était de ${old} points.` : "Premier record pour ces réglages."; }
+    else recText = `Record pour ces réglages : ${old} points.`;
+  }
+  $("e-rec").textContent = recText;
+  const m = G.missed.length;
+  $("retry").textContent = m > 1 ? `Revoir les ${m} ratés` : m ? "Revoir le raté" : "Aucun raté à revoir";
+  $("retry").disabled = !m;
+  $("e-missed").classList.toggle("hidden", !m);
+  const ul = $("e-list"); ul.innerHTML = "";
+  for (const f of G.missed){
+    const li = document.createElement("li");
+    li.innerHTML = `<div class="thumb"><img alt=""></div><span></span>`;
+    li.querySelector("img").src = f.img; li.querySelector("span").textContent = f.name;
+    ul.appendChild(li);
+  }
+  show("end");
+  $("again").focus();
+}
+
+$("ans").addEventListener("input", e => {
+  if (!G || G.locked) return;
+  const v = key(e.target.value);
+  if (v && G.cur.acc.includes(v)) resolve(true);
+});
+$("ans").addEventListener("keydown", e => {
+  if (!G || G.locked) return;
+  if (e.key === "Escape"){ e.preventDefault(); return resolve(false); }
+  if (e.key !== "Enter") return;
+  const v = key(e.target.value);
+  if (!v) return;
+  const other = BY_KEY.get(v);
+  const ok = G.cur.acc.includes(v) || ((!other || other === G.cur) && G.cur.acc.some(k => {
+    const d = lev(v, k); return (k.length >= 5 && d <= 1) || (k.length >= 9 && d <= 2);
+  }));
+  if (ok) return resolve(true);
+  const a = e.target; a.classList.remove("shake"); void a.offsetWidth; a.classList.add("shake"); a.select();
+});
+$("start").addEventListener("click", () => startGame(pool()));
+$("again").addEventListener("click", () => G && G.review ? startGame(G.base, true) : startGame(pool()));
+$("retry").addEventListener("click", () => startGame(G.missed.slice(), true));
+$("back").addEventListener("click", route);
+$("g-stop").addEventListener("click", finish);
+$("wipe").addEventListener("click", () => { store.wipe(); S = Object.assign({}, DEF); $("wiped").classList.remove("hidden"); });
+window.addEventListener("resize", () => { if (G && !$("v-game").classList.contains("hidden")) sizeFlag(G.cur); });
+
+route();
+</script>
+</body>
+</html>

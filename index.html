@@ -97,6 +97,14 @@ main{flex:1;padding:28px 0 56px}
 .answer .fb{min-height:30px;margin-top:12px;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
 .fb.good{color:var(--right)} .fb.bad{color:var(--wrong)}
 .answer .keys{color:var(--ink-2);font-size:14px;margin-top:6px}
+.alike{margin:4px auto 10px;max-width:540px}
+.alike ul{list-style:none;margin:0 0 10px;padding:0;display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.alike li{font-size:14px;line-height:1.3;text-align:center}
+.alike li.is{font-weight:700}
+.alike .thumb{height:46px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
+.alike img{display:block;filter:drop-shadow(0 0 .6px rgba(23,32,46,.55))}
+.alike p{margin:0;color:var(--ink-2);font-size:15px;line-height:1.45}
+.alike p.cont{margin-top:8px;font-size:13px}
 kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:0 5px;background:var(--field)}
 .shake{animation:shake .28s}
 @keyframes shake{25%{transform:translateX(-7px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
@@ -115,7 +123,7 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width
 .missgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px 20px;list-style:none;padding:0;margin:0}
 .missgrid li{font-size:15px;line-height:1.3}
 .missgrid .thumb{height:64px;display:flex;align-items:flex-end;margin-bottom:8px}
-.missgrid img{max-height:64px;max-width:100%;filter:drop-shadow(0 0 .6px rgba(23,32,46,.55))}
+.missgrid img{display:block;filter:drop-shadow(0 0 .6px rgba(23,32,46,.55))}
 
 /* Pages de texte */
 .doc{max-width:66ch}
@@ -175,6 +183,10 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
         <div class="checks one" id="f-cat"></div>
       </fieldset>
       <fieldset>
+        <legend>Options</legend>
+        <div class="checks one" id="f-opt"></div>
+      </fieldset>
+      <fieldset>
         <legend>Temps par drapeau</legend>
         <div class="seg" id="f-time" role="group" aria-label="Temps par drapeau"></div>
       </fieldset>
@@ -201,6 +213,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
       <label for="ans" class="sr">Nom du pays</label>
       <input id="ans" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Nom du pays" enterkeyhint="done">
       <div class="fb" id="fb" aria-live="polite"></div>
+      <div class="alike hidden" id="alike"><ul id="alike-list"></ul><p id="alike-tip"></p><p class="cont"><kbd>Entrée</kbd> pour continuer</p></div>
       <div class="keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> passe le drapeau.</div>
     </div>
   </section>
@@ -240,6 +253,10 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
     <p>Chaque bonne réponse rapporte 10 points, plus jusqu'à 10 points de rapidité selon le temps qu'il restait. Ta série compte les bonnes réponses d'affilée et repart à zéro au premier raté. Le record est enregistré pour chaque combinaison de réglages.</p>
     <h2>Les réglages</h2>
     <p>Sur la page d'accueil, choisis les continents, les types de drapeaux, le temps par drapeau (de 5 à 30 secondes) et la longueur de la partie : 10, 20 ou 50 drapeaux, toute la sélection, ou une partie sans fin que tu arrêtes quand tu veux. Tes réglages sont gardés pour ta prochaine visite.</p>
+    <h2>Insister sur mes erreurs</h2>
+    <p>Avec cette option, un drapeau que tu as raté revient plus souvent dans les parties suivantes. Chaque bonne réponse sur ce drapeau le fait revenir un peu moins, jusqu'à ce qu'il retrouve sa fréquence normale. Le nombre à côté de l'option indique combien de drapeaux de ta sélection sont concernés.</p>
+    <h2>Les sosies</h2>
+    <p>L'option « Seulement les drapeaux qui se ressemblent » garde uniquement les drapeaux faciles à confondre : Tchad et Roumanie, Irlande et Côte d'Ivoire, Australie et Nouvelle-Zélande, Monaco et Indonésie… Quand tu en rates un, pendant n'importe quelle partie, ses sosies s'affichent avec ce qui les distingue. Appuie sur Entrée pour passer au drapeau suivant.</p>
     <h2>Les drapeaux</h2>
     <ul>
       <li><strong>Pays membres de l'ONU et Vatican</strong> : les 193 États membres de l'ONU et le Vatican.</li>
@@ -283,11 +300,12 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
     <h2>Ce qui reste sur ton appareil</h2>
     <p>Pour te faire gagner du temps, Flagrant garde dans ton navigateur (stockage local) :</p>
     <ul>
-      <li>tes réglages : continents, types de drapeaux, temps et longueur de partie ;</li>
-      <li>tes records, un par combinaison de réglages.</li>
+      <li>tes réglages : continents, types de drapeaux, options, temps et longueur de partie ;</li>
+      <li>tes records, un par combinaison de réglages ;</li>
+      <li>tes résultats par drapeau (combien de fois tu l'as vu et raté récemment), pour l'option « Insister sur mes erreurs ».</li>
     </ul>
     <p>Ces informations ne quittent jamais ton appareil et personne d'autre n'y a accès. Elles disparaissent si tu vides les données de ton navigateur, ou avec ce bouton :</p>
-    <p><button class="ghost" id="wipe" type="button">Effacer mes données Flagrant</button><span class="done hidden" id="wiped">Réglages et records effacés.</span></p>
+    <p><button class="ghost" id="wipe" type="button">Effacer mes données Flagrant</button><span class="done hidden" id="wiped">Réglages, records et résultats effacés.</span></p>
     <h2>Hébergement</h2>
     <p>Le site est hébergé par GitHub Pages (GitHub, Inc.). Comme l'indique GitHub, l'adresse IP de chaque visiteur est enregistrée et conservée à des fins de sécurité. Ce traitement relève de la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">déclaration de confidentialité de GitHub</a>.</p>
     <h2>Tes droits</h2>
@@ -422,20 +440,57 @@ function lev(a, b){
   return prev[b.length];
 }
 
+/* ---------- Sosies ---------- */
+const ALIKE = [
+ ["td ro ad md", "Tchad et Roumanie sont presque identiques : le bleu du Tchad est plus foncé. L'Andorre et la Moldavie ont un blason au centre : des vaches et une mitre pour l'Andorre, un aigle pour la Moldavie."],
+ ["mc id pl", "Monaco et l'Indonésie : rouge au-dessus de blanc, mais le drapeau de Monaco est plus carré. La Pologne est inversée : blanc en haut, rouge en bas."],
+ ["ie ci it", "Irlande : vert côté mât, orange de l'autre. Côte d'Ivoire : orange côté mât, vert de l'autre. Italie : vert, blanc, rouge."],
+ ["au nz", "Australie : étoiles blanches, dont une grande à sept branches sous l'Union Jack. Nouvelle-Zélande : quatre étoiles rouges bordées de blanc."],
+ ["nl lu", "Pays-Bas : bleu foncé. Luxembourg : bleu ciel et drapeau plus allongé."],
+ ["ru sk si", "Russie : blanc, bleu, rouge, sans rien d'autre. Slovaquie : blason à double croix blanche sur trois collines, côté mât. Slovénie : petit blason bleu avec une montagne et trois étoiles, en haut côté mât."],
+ ["sn ml gn cm", "Sénégal : vert, jaune, rouge avec une étoile verte. Mali : vert, jaune, rouge sans étoile. Guinée : l'inverse, rouge, jaune, vert. Cameroun : vert, rouge, jaune avec une étoile jaune."],
+ ["co ec ve", "Colombie : la bande jaune occupe la moitié du drapeau. Équateur : même découpage avec un blason au centre. Venezuela : trois bandes égales et un arc d'étoiles blanches."],
+ ["no is fo", "Norvège : fond rouge, croix bleue bordée de blanc. Islande : fond bleu, croix rouge bordée de blanc. Féroé : fond blanc, croix rouge bordée de bleu."],
+ ["jo ps sd", "Jordanie : étoile blanche dans le triangle rouge. Palestine : le même drapeau sans étoile. Soudan : bande rouge en haut et triangle vert."],
+ ["eg iq ye", "Rouge, blanc, noir pour les trois. Yémen : rien au centre. Égypte : un aigle doré. Irak : une inscription verte en arabe."],
+ ["ht li", "Bleu au-dessus de rouge. Liechtenstein : couronne dorée en haut côté mât. Haïti : blason au centre sur un carré blanc."],
+ ["bo gh lt", "Bolivie : rouge, jaune, vert de haut en bas. Ghana : mêmes couleurs avec une étoile noire. Lituanie : jaune, vert, rouge."],
+ ["hn ni sv", "Bleu, blanc, bleu pour les trois. Honduras : cinq étoiles bleues. Nicaragua : un triangle seul dans un cercle de texte. Salvador : le triangle est entouré de drapeaux et d'une couronne de laurier."],
+ ["de rda be", "Allemagne : bandes horizontales noir, rouge, or. RDA : les mêmes avec un emblème au centre (marteau et compas). Belgique : bandes verticales noir, jaune, rouge."],
+ ["qa bh", "Qatar : bordeaux, avec neuf pointes. Bahreïn : rouge vif, avec cinq pointes."],
+ ["cu pr", "Cuba : bandes bleues et triangle rouge. Porto Rico : bandes rouges et triangle bleu."],
+ ["ne in", "Inde : roue bleue au centre, drapeau allongé. Niger : disque orange, drapeau presque carré."]
+];
+const BY_CODE = new Map(FLAGS.map(f => [f.c, f]));
+const ALIKE_OF = {};
+for (const [codes, tip] of ALIKE){
+  const g = codes.split(" ").filter(c => BY_CODE.has(c));
+  for (const c of g) ALIKE_OF[c] = {g, tip};
+}
+
 /* ---------- Stockage local ---------- */
 const store = {
   get(k, d){ try { const v = localStorage.getItem("flagrant:" + k); return v ? JSON.parse(v) : d } catch(e){ return d } },
   set(k, v){ try { localStorage.setItem("flagrant:" + k, JSON.stringify(v)) } catch(e){} },
-  wipe(){ try { localStorage.removeItem("flagrant:settings"); localStorage.removeItem("flagrant:records") } catch(e){} }
+  wipe(){ try { ["settings","records","stats"].forEach(k => localStorage.removeItem("flagrant:" + k)) } catch(e){} }
 };
-const DEF = {cont:Object.keys(CONT), cats:["pays"], time:15, len:20};
+const DEF = {cont:Object.keys(CONT), cats:["pays"], time:15, len:20, focus:false, alike:false};
 let S = Object.assign({}, DEF, store.get("settings", {}));
 const saveS = () => store.set("settings", S);
-const configKey = () => [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|");
+const configKey = () => [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|") + (S.focus ? "|erreurs" : "") + (S.alike ? "|sosies" : "");
+// Résultats par drapeau : [fois vu, erreurs récentes (0 à 3)]
+let STATS = store.get("stats", {});
+const recentMisses = c => (STATS[c] || [0, 0])[1];
+function recordResult(c, ok){
+  const s = STATS[c] || [0, 0];
+  s[0]++; s[1] = ok ? Math.max(0, s[1] - 1) : Math.min(3, s[1] + 1);
+  STATS[c] = s; store.set("stats", STATS);
+}
 
 /* ---------- Réglages ---------- */
 const $ = id => document.getElementById(id);
-const pool = () => FLAGS.filter(f => S.cont.includes(f.cont) && S.cats.includes(f.k));
+const basePool = () => FLAGS.filter(f => S.cont.includes(f.cont) && S.cats.includes(f.k));
+const pool = () => basePool().filter(f => !S.alike || ALIKE_OF[f.c]);
 const toggle = (arr, v) => arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v];
 
 function checkList(el, entries, selected, onToggle){
@@ -463,13 +518,18 @@ function renderSettings(){
   checkList($("f-cont"), Object.entries(CONT).map(([k, l]) => [k, l, inCats.filter(f => f.cont === k).length]), S.cont, v => S.cont = toggle(S.cont, v));
   const inCont = FLAGS.filter(f => S.cont.includes(f.cont));
   checkList($("f-cat"), Object.entries(CATS).map(([k, l]) => [k, l, inCont.filter(f => f.k === k).length]), S.cats, v => S.cats = toggle(S.cats, v));
+  const bp = basePool();
+  checkList($("f-opt"), [
+    ["focus", "Insister sur mes erreurs", bp.filter(f => recentMisses(f.c) > 0).length],
+    ["alike", "Seulement les drapeaux qui se ressemblent", bp.filter(f => ALIKE_OF[f.c]).length]
+  ], ["focus","alike"].filter(k => S[k]), v => S[v] = !S[v]);
   segment($("f-time"), [5,8,10,15,20,30].map(t => [t, t + " s"]), S.time, v => S.time = v);
   segment($("f-len"), [[10,"10"],[20,"20"],[50,"50"],[0,"Tous"],[-1,"Sans fin"]], S.len, v => S.len = v);
   $("all-cont").textContent = S.cont.length === Object.keys(CONT).length ? "Tout décocher" : "Tout cocher";
   const n = pool().length;
   const rec = store.get("records", {})[configKey()];
   if (!n){
-    $("status").textContent = S.cats.length ? "Aucun drapeau ne correspond : coche au moins un continent." : "Coche au moins un type de drapeaux.";
+    $("status").textContent = !S.cats.length ? "Coche au moins un type de drapeaux." : S.alike && basePool().length ? "Aucun sosie dans cette sélection : ajoute des continents ou des types de drapeaux." : "Aucun drapeau ne correspond : coche au moins un continent.";
   } else {
     const len = S.len > 0 ? Math.min(S.len, n) : n;
     $("status").textContent = (S.len === -1 ? `Partie sans fin sur ${n} drapeaux.` : `${len} drapeaux sur ${n} disponibles.`) + (rec ? ` Record : ${rec} points.` : "");
@@ -504,17 +564,21 @@ document.querySelector('nav a[data-route=""]').addEventListener("click", e => { 
 /* ---------- Partie ---------- */
 let G = null, raf = 0, nextTimer = 0;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]] } return a };
+// Avec « Insister sur mes erreurs », un drapeau raté récemment a jusqu'à 10 fois plus de chances de sortir tôt.
+const deal = list => !S.focus ? shuffle(list.slice()) : list
+  .map(f => [Math.pow(Math.random(), 1 / (1 + 3 * recentMisses(f.c))), f])
+  .sort((a, b) => b[0] - a[0]).map(x => x[1]);
 
 function startGame(list, isReview){
   if (!list.length) return;
-  let deck = shuffle(list.slice());
+  let deck = deal(list);
   const endless = !isReview && S.len === -1;
   if (!isReview && S.len > 0) deck = deck.slice(0, S.len);
   G = {deck, base:list.slice(), endless, review:!!isReview, i:-1, score:0, streak:0, best:0, good:0, missed:[], cur:null, locked:true, tEnd:0};
   if (location.hash) history.replaceState(null, "", location.pathname + location.search);
   show("game"); next();
 }
-function stopGame(){ cancelAnimationFrame(raf); clearTimeout(nextTimer); if (G) G.locked = true; }
+function stopGame(){ cancelAnimationFrame(raf); clearTimeout(nextTimer); $("alike").classList.add("hidden"); if (G){ G.locked = true; G.waiting = false; } }
 
 function sizeFlag(f){
   const maxW = Math.min(480, window.innerWidth - 90), maxH = window.innerWidth < 600 ? 170 : 250;
@@ -528,7 +592,7 @@ function sizeFlag(f){
 function next(){
   G.i++;
   if (G.i >= G.deck.length){
-    if (G.endless){ G.deck = shuffle(G.base.slice()); G.i = 0; } else return finish();
+    if (G.endless){ G.deck = deal(G.base); G.i = 0; } else return finish();
   }
   G.cur = G.deck[G.i]; G.locked = false;
   sizeFlag(G.cur);
@@ -552,6 +616,7 @@ function tick(){
 function resolve(ok){
   if (!G || G.locked) return;
   G.locked = true; cancelAnimationFrame(raf);
+  recordResult(G.cur.c, ok);
   const fb = $("fb"), a = $("ans");
   if (ok){
     const left = Math.max(0, G.tEnd - performance.now()) / 1000;
@@ -564,7 +629,29 @@ function resolve(ok){
   }
   a.disabled = true;
   $("g-score").textContent = G.score; $("g-streak").textContent = G.streak;
-  nextTimer = setTimeout(next, ok ? 850 : 1900);
+  const al = !ok && ALIKE_OF[G.cur.c];
+  if (al) showAlike(G.cur, al);
+  G.waiting = true;
+  nextTimer = setTimeout(goNext, ok ? 850 : al ? 6000 : 1900);
+}
+function goNext(){
+  if (!G || !G.waiting) return;
+  G.waiting = false; clearTimeout(nextTimer);
+  $("alike").classList.add("hidden");
+  next();
+}
+function showAlike(cur, al){
+  const ul = $("alike-list"); ul.innerHTML = "";
+  for (const c of al.g){
+    const f = BY_CODE.get(c), li = document.createElement("li");
+    if (c === cur.c) li.className = "is";
+    li.innerHTML = '<div class="thumb"><img alt=""></div><span></span>';
+    const im = li.querySelector("img"); im.src = f.img; im.width = Math.round(46 * f.r); im.height = 46;
+    li.querySelector("span").textContent = f.name;
+    ul.appendChild(li);
+  }
+  $("alike-tip").textContent = al.tip;
+  $("alike").classList.remove("hidden");
 }
 function finish(){
   stopGame();
@@ -586,7 +673,9 @@ function finish(){
   for (const f of G.missed){
     const li = document.createElement("li");
     li.innerHTML = `<div class="thumb"><img alt=""></div><span></span>`;
-    li.querySelector("img").src = f.img; li.querySelector("span").textContent = f.name;
+    const im = li.querySelector("img"); im.src = f.img;
+    const h = Math.min(64, 150 / f.r); im.width = Math.round(h * f.r); im.height = Math.round(h);
+    li.querySelector("span").textContent = f.name;
     ul.appendChild(li);
   }
   show("end");
@@ -616,7 +705,11 @@ $("again").addEventListener("click", () => G && G.review ? startGame(G.base, tru
 $("retry").addEventListener("click", () => startGame(G.missed.slice(), true));
 $("back").addEventListener("click", route);
 $("g-stop").addEventListener("click", finish);
-$("wipe").addEventListener("click", () => { store.wipe(); S = Object.assign({}, DEF); $("wiped").classList.remove("hidden"); });
+$("wipe").addEventListener("click", () => { store.wipe(); STATS = {}; S = Object.assign({}, DEF); $("wiped").classList.remove("hidden"); });
+document.addEventListener("keydown", e => {
+  if (G && G.waiting && (e.key === "Enter" || e.key === " ") && !$("v-game").classList.contains("hidden")){ e.preventDefault(); goNext(); }
+});
+$("alike").addEventListener("click", goNext);
 window.addEventListener("resize", () => { if (G && !$("v-game").classList.contains("hidden")) sizeFlag(G.cur); });
 
 route();

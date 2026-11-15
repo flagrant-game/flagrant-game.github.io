@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Flagrant : un jeu d'entraînement aux drapeaux du monde. Un drapeau, un chrono, tu tapes le nom.">
+<meta name="description" content="Flagrant : un jeu d'entraînement aux drapeaux et aux capitales du monde. Un drapeau, un chrono, tu tapes la réponse.">
 <title>Flagrant</title>
 <link rel="canonical" href="https://flagrant-game.github.io/">
 <meta property="og:type" content="website">
@@ -48,7 +48,7 @@ header .wrap{display:flex;align-items:baseline;justify-content:space-between;gap
 .mark{font-weight:900;font-stretch:62%;font-size:34px;letter-spacing:.01em;text-decoration:none;line-height:1;text-transform:uppercase}
 .mark:hover{text-decoration:none}
 nav{display:flex;gap:22px;font-size:16px}
-nav a{text-decoration:none;color:var(--ink-2)}
+nav a{text-decoration:none;color:var(--ink-2);white-space:nowrap}
 nav a:hover,nav a[aria-current]{color:var(--ink);text-decoration:underline}
 main{flex:1;padding:28px 0 56px}
 
@@ -98,6 +98,16 @@ main{flex:1;padding:28px 0 56px}
 .fb.good{color:var(--right)} .fb.bad{color:var(--wrong)}
 .answer .keys{color:var(--ink-2);font-size:14px;margin-top:6px}
 .alike{margin:4px auto 10px;max-width:540px}
+.mode-help{margin:8px 0 0;color:var(--ink-2);font-size:14px;max-width:44ch}
+.country{text-align:center;font-weight:700;font-stretch:87%;font-size:26px;margin:14px 0 0}
+.typed{margin:2px 0 0;color:var(--ink-2);font-size:15px}
+.typed:empty{display:none}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.veil{position:absolute;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr)}
+.veil i{background:#CDD1D6;outline:1px solid var(--ground)}
+.veil i.off{visibility:hidden}
+.paused{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:var(--stage-h,330px)}
+.paused p{margin:0;font-size:20px;font-weight:600}
 .alike ul{list-style:none;margin:0 0 10px;padding:0;display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
 .alike li{font-size:14px;line-height:1.3;text-align:center}
 .alike li.is{font-weight:700}
@@ -140,6 +150,21 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width
 footer{border-top:1px solid var(--line);padding:20px 0 30px;font-size:14px;color:var(--ink-2)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between}
 footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
+.stats{max-width:720px}
+.conts{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.conts th{text-align:left;font-size:14px;font-weight:600;color:var(--ink-2);padding:0 0 8px;border-bottom:1px solid var(--line)}
+.conts td{padding:11px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+.conts th.num,.conts td.num{text-align:right;width:96px;padding-left:10px}
+.r-mode{margin:4px 0 12px}
+.stats .note{color:var(--ink-2);font-size:14px;margin:10px 0 0}
+@media (max-width:600px){.conts .meter{display:none}.conts th.num,.conts td.num{width:auto}}
+.conts td.meter{width:34%;padding:0 18px}
+.conts .track{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.conts .track i{display:block;height:100%;background:var(--ink)}
+.conts tr.none td{color:var(--ink-2)}
+.missgrid .rate{display:block;color:var(--ink-2);font-size:14px;font-variant-numeric:tabular-nums}
+.stats .actions{margin-top:26px}
+a.go,a.ghost{display:inline-block;text-decoration:none}
 
 @media (max-width:760px){
   .home{grid-template-columns:1fr;gap:34px}
@@ -148,6 +173,11 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
   nav{gap:16px}
   .score{font-size:92px}
   .answer input{font-size:24px}
+}
+@media (max-width:480px){
+  .mark{font-size:28px}
+  header nav{gap:14px;font-size:15px}
+  header nav a[data-route=""]{display:none}
 }
 @media (prefers-reduced-motion:reduce){.shake{animation:none}}
 </style>
@@ -158,6 +188,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
     <a class="mark" href="#" id="home-link">Flagrant</a>
     <nav aria-label="Principale">
       <a href="#" data-route="">Jouer</a>
+      <a href="#resultats" data-route="resultats">Mes résultats</a>
       <a href="#regles" data-route="regles">Règles</a>
     </nav>
   </div>
@@ -169,11 +200,16 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
   <section id="v-home" class="home">
     <div>
       <h1>Un drapeau, quelques secondes, son nom.</h1>
-      <p class="lead">Entraîne-toi à reconnaître les drapeaux du monde. Tape le nom du pays : la réponse est validée dès qu'elle est juste.</p>
+      <p class="lead">Entraîne-toi sur les drapeaux et les capitales du monde. Tape ta réponse : elle est validée dès qu'elle est juste.</p>
       <button class="go" id="start">Lancer la partie</button>
       <p class="status" id="status"></p>
     </div>
     <form class="settings" onsubmit="return false">
+      <fieldset>
+        <legend>Mode de jeu</legend>
+        <div class="seg" id="f-mode" role="group" aria-label="Mode de jeu"></div>
+        <p class="mode-help" id="mode-help"></p>
+      </fieldset>
       <fieldset>
         <legend>Continents <button type="button" id="all-cont">Tout cocher</button></legend>
         <div class="checks" id="f-cont"></div>
@@ -204,17 +240,24 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
       <span class="r"><span>Série <b id="g-streak">0</b></span><span><b id="g-score">0</b> pts</span><button type="button" id="g-stop">Arrêter</button></span>
     </div>
     <div class="stage">
-      <div class="mast">
+      <div class="mast" id="mast">
         <div class="pole" id="pole" aria-hidden="true"><div class="shaft"><div class="fill" id="fill"></div></div></div>
         <img class="flag" id="flag" alt="Drapeau à identifier">
+        <div class="veil hidden" id="veil" aria-hidden="true"></div>
+      </div>
+      <div class="paused hidden" id="paused">
+        <p>Partie en pause.</p>
+        <button class="go" type="button" id="resume">Reprendre</button>
       </div>
     </div>
+    <p class="country hidden" id="g-country"></p>
     <div class="answer">
       <label for="ans" class="sr">Nom du pays</label>
       <input id="ans" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Nom du pays" enterkeyhint="done">
       <div class="fb" id="fb" aria-live="polite"></div>
+      <p class="typed" id="typed"></p>
       <div class="alike hidden" id="alike"><ul id="alike-list"></ul><p id="alike-tip"></p><p class="cont"><kbd>Entrée</kbd> pour continuer</p></div>
-      <div class="keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> passe le drapeau.</div>
+      <div class="keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> ou <button type="button" class="linkbtn" id="skip">Passer</button></div>
     </div>
   </section>
 
@@ -227,6 +270,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
       <button class="go" id="again">Rejouer</button>
       <button class="ghost" id="retry"></button>
       <button class="ghost" id="back">Changer les réglages</button>
+      <a class="ghost" href="#resultats">Mes résultats</a>
     </div>
     <div class="missed" id="e-missed">
       <h2>À revoir</h2>
@@ -235,28 +279,63 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
     </div>
   </section>
 
+  <!-- Résultats -->
+  <section id="v-resultats" class="doc stats hidden">
+    <h1>Mes résultats</h1>
+    <div class="seg r-mode" id="r-mode" role="group" aria-label="Résultats à afficher"></div>
+    <p class="date" id="r-total"></p>
+    <div id="r-empty" class="hidden">
+      <p>Tu n'as encore joué aucun drapeau. Tes résultats apparaîtront ici après ta première partie.</p>
+      <p><a class="go" href="#">Lancer une partie</a></p>
+    </div>
+    <div id="r-body">
+      <h2>Par continent</h2>
+      <table class="conts">
+        <thead><tr><th scope="col">Continent</th><th scope="col" class="meter"><span class="sr">Réussite en barre</span></th><th scope="col" class="num">Réussite</th><th scope="col" class="num">Temps moyen</th><th scope="col" class="num">Jamais vus</th></tr></thead>
+        <tbody id="r-conts"></tbody>
+      </table>
+      <p class="note">Le temps moyen compte les bonnes réponses. « Jamais vus » compte les drapeaux des types cochés dans tes réglages que tu n'as encore jamais eus dans ce mode.</p>
+      <h2>Ceux qui te posent problème</h2>
+      <p id="r-hard-lead"></p>
+      <ul class="missgrid" id="r-hard"></ul>
+      <p class="actions" id="r-hard-act"><button class="go" type="button" id="r-review"></button></p>
+    </div>
+  </section>
+
   <!-- Règles -->
   <article id="v-regles" class="doc hidden">
     <h1>Règles du jeu</h1>
     <p class="date">Comment se joue une partie de Flagrant.</p>
     <h2>Le principe</h2>
-    <p>Un drapeau apparaît en haut d'un mât. Le mât sert de chrono : la bande jaune descend à mesure que le temps passe et devient rouge dans le dernier quart. Tape le nom du pays ou du territoire avant qu'elle n'atteigne le bas.</p>
+    <p>Un drapeau apparaît en haut d'un mât. Le mât sert de chrono : la bande jaune descend à mesure que le temps passe et devient rouge dans le dernier quart. Réponds avant qu'elle n'atteigne le bas.</p>
+    <h2>Les modes de jeu</h2>
+    <ul>
+      <li><strong>Drapeaux</strong> : tape le nom du pays ou du territoire.</li>
+      <li><strong>Capitales</strong> : le drapeau et le nom du pays s'affichent, tape sa capitale. Quand un pays a plusieurs capitales (Bolivie, Afrique du Sud, Sri Lanka, Eswatini), chacune est acceptée. Hong Kong, Macao, l'Antarctique, Tokelau, quelques territoires sans capitale, l'ONU et l'Union européenne ne font pas partie de ce mode.</li>
+      <li><strong>Dévoilement</strong> : le drapeau est caché par des tuiles qui disparaissent une à une. Il est entièrement visible aux deux tiers du temps. Tape le nom du pays le plus tôt possible.</li>
+    </ul>
     <h2>Répondre</h2>
     <ul>
-      <li>La réponse est validée automatiquement dès que tu as tapé un nom correct, sans appuyer sur Entrée.</li>
+      <li>La réponse est validée automatiquement dès que tu as tapé une réponse correcte, sans appuyer sur Entrée.</li>
       <li>Les accents, les majuscules, les tirets et les articles ne comptent pas : « cote d'ivoire », « Côte-d'Ivoire » et « la côte d'ivoire » sont acceptés.</li>
-      <li>Les noms anglais et les noms courants marchent aussi : « USA », « RDC », « Birmanie », « Hollande », « Swaziland »…</li>
-      <li>Si tu fais une faute de frappe, appuie sur Entrée : une lettre de différence est tolérée (deux pour les noms longs). La tolérance ne s'applique jamais si ce que tu as tapé est le nom exact d'un autre pays : « Niger » ne vaut pas pour le Nigeria.</li>
-      <li>Échap passe le drapeau, qui compte alors comme raté.</li>
+      <li>Les noms anglais et les noms courants marchent aussi : « USA », « RDC », « Birmanie », « Hollande », « Swaziland », « Beijing », « Kyiv »…</li>
+      <li>Si tu fais une faute de frappe, appuie sur Entrée : une lettre de différence est tolérée (deux pour les noms longs). La tolérance ne s'applique jamais si ce que tu as tapé est le nom exact d'une autre réponse : « Niger » ne vaut pas pour le Nigeria.</li>
+      <li>Échap ou le bouton « Passer » passe la question, qui compte alors comme ratée. Quand tu rates, le jeu rappelle ce que tu avais tapé.</li>
+      <li>Si tu changes d'onglet ou que ton téléphone se verrouille, la partie se met en pause. Appuie sur Entrée ou sur « Reprendre » pour continuer.</li>
     </ul>
     <h2>Les points</h2>
-    <p>Chaque bonne réponse rapporte 10 points, plus jusqu'à 10 points de rapidité selon le temps qu'il restait. Ta série compte les bonnes réponses d'affilée et repart à zéro au premier raté. Le record est enregistré pour chaque combinaison de réglages.</p>
+    <p>Chaque bonne réponse rapporte 10 points, plus jusqu'à 10 points de rapidité selon le temps qu'il restait. En mode Dévoilement, le bonus va jusqu'à 20 points selon la part du drapeau encore cachée. Ton temps de réponse s'affiche après chaque bonne réponse. Ta série compte les bonnes réponses d'affilée et repart à zéro au premier raté. Le record est enregistré pour chaque combinaison de réglages.</p>
     <h2>Les réglages</h2>
-    <p>Sur la page d'accueil, choisis les continents, les types de drapeaux, le temps par drapeau (de 5 à 30 secondes) et la longueur de la partie : 10, 20 ou 50 drapeaux, toute la sélection, ou une partie sans fin que tu arrêtes quand tu veux. Tes réglages sont gardés pour ta prochaine visite.</p>
-    <h2>Insister sur mes erreurs</h2>
-    <p>Avec cette option, un drapeau que tu as raté revient plus souvent dans les parties suivantes. Chaque bonne réponse sur ce drapeau le fait revenir un peu moins, jusqu'à ce qu'il retrouve sa fréquence normale. Le nombre à côté de l'option indique combien de drapeaux de ta sélection sont concernés.</p>
-    <h2>Les sosies</h2>
-    <p>L'option « Seulement les drapeaux qui se ressemblent » garde uniquement les drapeaux faciles à confondre : Tchad et Roumanie, Irlande et Côte d'Ivoire, Australie et Nouvelle-Zélande, Monaco et Indonésie… Quand tu en rates un, pendant n'importe quelle partie, ses sosies s'affichent avec ce qui les distingue. Appuie sur Entrée pour passer au drapeau suivant.</p>
+    <p>Sur la page d'accueil, choisis le mode, les continents, les types de drapeaux, le temps par question (de 5 à 30 secondes) et la longueur de la partie : 10, 20 ou 50 questions, toute la sélection, ou une partie sans fin que tu arrêtes quand tu veux. Tes réglages sont gardés pour ta prochaine visite.</p>
+    <h2>Les options</h2>
+    <ul>
+      <li><strong>Insister sur mes erreurs</strong> : ce que tu as raté revient plus souvent dans les parties suivantes. Chaque bonne réponse le fait revenir un peu moins, jusqu'à retrouver la fréquence normale.</li>
+      <li><strong>Jamais vus en priorité</strong> : les drapeaux, ou les capitales, que tu n'as encore jamais eus dans ce mode passent en premier. Pratique pour faire le tour de tout.</li>
+      <li><strong>Seulement les drapeaux qui se ressemblent</strong> : uniquement les drapeaux faciles à confondre (Tchad et Roumanie, Irlande et Côte d'Ivoire, Australie et Nouvelle-Zélande…). Quand tu rates un de ces drapeaux, dans n'importe quelle partie, ses sosies s'affichent avec ce qui les distingue. Cette option n'existe pas en mode Capitales.</li>
+    </ul>
+    <p>Le nombre à côté de chaque option indique combien de questions de ta sélection sont concernées.</p>
+    <h2>Mes résultats</h2>
+    <p>La page « Mes résultats » montre, pour les drapeaux et pour les capitales séparément, ton taux de réussite et ton temps moyen par continent, le nombre de drapeaux jamais vus, et ce que tu trouves le moins souvent. Le bouton en bas de la page lance une partie avec ces questions. Les modes Drapeaux et Dévoilement comptent ensemble.</p>
     <h2>Les drapeaux</h2>
     <ul>
       <li><strong>Pays membres de l'ONU et Vatican</strong> : les 193 États membres de l'ONU et le Vatican.</li>
@@ -294,7 +373,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
   <!-- Confidentialité -->
   <article id="v-confidentialite" class="doc hidden">
     <h1>Politique de confidentialité</h1>
-    <p class="date">En vigueur depuis le 13 novembre 2026.</p>
+    <p class="date">Mise à jour le 15 novembre 2026.</p>
     <h2>Ce que Flagrant collecte</h2>
     <p>Rien. Il n'y a ni compte, ni formulaire, ni cookie, ni outil de mesure d'audience, ni publicité. Le site ne fait appel à aucun service extérieur : les drapeaux et la police sont servis par le site lui-même.</p>
     <h2>Ce qui reste sur ton appareil</h2>
@@ -302,7 +381,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
     <ul>
       <li>tes réglages : continents, types de drapeaux, options, temps et longueur de partie ;</li>
       <li>tes records, un par combinaison de réglages ;</li>
-      <li>tes résultats par drapeau (combien de fois tu l'as vu et raté récemment), pour l'option « Insister sur mes erreurs ».</li>
+      <li>tes résultats par drapeau et par capitale (combien de fois tu l'as vu, trouvé, raté récemment, et ton temps de réponse), pour la page « Mes résultats » et les options « Insister sur mes erreurs » et « Jamais vus en priorité ».</li>
     </ul>
     <p>Ces informations ne quittent jamais ton appareil et personne d'autre n'y a accès. Elles disparaissent si tu vides les données de ton navigateur, ou avec ce bouton :</p>
     <p><button class="ghost" id="wipe" type="button">Effacer mes données Flagrant</button><span class="done hidden" id="wiped">Réglages, records et résultats effacés.</span></p>
@@ -315,7 +394,7 @@ footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
   <!-- Mentions légales -->
   <article id="v-mentions" class="doc hidden">
     <h1>Mentions légales et crédits</h1>
-    <p class="date">Mis à jour le 14 novembre 2026.</p>
+    <p class="date">Mis à jour le 15 novembre 2026.</p>
     <h2>Éditeur</h2>
     <p>Flagrant est un site personnel, non professionnel et sans but lucratif, édité par un particulier. Conformément à l'article 1-1, II de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, dans sa rédaction issue de la loi du 21 mai 2024, l'éditeur a choisi de ne pas rendre publiques ses coordonnées, qui sont connues de l'hébergeur.</p>
     <h2>Hébergeur</h2>
@@ -426,6 +505,69 @@ for (const f of FLAGS){
   f.cont = f.o || CONT_OF[f.c] || "ot";
   f.img = "flags/" + f.c + ".svg";
 }
+// Capitales : "Nom affiché|autres réponses acceptées…". Pas de capitale pour aq, eu, un, hk, mo, io, tf, tk.
+const CAPITALS = {
+ af:"Kaboul|Kabul", al:"Tirana", dz:"Alger|Algiers", ad:"Andorre-la-Vieille|Andorra la Vella", ao:"Luanda",
+ ag:"Saint John's|St John's|Saint Johns", ar:"Buenos Aires", am:"Erevan|Yerevan|Erevan", au:"Canberra", at:"Vienne|Vienna|Wien",
+ az:"Bakou|Baku", bs:"Nassau", bh:"Manama", bd:"Dacca|Dhaka", bb:"Bridgetown", by:"Minsk", be:"Bruxelles|Brussels",
+ bz:"Belmopan", bj:"Porto-Novo", bt:"Thimphou|Thimphu", bo:"Sucre|La Paz", ba:"Sarajevo", bw:"Gaborone",
+ br:"Brasilia|Brasília", bn:"Bandar Seri Begawan", bg:"Sofia", bf:"Ouagadougou", bi:"Gitega", cv:"Praia",
+ kh:"Phnom Penh", cm:"Yaoundé", ca:"Ottawa", cf:"Bangui", td:"N'Djaména|N'Djamena|Ndjamena", cl:"Santiago|Santiago du Chili",
+ cn:"Pékin|Beijing|Peking", co:"Bogota|Bogotá", km:"Moroni", cg:"Brazzaville", cd:"Kinshasa", cr:"San José",
+ ci:"Yamoussoukro", hr:"Zagreb", cu:"La Havane|Havane|Havana", cy:"Nicosie|Nicosia", cz:"Prague|Praha",
+ dk:"Copenhague|Copenhagen", dj:"Djibouti", dm:"Roseau", do:"Saint-Domingue|Santo Domingo", ec:"Quito",
+ eg:"Le Caire|Caire|Cairo", sv:"San Salvador", gq:"Malabo", er:"Asmara", ee:"Tallinn", sz:"Mbabane|Lobamba",
+ et:"Addis-Abeba|Addis Abeba|Addis Ababa", fj:"Suva", fi:"Helsinki", fr:"Paris", ga:"Libreville", gm:"Banjul",
+ ge:"Tbilissi|Tbilisi", de:"Berlin", gh:"Accra", gr:"Athènes|Athens", gd:"Saint-Georges|Saint George's|St George's",
+ gt:"Guatemala|Ciudad de Guatemala|Guatemala City", gn:"Conakry", gw:"Bissau", gy:"Georgetown", ht:"Port-au-Prince",
+ hn:"Tegucigalpa", hu:"Budapest", is:"Reykjavik|Reykjavík", in:"New Delhi|Delhi", id:"Jakarta|Djakarta|Nusantara",
+ ir:"Téhéran|Tehran", iq:"Bagdad|Baghdad", ie:"Dublin", il:"Jérusalem|Jerusalem|Tel-Aviv|Tel Aviv", it:"Rome|Roma",
+ jm:"Kingston", jp:"Tokyo|Tokio", jo:"Amman", kz:"Astana|Nour-Soultan|Nur-Sultan", ke:"Nairobi",
+ ki:"Tarawa-Sud|Tarawa|South Tarawa", kw:"Koweït|Koweit City|Kuwait City|Kuwait", kg:"Bichkek|Bishkek", la:"Vientiane",
+ lv:"Riga", lb:"Beyrouth|Beirut", ls:"Maseru", lr:"Monrovia", ly:"Tripoli", li:"Vaduz", lt:"Vilnius", lu:"Luxembourg",
+ mg:"Antananarivo|Tananarive", mw:"Lilongwe", my:"Kuala Lumpur|Putrajaya", mv:"Malé", ml:"Bamako",
+ mt:"La Valette|Valette|Valletta", mh:"Majuro", mr:"Nouakchott", mu:"Port-Louis", mx:"Mexico|Ciudad de Mexico|Mexico City",
+ fm:"Palikir", md:"Chisinau|Chişinău|Kichinev", mc:"Monaco", mn:"Oulan-Bator|Ulaanbaatar|Ulan Bator", me:"Podgorica",
+ ma:"Rabat", mz:"Maputo", mm:"Naypyidaw|Naypyitaw|Nay Pyi Taw", na:"Windhoek", nr:"Yaren", np:"Katmandou|Kathmandu",
+ nl:"Amsterdam", nz:"Wellington", ni:"Managua", ne:"Niamey", ng:"Abuja", kp:"Pyongyang", mk:"Skopje", no:"Oslo",
+ om:"Mascate|Muscat", pk:"Islamabad", pw:"Ngerulmud|Melekeok", pa:"Panama|Panama City|Ciudad de Panama",
+ pg:"Port Moresby", py:"Asuncion|Asunción", pe:"Lima", ph:"Manille|Manila", pl:"Varsovie|Warsaw|Warszawa",
+ pt:"Lisbonne|Lisbon|Lisboa", qa:"Doha", ro:"Bucarest|Bucharest", ru:"Moscou|Moscow|Moskva", rw:"Kigali",
+ kn:"Basseterre", lc:"Castries", vc:"Kingstown", ws:"Apia", sm:"Saint-Marin|San Marino", st:"Sao Tomé|São Tomé",
+ sa:"Riyad|Riyadh", sn:"Dakar", rs:"Belgrade|Beograd", sc:"Victoria", sl:"Freetown", sg:"Singapour|Singapore",
+ sk:"Bratislava", si:"Ljubljana", sb:"Honiara", so:"Mogadiscio|Mogadishu", za:"Pretoria|Le Cap|Cape Town|Bloemfontein",
+ kr:"Séoul|Seoul", ss:"Djouba|Juba", es:"Madrid", lk:"Sri Jayawardenepura Kotte|Kotte|Colombo", sd:"Khartoum",
+ sr:"Paramaribo", se:"Stockholm", ch:"Berne|Bern", sy:"Damas|Damascus", tj:"Douchanbé|Dushanbe", tz:"Dodoma",
+ th:"Bangkok", tl:"Dili", tg:"Lomé", to:"Nuku'alofa", tt:"Port-d'Espagne|Port of Spain", tn:"Tunis", tr:"Ankara",
+ tm:"Achgabat|Ashgabat|Achkhabad", tv:"Funafuti", ug:"Kampala", ua:"Kiev|Kyiv", ae:"Abou Dabi|Abu Dhabi|Abou Dhabi",
+ gb:"Londres|London", us:"Washington|Washington DC", uy:"Montevideo", uz:"Tachkent|Tashkent", vu:"Port-Vila",
+ va:"Vatican|Cité du Vatican|Vatican City", ve:"Caracas", vn:"Hanoï|Hanoi", ye:"Sanaa|Sana'a|Aden", zm:"Lusaka", zw:"Harare",
+ // reconnaissance limitée
+ ps:"Ramallah|Jérusalem-Est|Jérusalem", xk:"Pristina|Prishtina", tw:"Taipei|Taïpei", eh:"Laâyoune|Laayoune|El Aaiún|Tifariti",
+ abkhazie:"Soukhoumi|Sokhoumi|Sukhumi", ossetie:"Tskhinvali", transnistrie:"Tiraspol", somaliland:"Hargeisa|Hargeysa",
+ "chypre-nord":"Nicosie-Nord|Nicosie|North Nicosia|Lefkosa",
+ // pays disparus
+ urss:"Moscou|Moscow", yougoslavie:"Belgrade", rda:"Berlin-Est|Berlin|East Berlin", zaire:"Kinshasa", "yemen-sud":"Aden",
+ "antilles-nl":"Willemstad", artsakh:"Stepanakert|Khankendi",
+ // territoires et régions
+ ai:"The Valley", as:"Pago Pago", aw:"Oranjestad", ax:"Mariehamn", bl:"Gustavia", bm:"Hamilton", cc:"West Island",
+ ck:"Avarua", cw:"Willemstad", cx:"Flying Fish Cove", fk:"Stanley|Port Stanley", fo:"Tórshavn|Torshavn",
+ "gb-eng":"Londres|London", "gb-sct":"Édimbourg|Edinburgh", "gb-wls":"Cardiff", gg:"Saint-Pierre-Port|St Peter Port",
+ gi:"Gibraltar", gl:"Nuuk", gs:"King Edward Point|Grytviken", gu:"Hagåtña|Hagatna|Agana", im:"Douglas",
+ je:"Saint-Hélier|St Helier", ky:"George Town", mp:"Saipan", ms:"Plymouth|Brades", nc:"Nouméa", nf:"Kingston",
+ nu:"Alofi", pf:"Papeete", pn:"Adamstown", pr:"San Juan", sh:"Jamestown", sx:"Philipsburg", tc:"Cockburn Town",
+ vg:"Road Town", vi:"Charlotte Amalie", wf:"Mata-Utu"
+};
+const CAP_DISPLAY = {bo:"Sucre et La Paz", za:"Pretoria, Le Cap et Bloemfontein", lk:"Sri Jayawardenepura Kotte et Colombo",
+  sz:"Mbabane et Lobamba", ps:"Ramallah (Jérusalem-Est proclamée)", nr:"Yaren (pas de capitale officielle)", eh:"Laâyoune (revendiquée)"};
+const CAP_KEY = new Map();
+for (const f of FLAGS){
+  const c = CAPITALS[f.c]; if (!c) continue;
+  const names = c.split("|");
+  f.capName = CAP_DISPLAY[f.c] || names[0];
+  f.capAcc = [...new Set(names.map(key))];
+  for (const k of f.capAcc) if (!CAP_KEY.has(k)) CAP_KEY.set(k, f);
+}
 const BY_KEY = new Map();
 for (const f of FLAGS) for (const k of f.acc) if (!BY_KEY.has(k)) BY_KEY.set(k, f);
 
@@ -474,23 +616,33 @@ const store = {
   set(k, v){ try { localStorage.setItem("flagrant:" + k, JSON.stringify(v)) } catch(e){} },
   wipe(){ try { ["settings","records","stats"].forEach(k => localStorage.removeItem("flagrant:" + k)) } catch(e){} }
 };
-const DEF = {cont:Object.keys(CONT), cats:["pays"], time:15, len:20, focus:false, alike:false};
+const DEF = {mode:"drapeau", cont:Object.keys(CONT), cats:["pays"], time:15, len:20, focus:false, fresh:false, alike:false};
+const MODES = {drapeau:"Drapeaux", capitale:"Capitales", devoile:"Dévoilement"};
+const MODE_HELP = {drapeau:"Un drapeau s'affiche : tape le nom du pays.", capitale:"Le drapeau et le nom du pays s'affichent : tape la capitale.", devoile:"Le drapeau apparaît morceau par morceau : plus tu réponds tôt, plus tu gagnes de points."};
 let S = Object.assign({}, DEF, store.get("settings", {}));
 const saveS = () => store.set("settings", S);
-const configKey = () => [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|") + (S.focus ? "|erreurs" : "") + (S.alike ? "|sosies" : "");
+const isCap = () => S.mode === "capitale";
+const useAlike = () => S.alike && !isCap();
+const configKey = () => (S.mode === "drapeau" ? "" : S.mode + "|") + [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|") + (S.focus ? "|erreurs" : "") + (S.fresh ? "|nouveaux" : "") + (useAlike() ? "|sosies" : "");
+// Clé des résultats : le code du drapeau, préfixé par « cap: » pour les capitales
+const sk = f => (isCap() ? "cap:" : "") + f.c;
 // Résultats par drapeau : [fois vu, erreurs récentes (0 à 3)]
 let STATS = store.get("stats", {});
-const recentMisses = c => (STATS[c] || [0, 0])[1];
-function recordResult(c, ok){
-  const s = STATS[c] || [0, 0];
-  s[0]++; s[1] = ok ? Math.max(0, s[1] - 1) : Math.min(3, s[1] + 1);
+const recentMisses = k => (STATS[k] || [0, 0])[1];
+// Résultats : [fois vu, erreurs récentes (0 à 3), fois trouvé, secondes cumulées des bonnes réponses, bonnes réponses chronométrées]
+function recordResult(c, ok, secs){
+  const s = STATS[c] || [0, 0, 0, 0, 0];
+  if (s.length < 3) s[2] = Math.max(0, s[0] - s[1]);   // anciennes données sans le compte des réussites
+  if (s.length < 5){ s[3] = 0; s[4] = 0; }
+  s[0]++; if (ok){ s[2]++; s[3] = Math.round((s[3] + secs) * 10) / 10; s[4]++; }
+  s[1] = ok ? Math.max(0, s[1] - 1) : Math.min(3, s[1] + 1);
   STATS[c] = s; store.set("stats", STATS);
 }
 
 /* ---------- Réglages ---------- */
 const $ = id => document.getElementById(id);
 const basePool = () => FLAGS.filter(f => S.cont.includes(f.cont) && S.cats.includes(f.k));
-const pool = () => basePool().filter(f => !S.alike || ALIKE_OF[f.c]);
+const pool = () => basePool().filter(f => (!isCap() || f.capName) && (!useAlike() || ALIKE_OF[f.c]));
 const toggle = (arr, v) => arr.includes(v) ? arr.filter(x => x !== v) : [...arr, v];
 
 function checkList(el, entries, selected, onToggle){
@@ -504,12 +656,12 @@ function checkList(el, entries, selected, onToggle){
     el.appendChild(row);
   }
 }
-function segment(el, entries, current, onPick){
+function segment(el, entries, current, onPick, local){
   el.innerHTML = "";
   for (const [val, label] of entries){
     const b = document.createElement("button");
     b.type = "button"; b.textContent = label; b.setAttribute("aria-pressed", String(val === current));
-    b.addEventListener("click", () => { onPick(val); saveS(); renderSettings(); });
+    b.addEventListener("click", () => { onPick(val); if (!local){ saveS(); renderSettings(); } });
     el.appendChild(b);
   }
 }
@@ -518,11 +670,15 @@ function renderSettings(){
   checkList($("f-cont"), Object.entries(CONT).map(([k, l]) => [k, l, inCats.filter(f => f.cont === k).length]), S.cont, v => S.cont = toggle(S.cont, v));
   const inCont = FLAGS.filter(f => S.cont.includes(f.cont));
   checkList($("f-cat"), Object.entries(CATS).map(([k, l]) => [k, l, inCont.filter(f => f.k === k).length]), S.cats, v => S.cats = toggle(S.cats, v));
-  const bp = basePool();
-  checkList($("f-opt"), [
-    ["focus", "Insister sur mes erreurs", bp.filter(f => recentMisses(f.c) > 0).length],
-    ["alike", "Seulement les drapeaux qui se ressemblent", bp.filter(f => ALIKE_OF[f.c]).length]
-  ], ["focus","alike"].filter(k => S[k]), v => S[v] = !S[v]);
+  segment($("f-mode"), Object.entries(MODES), S.mode, v => S.mode = v);
+  $("mode-help").textContent = MODE_HELP[S.mode];
+  const bp = basePool().filter(f => !isCap() || f.capName);
+  const opts = [
+    ["focus", "Insister sur mes erreurs", bp.filter(f => recentMisses(sk(f)) > 0).length],
+    ["fresh", isCap() ? "Les pays jamais vus en priorité" : "Les drapeaux jamais vus en priorité", bp.filter(f => !STATS[sk(f)]).length]
+  ];
+  if (!isCap()) opts.push(["alike", "Seulement les drapeaux qui se ressemblent", bp.filter(f => ALIKE_OF[f.c]).length]);
+  checkList($("f-opt"), opts, opts.map(o => o[0]).filter(k => S[k]), v => S[v] = !S[v]);
   segment($("f-time"), [5,8,10,15,20,30].map(t => [t, t + " s"]), S.time, v => S.time = v);
   segment($("f-len"), [[10,"10"],[20,"20"],[50,"50"],[0,"Tous"],[-1,"Sans fin"]], S.len, v => S.len = v);
   $("all-cont").textContent = S.cont.length === Object.keys(CONT).length ? "Tout décocher" : "Tout cocher";
@@ -532,7 +688,8 @@ function renderSettings(){
     $("status").textContent = !S.cats.length ? "Coche au moins un type de drapeaux." : S.alike && basePool().length ? "Aucun sosie dans cette sélection : ajoute des continents ou des types de drapeaux." : "Aucun drapeau ne correspond : coche au moins un continent.";
   } else {
     const len = S.len > 0 ? Math.min(S.len, n) : n;
-    $("status").textContent = (S.len === -1 ? `Partie sans fin sur ${n} drapeaux.` : `${len} drapeaux sur ${n} disponibles.`) + (rec ? ` Record : ${rec} points.` : "");
+    const w = isCap() ? "capitales" : "drapeaux";
+    $("status").textContent = (S.len === -1 ? `Partie sans fin sur ${n} ${w}.` : `${len} ${w} sur ${n} disponibles.`) + (rec ? ` Record : ${rec} points.` : "");
   }
   $("start").disabled = n === 0;
 }
@@ -541,33 +698,95 @@ $("all-cont").addEventListener("click", () => {
 });
 
 /* ---------- Vues ---------- */
-const VIEWS = ["home","game","end","regles","conditions","confidentialite","mentions"];
+const VIEWS = ["home","game","end","resultats","regles","conditions","confidentialite","mentions"];
 function show(v){
   for (const x of VIEWS) $("v-" + x).classList.toggle("hidden", x !== v);
   document.querySelectorAll("header nav a").forEach(a => {
     const on = (a.dataset.route === "" && (v === "home")) || a.dataset.route === v;
     on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current");
   });
-  const titles = {regles:"Règles", conditions:"Conditions d'utilisation", confidentialite:"Confidentialité", mentions:"Mentions légales et crédits"};
+  const titles = {resultats:"Mes résultats", regles:"Règles", conditions:"Conditions d'utilisation", confidentialite:"Confidentialité", mentions:"Mentions légales et crédits"};
   document.title = titles[v] ? titles[v] + " | Flagrant" : "Flagrant";
 }
 function route(){
   stopGame();
   const h = location.hash.slice(1);
-  if (["regles","conditions","confidentialite","mentions"].includes(h)){ show(h); window.scrollTo(0, 0); }
+  if (h === "resultats"){ RMODE = isCap() ? "capitale" : "drapeau"; renderResults(); show(h); window.scrollTo(0, 0); }
+  else if (["regles","conditions","confidentialite","mentions"].includes(h)){ show(h); window.scrollTo(0, 0); }
   else { show("home"); renderSettings(); }
 }
 window.addEventListener("hashchange", route);
 $("home-link").addEventListener("click", e => { if (!location.hash || location.hash === "#"){ e.preventDefault(); route(); } });
 document.querySelector('nav a[data-route=""]').addEventListener("click", e => { if (!location.hash || location.hash === "#"){ e.preventDefault(); route(); } });
 
+/* ---------- Mes résultats ---------- */
+const found = s => s.length < 3 ? Math.max(0, s[0] - s[1]) : s[2];
+const pct = (a, b) => Math.round(100 * a / b) + " %";
+const secsTxt = (t, n) => n ? (t / n).toFixed(1).replace(".", ",") + " s" : "–";
+let HARD = [], RMODE = "drapeau";
+function renderResults(){
+  STATS = store.get("stats", {});   // relit, au cas où un autre onglet a joué
+  segment($("r-mode"), [["drapeau", "Drapeaux"], ["capitale", "Capitales"]], RMODE, v => { RMODE = v; renderResults(); }, true);
+  const cap = RMODE === "capitale", pre = cap ? "cap:" : "";
+  const st = f => STATS[pre + f.c];
+  const eligible = f => !cap || f.capName;
+  const played = FLAGS.filter(f => eligible(f) && st(f) && st(f)[0] > 0);
+  const sum = (fs, i) => fs.reduce((n, f) => n + (i === "ok" ? found(st(f)) : (st(f)[i] || 0)), 0);
+  const seen = sum(played, 0), ok = sum(played, "ok");
+  $("r-empty").classList.toggle("hidden", seen > 0);
+  $("r-body").classList.toggle("hidden", seen === 0);
+  $("r-total").textContent = seen
+    ? `${seen} réponse${seen > 1 ? "s" : ""} sur ${played.length} ${cap ? "capitale" : "drapeau"}${played.length > 1 ? (cap ? "s" : "x") : ""} différent${cap ? "e" : ""}${played.length > 1 ? "s" : ""}, ${pct(ok, seen)} de bonnes réponses, ${secsTxt(sum(played, 3), sum(played, 4))} en moyenne par bonne réponse.`
+    : cap ? "Aucune partie de capitales jouée pour l'instant." : "Aucune partie jouée pour l'instant.";
+  if (!seen) return;
+  const tb = $("r-conts"); tb.innerHTML = "";
+  for (const [k, label] of Object.entries(CONT)){
+    const fs = played.filter(f => f.cont === k);
+    const n = sum(fs, 0), g = sum(fs, "ok");
+    const never = FLAGS.filter(f => f.cont === k && S.cats.includes(f.k) && eligible(f) && !st(f)).length;
+    const tr = document.createElement("tr");
+    if (!n) tr.className = "none";
+    tr.innerHTML = `<td></td><td class="meter"><div class="track"><i style="width:${n ? Math.round(100 * g / n) : 0}%"></i></div></td><td class="num">${n ? pct(g, n) : "–"}</td><td class="num">${secsTxt(sum(fs, 3), sum(fs, 4))}</td><td class="num">${never}</td>`;
+    tr.firstChild.textContent = label;
+    tb.appendChild(tr);
+  }
+  // Les plus difficiles : au moins une erreur, du plus faible taux de réussite au plus élevé
+  const rate = f => found(st(f)) / st(f)[0];
+  HARD = played.filter(f => found(st(f)) < st(f)[0])
+    .sort((a, b) => rate(a) - rate(b) || st(b)[0] - st(a)[0])
+    .slice(0, 24);
+  $("r-hard-lead").textContent = HARD.length
+    ? (cap ? "Les capitales que tu trouves le moins souvent, de la plus difficile à la moins difficile." : "Les drapeaux que tu trouves le moins souvent, du plus difficile au moins difficile.")
+    : "Aucune erreur pour l'instant : tout ce que tu as joué a été trouvé.";
+  $("r-hard-act").classList.toggle("hidden", !HARD.length);
+  $("r-review").textContent = HARD.length > 1 ? `Réviser ces ${HARD.length} ${cap ? "capitales" : "drapeaux"}` : (cap ? "Réviser cette capitale" : "Réviser ce drapeau");
+  const ul = $("r-hard"); ul.innerHTML = "";
+  for (const f of HARD){
+    const s = st(f), li = document.createElement("li");
+    li.innerHTML = '<div class="thumb"><img alt=""></div><span></span><span class="rate"></span>';
+    const im = li.querySelector("img"); im.src = f.img;
+    const h = Math.min(64, 150 / f.r); im.width = Math.round(h * f.r); im.height = Math.round(h);
+    li.querySelector("span").textContent = cap ? `${f.name} : ${f.capName}` : f.name;
+    li.querySelector(".rate").textContent = `trouvé${cap ? "e" : ""} ${found(s)} fois sur ${s[0]}`;
+    ul.appendChild(li);
+  }
+}
+$("r-review").addEventListener("click", () => {
+  if (RMODE === "capitale") S.mode = "capitale"; else if (S.mode === "capitale") S.mode = "drapeau";
+  saveS(); startGame(HARD.slice(), true);
+});
+
 /* ---------- Partie ---------- */
 let G = null, raf = 0, nextTimer = 0;
 const shuffle = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]] } return a };
-// Avec « Insister sur mes erreurs », un drapeau raté récemment a jusqu'à 10 fois plus de chances de sortir tôt.
-const deal = list => !S.focus ? shuffle(list.slice()) : list
-  .map(f => [Math.pow(Math.random(), 1 / (1 + 3 * recentMisses(f.c))), f])
+// « Insister sur mes erreurs » : un drapeau raté récemment a jusqu'à 10 fois plus de chances de sortir tôt.
+// « Jamais vus en priorité » : un drapeau jamais joué dans ce mode passe presque toujours devant.
+const weight = f => 1 + (S.focus ? 3 * recentMisses(sk(f)) : 0) + (S.fresh && !STATS[sk(f)] ? 40 : 0);
+const deal = list => !S.focus && !S.fresh ? shuffle(list.slice()) : list
+  .map(f => [Math.pow(Math.random(), 1 / weight(f)), f])
   .sort((a, b) => b[0] - a[0]).map(x => x[1]);
+const answers = f => isCap() ? f.capAcc : f.acc;
+const label = f => isCap() ? f.capName : f.name;
 
 function startGame(list, isReview){
   if (!list.length) return;
@@ -578,7 +797,11 @@ function startGame(list, isReview){
   if (location.hash) history.replaceState(null, "", location.pathname + location.search);
   show("game"); next();
 }
-function stopGame(){ cancelAnimationFrame(raf); clearTimeout(nextTimer); $("alike").classList.add("hidden"); if (G){ G.locked = true; G.waiting = false; } }
+function stopGame(){
+  cancelAnimationFrame(raf); clearTimeout(nextTimer);
+  $("alike").classList.add("hidden"); $("paused").classList.add("hidden"); $("mast").classList.remove("hidden");
+  if (G){ G.locked = true; G.waiting = false; G.paused = false; }
+}
 
 function sizeFlag(f){
   const maxW = Math.min(480, window.innerWidth - 90), maxH = window.innerWidth < 600 ? 170 : 250;
@@ -587,6 +810,8 @@ function sizeFlag(f){
   const img = $("flag");
   img.style.width = Math.round(w) + "px"; img.style.height = Math.round(h) + "px";
   $("pole").style.height = Math.round(maxH + 70) + "px";
+  const v = $("veil"); v.style.left = img.offsetLeft + "px"; v.style.top = img.offsetTop + "px";
+  v.style.width = img.style.width; v.style.height = img.style.height;
   document.querySelector(".stage").style.setProperty("--stage-h", Math.round(maxH + 104) + "px");
 }
 function next(){
@@ -597,39 +822,67 @@ function next(){
   G.cur = G.deck[G.i]; G.locked = false;
   sizeFlag(G.cur);
   $("flag").src = G.cur.img;
-  const fl = $("flag"); if (!fl.complete) { G.locked = true; fl.onload = fl.onerror = () => { fl.onload = fl.onerror = null; if (G && G.cur && fl.src.endsWith(G.cur.img)) { G.locked = false; G.tEnd = performance.now() + S.time * 1000; } }; }
+  // Le chrono ne démarre qu'une fois le drapeau affiché
+  const fl = $("flag");
+  if (!fl.complete){
+    G.locked = true;
+    fl.onload = fl.onerror = () => { fl.onload = fl.onerror = null;
+      if (G && G.cur && fl.src.endsWith(G.cur.img) && !G.waiting){ G.locked = false; G.tEnd = performance.now() + S.time * 1000; G.t0 = performance.now(); } };
+  }
+  $("typed").textContent = ""; G.tried = "";
+  const cn = $("g-country"); cn.classList.toggle("hidden", !isCap()); cn.textContent = isCap() ? G.cur.name : "";
+  $("ans").placeholder = isCap() ? "Capitale" : "Nom du pays";
+  $("ans").setAttribute("aria-label", isCap() ? "Capitale" : "Nom du pays");
+  // Dévoilement : 24 tuiles retirées dans un ordre aléatoire
+  const veil = $("veil");
+  if (S.mode === "devoile"){
+    veil.innerHTML = "<i></i>".repeat(24); G.tiles = shuffle([...veil.children]); G.shown = 0;
+    veil.classList.remove("hidden");
+  } else { veil.classList.add("hidden"); G.tiles = null; }
   const fb = $("fb"); fb.textContent = ""; fb.className = "fb";
   const a = $("ans"); a.value = ""; a.className = ""; a.disabled = false; a.focus();
   const done = G.good + G.missed.length;
   $("g-prog").innerHTML = G.endless ? `Drapeau <b>${done + 1}</b>` : `<b>${G.i + 1}</b> sur ${G.deck.length}`;
-  const nx = G.deck[G.i + 1]; if (nx) new Image().src = nx.img;
-  G.tEnd = performance.now() + S.time * 1000;
+  const nx = G.deck[G.i + 1]; if (nx) new Image().src = nx.img;   // précharge le suivant
+  G.tEnd = performance.now() + S.time * 1000; G.t0 = performance.now();
   cancelAnimationFrame(raf); tick();
 }
+// Part encore cachée du drapeau en mode Dévoilement (1 = tout caché)
+const hiddenPart = () => G.tiles ? 1 - G.shown / G.tiles.length : 0;
 function tick(){
   const left = G.tEnd - performance.now(), r = Math.max(0, left / (S.time * 1000));
   $("fill").style.transform = `scaleY(${r})`;
   $("pole").classList.toggle("low", r < .25);
+  if (G.tiles && !G.locked){
+    // 2 tuiles visibles au départ, tout est découvert aux deux tiers du temps
+    const want = Math.min(G.tiles.length, 2 + Math.floor((1 - r) / 0.67 * (G.tiles.length - 2)));
+    while (G.shown < want) G.tiles[G.shown++].classList.add("off");
+  }
   if (left <= 0) return resolve(false);
   raf = requestAnimationFrame(tick);
 }
 function resolve(ok){
   if (!G || G.locked) return;
   G.locked = true; cancelAnimationFrame(raf);
-  recordResult(G.cur.c, ok);
+  const secs = Math.max(0, (performance.now() - G.t0) / 1000);
+  const hid = hiddenPart();
+  recordResult(sk(G.cur), ok, secs);
+  if (G.tiles){ G.tiles.forEach(t => t.classList.add("off")); G.tiles = null; }
   const fb = $("fb"), a = $("ans");
   if (ok){
     const left = Math.max(0, G.tEnd - performance.now()) / 1000;
-    const pts = 10 + Math.ceil(left / S.time * 10);
+    const pts = S.mode === "devoile" ? 10 + Math.ceil(hid * 20) : 10 + Math.ceil(left / S.time * 10);
     G.score += pts; G.streak++; G.good++; G.best = Math.max(G.best, G.streak);
-    fb.textContent = `${G.cur.name}, +${pts}`; fb.className = "fb good"; a.className = "good";
+    fb.textContent = `${label(G.cur)}, +${pts}, ${secs.toFixed(1).replace(".", ",")} s`; fb.className = "fb good"; a.className = "good";
   } else {
     G.streak = 0; G.missed.push(G.cur);
-    fb.textContent = `C'était : ${G.cur.name}`; fb.className = "fb bad";
+    fb.textContent = `C'était : ${label(G.cur)}`; fb.className = "fb bad";
+    const typed = a.value.trim() || G.tried;
+    $("typed").textContent = typed ? `Tu as tapé : ${typed}` : "";
   }
   a.disabled = true;
   $("g-score").textContent = G.score; $("g-streak").textContent = G.streak;
-  const al = !ok && ALIKE_OF[G.cur.c];
+  const al = !ok && !isCap() && ALIKE_OF[G.cur.c];
   if (al) showAlike(G.cur, al);
   G.waiting = true;
   nextTimer = setTimeout(goNext, ok ? 850 : al ? 6000 : 1900);
@@ -658,6 +911,7 @@ function finish(){
   const total = G.good + G.missed.length;
   $("e-score").innerHTML = `${G.score}<small>pts</small>`;
   $("e-sum").textContent = total ? `${G.good} trouvé${G.good > 1 ? "s" : ""} sur ${total}, meilleure série de ${G.best}.` : "Aucun drapeau joué.";
+  $("e-missed").querySelector("p").textContent = isCap() ? "Les capitales que tu n'as pas trouvées pendant cette partie." : "Les drapeaux que tu n'as pas trouvés pendant cette partie.";
   let recText = "";
   if (!G.review && !G.endless && total === G.deck.length){
     const recs = store.get("records", {}), k = configKey(), old = recs[k] || 0;
@@ -675,7 +929,7 @@ function finish(){
     li.innerHTML = `<div class="thumb"><img alt=""></div><span></span>`;
     const im = li.querySelector("img"); im.src = f.img;
     const h = Math.min(64, 150 / f.r); im.width = Math.round(h * f.r); im.height = Math.round(h);
-    li.querySelector("span").textContent = f.name;
+    li.querySelector("span").textContent = isCap() ? `${f.name} : ${f.capName}` : f.name;
     ul.appendChild(li);
   }
   show("end");
@@ -685,7 +939,7 @@ function finish(){
 $("ans").addEventListener("input", e => {
   if (!G || G.locked) return;
   const v = key(e.target.value);
-  if (v && G.cur.acc.includes(v)) resolve(true);
+  if (v && answers(G.cur).includes(v)) resolve(true);
 });
 $("ans").addEventListener("keydown", e => {
   if (!G || G.locked) return;
@@ -693,11 +947,13 @@ $("ans").addEventListener("keydown", e => {
   if (e.key !== "Enter") return;
   const v = key(e.target.value);
   if (!v) return;
-  const other = BY_KEY.get(v);
-  const ok = G.cur.acc.includes(v) || ((!other || other === G.cur) && G.cur.acc.some(k => {
+  const other = (isCap() ? CAP_KEY : BY_KEY).get(v);
+  const acc = answers(G.cur);
+  const ok = acc.includes(v) || ((!other || other === G.cur) && acc.some(k => {
     const d = lev(v, k); return (k.length >= 5 && d <= 1) || (k.length >= 9 && d <= 2);
   }));
   if (ok) return resolve(true);
+  G.tried = e.target.value.trim();
   const a = e.target; a.classList.remove("shake"); void a.offsetWidth; a.classList.add("shake"); a.select();
 });
 $("start").addEventListener("click", () => startGame(pool()));
@@ -707,9 +963,28 @@ $("back").addEventListener("click", route);
 $("g-stop").addEventListener("click", finish);
 $("wipe").addEventListener("click", () => { store.wipe(); STATS = {}; S = Object.assign({}, DEF); $("wiped").classList.remove("hidden"); });
 document.addEventListener("keydown", e => {
+  if (G && G.paused && e.key === "Enter"){ e.preventDefault(); return resumeGame(); }
   if (G && G.waiting && (e.key === "Enter" || e.key === " ") && !$("v-game").classList.contains("hidden")){ e.preventDefault(); goNext(); }
 });
 $("alike").addEventListener("click", goNext);
+$("skip").addEventListener("click", () => { if (G && G.waiting) goNext(); else if (G && !G.locked) resolve(false); });
+// Pause automatique quand la page n'est plus visible (changement d'onglet, téléphone verrouillé…)
+function pauseGame(){
+  if (!G || G.locked || G.paused || $("v-game").classList.contains("hidden")) return;
+  G.paused = true; G.pausedAt = performance.now(); G.left = G.tEnd - G.pausedAt;
+  cancelAnimationFrame(raf);
+  $("ans").disabled = true; $("mast").classList.add("hidden"); $("paused").classList.remove("hidden");
+}
+function resumeGame(){
+  if (!G || !G.paused) return;
+  const now = performance.now();
+  G.paused = false; G.t0 += now - G.pausedAt; G.tEnd = now + G.left;
+  $("paused").classList.add("hidden"); $("mast").classList.remove("hidden");
+  const a = $("ans"); a.disabled = false; a.focus();
+  tick();
+}
+document.addEventListener("visibilitychange", () => { if (document.hidden) pauseGame(); });
+$("resume").addEventListener("click", resumeGame);
 window.addEventListener("resize", () => { if (G && !$("v-game").classList.contains("hidden")) sizeFlag(G.cur); });
 
 route();

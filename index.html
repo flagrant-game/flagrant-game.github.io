@@ -98,6 +98,33 @@ main{flex:1;padding:28px 0 56px}
 .fb.good{color:var(--right)} .fb.bad{color:var(--wrong)}
 .answer .keys{color:var(--ink-2);font-size:14px;margin-top:6px}
 .alike{margin:4px auto 10px;max-width:540px}
+.starts{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.ghost.small{padding:6px 12px;font-size:14px}
+.lobby{max-width:640px}
+.lobby h1{font-weight:800;font-stretch:75%;font-size:42px;line-height:1.05;margin:6px 0 16px}
+.lobby .lbl{display:block;font-weight:700;font-size:15px;margin:16px 0 6px}
+.namerow{display:flex;gap:10px;flex-wrap:wrap}
+.namerow input{flex:1;min-width:200px;font:inherit;font-size:20px;padding:10px 12px;border:2px solid var(--ink);border-radius:4px;background:var(--field);color:var(--ink)}
+.err{color:var(--wrong);min-height:1.5em;margin:8px 0 0}
+.share{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.share code{font:inherit;font-weight:600;background:var(--field);border:1px solid var(--line);border-radius:4px;padding:4px 8px;word-break:break-all}
+.lobby .note{color:var(--ink-2)}
+#mp-setslot{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.board{list-style:none;padding:0;margin:0 0 8px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+.board li{display:flex;gap:12px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+.board .pos{width:1.6em;color:var(--ink-2)}
+.board .nm{flex:1}
+.board .sc{font-weight:700}
+.board li.me .nm{font-weight:700}
+#mp-board{max-width:420px;margin:14px auto 0;font-size:15px;text-align:left}
+.rank{max-width:420px;margin-bottom:22px}
+.map{max-width:420px;margin:10px auto 6px}
+.map svg{display:block;width:100%;height:auto}
+.map .sea{fill:#D7DBE0}
+.map path.l{fill:#F4F5F6;stroke:#C3C8CE;stroke-width:.4}
+.map path.l.on{fill:var(--ink);stroke:var(--ink)}
+.map circle{fill:none;stroke:var(--ink);stroke-width:2.5}
+.map circle.dot{fill:var(--ink);stroke:none}
 .mode-help{margin:8px 0 0;color:var(--ink-2);font-size:14px;max-width:44ch}
 .country{text-align:center;font-weight:700;font-stretch:87%;font-size:26px;margin:14px 0 0}
 .typed{margin:2px 0 0;color:var(--ink-2);font-size:15px}
@@ -149,7 +176,9 @@ kbd{font:inherit;font-size:13px;border:1px solid var(--line);border-bottom-width
 
 footer{border-top:1px solid var(--line);padding:20px 0 30px;font-size:14px;color:var(--ink-2)}
 footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:space-between}
-footer nav{gap:18px;flex-wrap:wrap;font-size:14px}
+footer nav{gap:18px;flex-wrap:wrap;font-size:14px;align-items:center}
+footer select{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;padding:3px 6px}
+.legal-note{color:var(--ink-2);font-size:14px;margin:0 0 18px;padding:10px 12px;border-left:3px solid var(--line)}
 .stats{max-width:720px}
 .conts{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin-bottom:8px}
 .conts th{text-align:left;font-size:14px;font-weight:600;color:var(--ink-2);padding:0 0 8px;border-bottom:1px solid var(--line)}
@@ -186,10 +215,10 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
 <header>
   <div class="wrap">
     <a class="mark" href="#" id="home-link">Flagrant</a>
-    <nav aria-label="Principale">
-      <a href="#" data-route="">Jouer</a>
-      <a href="#resultats" data-route="resultats">Mes résultats</a>
-      <a href="#regles" data-route="regles">Règles</a>
+    <nav aria-label="Principale" data-i18n-aria="nav.main">
+      <a href="#" data-route="" data-i18n="nav.play">Jouer</a>
+      <a href="#resultats" data-route="resultats" data-i18n="nav.results">Mes résultats</a>
+      <a href="#regles" data-route="regles" data-i18n="nav.rules">Règles</a>
     </nav>
   </div>
 </header>
@@ -199,65 +228,86 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
   <!-- Accueil -->
   <section id="v-home" class="home">
     <div>
-      <h1>Un drapeau, quelques secondes, son nom.</h1>
-      <p class="lead">Entraîne-toi sur les drapeaux et les capitales du monde. Tape ta réponse : elle est validée dès qu'elle est juste.</p>
-      <button class="go" id="start">Lancer la partie</button>
+      <h1 data-i18n="home.h1">Un drapeau, quelques secondes, son nom.</h1>
+      <p class="lead" data-i18n="home.lead">Entraîne-toi sur les drapeaux et les capitales du monde. Tape ta réponse : elle est validée dès qu'elle est juste.</p>
+      <div class="starts"><button class="go" id="start" data-i18n="home.start">Lancer la partie</button> <button class="ghost" id="mp-create" data-i18n="mp.create">Jouer avec des amis</button></div>
       <p class="status" id="status"></p>
     </div>
     <form class="settings" onsubmit="return false">
       <fieldset>
-        <legend>Mode de jeu</legend>
-        <div class="seg" id="f-mode" role="group" aria-label="Mode de jeu"></div>
+        <legend data-i18n="set.mode">Mode de jeu</legend>
+        <div class="seg" id="f-mode" role="group" aria-label="Mode de jeu" data-i18n-aria="set.mode"></div>
         <p class="mode-help" id="mode-help"></p>
       </fieldset>
       <fieldset>
-        <legend>Continents <button type="button" id="all-cont">Tout cocher</button></legend>
+        <legend><span data-i18n="set.cont">Continents</span> <button type="button" id="all-cont">Tout cocher</button></legend>
         <div class="checks" id="f-cont"></div>
       </fieldset>
       <fieldset>
-        <legend>Drapeaux inclus</legend>
+        <legend data-i18n="set.cats">Drapeaux inclus</legend>
         <div class="checks one" id="f-cat"></div>
       </fieldset>
       <fieldset>
-        <legend>Options</legend>
+        <legend data-i18n="set.opts">Options</legend>
         <div class="checks one" id="f-opt"></div>
       </fieldset>
       <fieldset>
-        <legend>Temps par drapeau</legend>
-        <div class="seg" id="f-time" role="group" aria-label="Temps par drapeau"></div>
+        <legend data-i18n="set.time">Temps par question</legend>
+        <div class="seg" id="f-time" role="group" aria-label="Temps par question" data-i18n-aria="set.time"></div>
       </fieldset>
       <fieldset>
-        <legend>Longueur de la partie</legend>
-        <div class="seg" id="f-len" role="group" aria-label="Longueur de la partie"></div>
+        <legend data-i18n="set.len">Longueur de la partie</legend>
+        <div class="seg" id="f-len" role="group" aria-label="Longueur de la partie" data-i18n-aria="set.len"></div>
       </fieldset>
     </form>
+  </section>
+
+  <!-- Salon multijoueur -->
+  <section id="v-lobby" class="hidden lobby">
+    <h1 data-i18n="mp.lobbyH">Salon</h1>
+    <div id="mp-form">
+      <p id="mp-lead"></p>
+      <label for="mp-name" class="lbl" data-i18n="mp.name">Ton pseudo</label>
+      <div class="namerow"><input id="mp-name" maxlength="20" autocomplete="nickname"><button class="go" id="mp-go" type="button"></button></div>
+      <p class="err" id="mp-err" role="alert"></p>
+    </div>
+    <div id="mp-room" class="hidden">
+      <p class="share"><span data-i18n="mp.share">Envoie ce lien à tes amis :</span> <code id="mp-link"></code> <button class="ghost small" type="button" id="mp-copy" data-i18n="mp.copy">Copier</button></p>
+      <h2 data-i18n="mp.players">Joueurs</h2>
+      <ol class="board" id="mp-players"></ol>
+      <p class="note" id="mp-wait"></p>
+      <div id="mp-setslot" class="hidden"></div>
+      <p class="actions"><button class="go" type="button" id="mp-start" data-i18n="home.start">Lancer la partie</button> <button class="ghost" type="button" id="mp-leave" data-i18n="mp.leave">Quitter le salon</button></p>
+    </div>
   </section>
 
   <!-- Partie -->
   <section id="v-game" class="hidden" aria-label="Partie en cours">
     <div class="bar">
       <span id="g-prog"></span>
-      <span class="r"><span>Série <b id="g-streak">0</b></span><span><b id="g-score">0</b> pts</span><button type="button" id="g-stop">Arrêter</button></span>
+      <span class="r"><span><span data-i18n="g.streak">Série</span> <b id="g-streak">0</b></span><span><b id="g-score">0</b> <span data-i18n="g.pts">pts</span></span><button type="button" id="g-stop" data-i18n="g.stop">Arrêter</button></span>
     </div>
     <div class="stage">
       <div class="mast" id="mast">
         <div class="pole" id="pole" aria-hidden="true"><div class="shaft"><div class="fill" id="fill"></div></div></div>
-        <img class="flag" id="flag" alt="Drapeau à identifier">
+        <img class="flag" id="flag" alt="Drapeau à identifier" data-i18n-alt="g.flag">
         <div class="veil hidden" id="veil" aria-hidden="true"></div>
       </div>
       <div class="paused hidden" id="paused">
-        <p>Partie en pause.</p>
-        <button class="go" type="button" id="resume">Reprendre</button>
+        <p data-i18n="g.paused">Partie en pause.</p>
+        <button class="go" type="button" id="resume" data-i18n="g.resume">Reprendre</button>
       </div>
     </div>
     <p class="country hidden" id="g-country"></p>
     <div class="answer">
-      <label for="ans" class="sr">Nom du pays</label>
+      <label for="ans" class="sr" id="ans-label">Nom du pays</label>
       <input id="ans" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Nom du pays" enterkeyhint="done">
       <div class="fb" id="fb" aria-live="polite"></div>
       <p class="typed" id="typed"></p>
-      <div class="alike hidden" id="alike"><ul id="alike-list"></ul><p id="alike-tip"></p><p class="cont"><kbd>Entrée</kbd> pour continuer</p></div>
-      <div class="keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> ou <button type="button" class="linkbtn" id="skip">Passer</button></div>
+      <div class="map hidden" id="map" aria-hidden="true"></div>
+      <ol class="board hidden" id="mp-board" aria-label="Scores"></ol>
+      <div class="alike hidden" id="alike"><ul id="alike-list"></ul><p id="alike-tip"></p><p class="cont" data-i18n-html="g.cont"><kbd>Entrée</kbd> pour continuer</p></div>
+      <div class="keys"><span data-i18n-html="g.keys"><kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> ou</span> <button type="button" class="linkbtn" id="skip" data-i18n="g.skip">Passer</button></div>
     </div>
   </section>
 
@@ -266,36 +316,43 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
     <p class="score" id="e-score"></p>
     <p class="summary" id="e-sum"></p>
     <p class="record" id="e-rec"></p>
+    <div id="mp-end" class="hidden">
+      <h2 data-i18n="mp.rankH">Classement</h2>
+      <ol class="board rank" id="mp-rank"></ol>
+      <p class="actions"><button class="go" type="button" id="mp-again" data-i18n="mp.again">Nouvelle partie</button> <button class="ghost" type="button" id="mp-leave2" data-i18n="mp.leave">Quitter le salon</button></p>
+    </div>
+    <div id="solo-end">
     <div class="actions">
-      <button class="go" id="again">Rejouer</button>
+      <button class="go" id="again" data-i18n="e.again">Rejouer</button>
       <button class="ghost" id="retry"></button>
-      <button class="ghost" id="back">Changer les réglages</button>
-      <a class="ghost" href="#resultats">Mes résultats</a>
+      <button class="ghost" id="back" data-i18n="e.back">Changer les réglages</button>
+      <a class="ghost" href="#resultats" data-i18n="nav.results">Mes résultats</a>
     </div>
     <div class="missed" id="e-missed">
-      <h2>À revoir</h2>
+      <h2 data-i18n="e.reviewH">À revoir</h2>
       <p>Les drapeaux que tu n'as pas trouvés pendant cette partie.</p>
       <ul class="missgrid" id="e-list"></ul>
+    </div>
     </div>
   </section>
 
   <!-- Résultats -->
   <section id="v-resultats" class="doc stats hidden">
-    <h1>Mes résultats</h1>
-    <div class="seg r-mode" id="r-mode" role="group" aria-label="Résultats à afficher"></div>
+    <h1 data-i18n="r.h1">Mes résultats</h1>
+    <div class="seg r-mode" id="r-mode" role="group" aria-label="Résultats à afficher" data-i18n-aria="r.modes"></div>
     <p class="date" id="r-total"></p>
     <div id="r-empty" class="hidden">
-      <p>Tu n'as encore joué aucun drapeau. Tes résultats apparaîtront ici après ta première partie.</p>
-      <p><a class="go" href="#">Lancer une partie</a></p>
+      <p data-i18n="r.empty">Tu n'as encore joué aucun drapeau. Tes résultats apparaîtront ici après ta première partie.</p>
+      <p><a class="go" href="#" data-i18n="r.launch">Lancer une partie</a></p>
     </div>
     <div id="r-body">
-      <h2>Par continent</h2>
+      <h2 data-i18n="r.byCont">Par continent</h2>
       <table class="conts">
-        <thead><tr><th scope="col">Continent</th><th scope="col" class="meter"><span class="sr">Réussite en barre</span></th><th scope="col" class="num">Réussite</th><th scope="col" class="num">Temps moyen</th><th scope="col" class="num">Jamais vus</th></tr></thead>
+        <thead><tr><th scope="col" data-i18n="r.colCont">Continent</th><th scope="col" class="meter"><span class="sr" data-i18n="r.colBar">Réussite en barre</span></th><th scope="col" class="num" data-i18n="r.colRate">Réussite</th><th scope="col" class="num" data-i18n="r.colTime">Temps moyen</th><th scope="col" class="num" data-i18n="r.colNever">Jamais vus</th></tr></thead>
         <tbody id="r-conts"></tbody>
       </table>
-      <p class="note">Le temps moyen compte les bonnes réponses. « Jamais vus » compte les drapeaux des types cochés dans tes réglages que tu n'as encore jamais eus dans ce mode.</p>
-      <h2>Ceux qui te posent problème</h2>
+      <p class="note" data-i18n="r.note">Le temps moyen compte les bonnes réponses. « Jamais vus » compte les drapeaux des types cochés dans tes réglages que tu n'as encore jamais eus dans ce mode.</p>
+      <h2 data-i18n="r.hardH">Ceux qui te posent problème</h2>
       <p id="r-hard-lead"></p>
       <ul class="missgrid" id="r-hard"></ul>
       <p class="actions" id="r-hard-act"><button class="go" type="button" id="r-review"></button></p>
@@ -331,11 +388,13 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
     <ul>
       <li><strong>Insister sur mes erreurs</strong> : ce que tu as raté revient plus souvent dans les parties suivantes. Chaque bonne réponse le fait revenir un peu moins, jusqu'à retrouver la fréquence normale.</li>
       <li><strong>Jamais vus en priorité</strong> : les drapeaux, ou les capitales, que tu n'as encore jamais eus dans ce mode passent en premier. Pratique pour faire le tour de tout.</li>
+      <li><strong>Montrer la carte après chaque réponse</strong> : une petite carte du monde situe le pays. Les très petits pays et les îles sont entourés d'un cercle. Activée par défaut.</li>
       <li><strong>Seulement les drapeaux qui se ressemblent</strong> : uniquement les drapeaux faciles à confondre (Tchad et Roumanie, Irlande et Côte d'Ivoire, Australie et Nouvelle-Zélande…). Quand tu rates un de ces drapeaux, dans n'importe quelle partie, ses sosies s'affichent avec ce qui les distingue. Cette option n'existe pas en mode Capitales.</li>
     </ul>
     <p>Le nombre à côté de chaque option indique combien de questions de ta sélection sont concernées.</p>
     <h2>Mes résultats</h2>
     <p>La page « Mes résultats » montre, pour les drapeaux et pour les capitales séparément, ton taux de réussite et ton temps moyen par continent, le nombre de drapeaux jamais vus, et ce que tu trouves le moins souvent. Le bouton en bas de la page lance une partie avec ces questions. Les modes Drapeaux et Dévoilement comptent ensemble.</p>
+    <!--RULESMP-->
     <h2>Les drapeaux</h2>
     <ul>
       <li><strong>Pays membres de l'ONU et Vatican</strong> : les 193 États membres de l'ONU et le Vatican.</li>
@@ -356,12 +415,14 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
     <p>Le site est gratuit et ne demande ni compte ni inscription. Il est fourni tel quel : l'éditeur peut le modifier, le suspendre ou l'arrêter à tout moment, sans préavis ni indemnité.</p>
     <h2>3. Utilisation</h2>
     <p>Tu peux utiliser Flagrant pour ton usage personnel, seul ou en classe. Tu t'engages à ne pas perturber son fonctionnement ni tenter d'accéder à ce qui n'est pas prévu pour toi.</p>
+    <h2>3 bis. Multijoueur</h2>
+    <p>En multijoueur, choisis un pseudo correct : un pseudo injurieux, discriminant ou qui se fait passer pour quelqu'un d'autre est interdit. Les salons ne sont pas surveillés : ne partage le lien de ton salon qu'avec des personnes que tu connais.</p>
     <h2>4. Contenus et exactitude</h2>
     <p>Les drapeaux et les noms sont fournis à titre éducatif. Malgré le soin apporté, une erreur ou un drapeau dépassé reste possible. La présence d'un drapeau, son classement ou le nom choisi pour un territoire ne constituent pas une prise de position sur son statut politique ou international.</p>
     <h2>5. Propriété intellectuelle</h2>
     <p>Le nom Flagrant, la mise en page et le code du site appartiennent à son éditeur. Les images de drapeaux et la police de caractères restent soumises à leurs propres licences, détaillées dans les <a href="#mentions">mentions légales et crédits</a>.</p>
     <h2>6. Données</h2>
-    <p>Flagrant ne collecte aucune donnée personnelle. Tes réglages et records restent dans ton navigateur. Le détail est dans la <a href="#confidentialite">politique de confidentialité</a>.</p>
+    <p>En solo, Flagrant ne collecte aucune donnée personnelle : tes réglages et records restent dans ton navigateur. Le multijoueur utilise ton pseudo et un identifiant anonyme. Le détail est dans la <a href="#confidentialite">politique de confidentialité</a>.</p>
     <h2>7. Responsabilité</h2>
     <p>L'éditeur ne peut être tenu responsable d'une indisponibilité du site, d'une perte de tes records locaux ou d'une erreur dans les contenus.</p>
     <h2>8. Modification des conditions</h2>
@@ -375,20 +436,31 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
     <h1>Politique de confidentialité</h1>
     <p class="date">Mise à jour le 15 novembre 2026.</p>
     <h2>Ce que Flagrant collecte</h2>
-    <p>Rien. Il n'y a ni compte, ni formulaire, ni cookie, ni outil de mesure d'audience, ni publicité. Le site ne fait appel à aucun service extérieur : les drapeaux et la police sont servis par le site lui-même.</p>
+    <p>En partie solo, rien. Il n'y a ni compte, ni formulaire, ni cookie, ni outil de mesure d'audience, ni publicité, et le site ne fait appel à aucun service extérieur : les drapeaux, la carte et la police sont servis par le site lui-même. Le multijoueur est le seul cas où des informations quittent ton appareil, comme expliqué plus bas.</p>
     <h2>Ce qui reste sur ton appareil</h2>
     <p>Pour te faire gagner du temps, Flagrant garde dans ton navigateur (stockage local) :</p>
     <ul>
-      <li>tes réglages : continents, types de drapeaux, options, temps et longueur de partie ;</li>
+      <li>tes réglages : langue, mode, continents, types de drapeaux, options, temps et longueur de partie ;</li>
+      <li>le pseudo que tu as choisi pour le multijoueur, pour ne pas avoir à le retaper ;</li>
       <li>tes records, un par combinaison de réglages ;</li>
       <li>tes résultats par drapeau et par capitale (combien de fois tu l'as vu, trouvé, raté récemment, et ton temps de réponse), pour la page « Mes résultats » et les options « Insister sur mes erreurs » et « Jamais vus en priorité ».</li>
     </ul>
     <p>Ces informations ne quittent jamais ton appareil et personne d'autre n'y a accès. Elles disparaissent si tu vides les données de ton navigateur, ou avec ce bouton :</p>
     <p><button class="ghost" id="wipe" type="button">Effacer mes données Flagrant</button><span class="done hidden" id="wiped">Réglages, records et résultats effacés.</span></p>
+    <h2>Multijoueur</h2>
+    <p>Quand tu joues avec des amis, les informations nécessaires à la partie passent par Firebase Realtime Database, un service de Google, et sont stockées dans un centre de données situé en Belgique :</p>
+    <ul>
+      <li>ton pseudo ;</li>
+      <li>un identifiant anonyme créé pour ta session de jeu, sans compte, sans e-mail et sans mot de passe ;</li>
+      <li>ton score et le temps de chacune de tes bonnes réponses ;</li>
+      <li>les réglages et l'état de la partie.</li>
+    </ul>
+    <p>Ces informations sont visibles par les joueurs du même salon. Un salon est supprimé quand l'hôte le quitte en dernier avec le bouton « Quitter le salon ». Sinon, il est effacé dès qu'un nouveau salon est créé plus de 24 heures après. Les identifiants anonymes inutilisés sont supprimés automatiquement après 30 jours. Google traite aussi des données techniques de connexion, comme l'adresse IP, selon sa <a href="https://policies.google.com/privacy?hl=fr">politique de confidentialité</a> et les <a href="https://firebase.google.com/support/privacy?hl=fr">engagements de Firebase</a>.</p>
+    <p>Ces données servent uniquement à faire fonctionner la partie (base légale : exécution du service que tu demandes en rejoignant un salon). Si tu ne veux pas les transmettre, joue en solo.</p>
     <h2>Hébergement</h2>
     <p>Le site est hébergé par GitHub Pages (GitHub, Inc.). Comme l'indique GitHub, l'adresse IP de chaque visiteur est enregistrée et conservée à des fins de sécurité. Ce traitement relève de la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement">déclaration de confidentialité de GitHub</a>.</p>
     <h2>Tes droits</h2>
-    <p>Comme Flagrant ne détient aucune donnée personnelle te concernant, il n'y a rien à consulter, corriger ou supprimer de son côté. Pour une question liée à l'hébergement, tu peux contacter GitHub ou la CNIL (cnil.fr).</p>
+    <p>En solo, Flagrant ne détient aucune donnée personnelle te concernant. Pour le multijoueur, quitter le salon avec le bouton prévu supprime ton pseudo et ton score de ce salon ; pour toute autre demande, utilise <a href="https://github.com/flagrant-game/flagrant-game.github.io/issues">la page du projet sur GitHub</a>. Pour une question liée à l'hébergement, tu peux contacter GitHub ou la CNIL (cnil.fr).</p>
   </article>
 
   <!-- Mentions légales -->
@@ -404,6 +476,8 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
       <dt>Téléphone</dt><dd>+1 877 448 4820</dd>
       <dt>Site</dt><dd><a href="https://pages.github.com">pages.github.com</a></dd>
     </dl>
+    <h2>Données du multijoueur</h2>
+    <p>Les parties à plusieurs passent par Firebase Realtime Database, un service de Google, avec un stockage en Belgique. Détails dans la <a href="#confidentialite">politique de confidentialité</a>.</p>
     <h2>Signaler une erreur</h2>
     <p>Un drapeau faux ou un nom refusé alors qu'il devrait être accepté ? Signale-le sur <a href="https://github.com/flagrant-game/flagrant-game.github.io/issues">la page du projet sur GitHub</a>.</p>
     <h2>Drapeaux</h2>
@@ -413,6 +487,8 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
     </ul>
     <h2>Noms des pays</h2>
     <p>Les noms français et anglais proviennent des données Unicode CLDR fournies par ton navigateur, complétées à la main par des noms courants.</p>
+    <h2>Carte</h2>
+    <p>Carte du monde d'après les données <a href="https://www.naturalearthdata.com">Natural Earth</a> (domaine public), dans la version <a href="https://github.com/topojson/world-atlas">world-atlas</a> de Mike Bostock (licence ISC). Les frontières sont simplifiées et ne prennent pas position sur les territoires disputés.</p>
     <h2>Police de caractères</h2>
     <p>Archivo, dessinée par Omnibus-Type, sous licence SIL Open Font License 1.1.</p>
     <h2>Inspiration</h2>
@@ -423,20 +499,684 @@ a.go,a.ghost{display:inline-block;text-decoration:none}
 <footer>
   <div class="wrap">
     <span>Flagrant, 2026</span>
-    <nav aria-label="Informations">
-      <a href="#regles">Règles</a>
-      <a href="#conditions">Conditions d'utilisation</a>
-      <a href="#confidentialite">Confidentialité</a>
-      <a href="#mentions">Mentions légales et crédits</a>
+    <nav aria-label="Informations" data-i18n-aria="f.info">
+      <a href="#regles" data-i18n="nav.rules">Règles</a>
+      <a href="#conditions" data-i18n="f.terms">Conditions d'utilisation</a>
+      <a href="#confidentialite" data-i18n="f.privacy">Confidentialité</a>
+      <a href="#mentions" data-i18n="f.legal">Mentions légales et crédits</a>
+      <label class="lang"><span class="sr" data-i18n="f.lang">Langue</span><select id="lang"></select></label>
     </nav>
   </div>
 </footer>
 
 <script>
+/* ---------- Langues ---------- */
+const LANGS = {fr:"Français", en:"English", es:"Español", de:"Deutsch", it:"Italiano", pt:"Português"};
+const LANG = (() => {
+  try { const s = localStorage.getItem("flagrant:lang"); if (s && LANGS[s]) return s; } catch(e){}
+  for (const l of (navigator.languages || [navigator.language || "fr"])){ const c = String(l).slice(0, 2).toLowerCase(); if (LANGS[c]) return c; }
+  return "en";
+})();
+document.documentElement.lang = LANG;
+
+const T = {
+ "nav.main":     {fr:"Principale", en:"Main", es:"Principal", de:"Hauptmenü", it:"Principale", pt:"Principal"},
+ "nav.play":     {fr:"Jouer", en:"Play", es:"Jugar", de:"Spielen", it:"Gioca", pt:"Jogar"},
+ "nav.results":  {fr:"Mes résultats", en:"My results", es:"Mis resultados", de:"Meine Ergebnisse", it:"I miei risultati", pt:"Meus resultados"},
+ "nav.rules":    {fr:"Règles", en:"Rules", es:"Reglas", de:"Regeln", it:"Regole", pt:"Regras"},
+ "home.h1":      {fr:"Un drapeau, quelques secondes, son nom.", en:"One flag, a few seconds, its name.", es:"Una bandera, unos segundos, su nombre.", de:"Eine Flagge, ein paar Sekunden, ihr Name.", it:"Una bandiera, pochi secondi, il suo nome.", pt:"Uma bandeira, alguns segundos, o seu nome."},
+ "home.lead":    {fr:"Entraîne-toi sur les drapeaux et les capitales du monde. Tape ta réponse : elle est validée dès qu'elle est juste.",
+                  en:"Practise the flags and capitals of the world. Type your answer: it counts as soon as it's right.",
+                  es:"Practica las banderas y capitales del mundo. Escribe tu respuesta: cuenta en cuanto es correcta.",
+                  de:"Übe die Flaggen und Hauptstädte der Welt. Tippe deine Antwort: Sie zählt, sobald sie stimmt.",
+                  it:"Allenati con le bandiere e le capitali del mondo. Scrivi la risposta: conta appena è giusta.",
+                  pt:"Treine as bandeiras e capitais do mundo. Digite a resposta: ela vale assim que estiver certa."},
+ "home.start":   {fr:"Lancer la partie", en:"Start game", es:"Empezar partida", de:"Spiel starten", it:"Inizia la partita", pt:"Começar partida"},
+ "set.mode":     {fr:"Mode de jeu", en:"Game mode", es:"Modo de juego", de:"Spielmodus", it:"Modalità di gioco", pt:"Modo de jogo"},
+ "set.cont":     {fr:"Continents", en:"Continents", es:"Continentes", de:"Kontinente", it:"Continenti", pt:"Continentes"},
+ "set.all":      {fr:"Tout cocher", en:"Select all", es:"Marcar todo", de:"Alle auswählen", it:"Seleziona tutto", pt:"Marcar tudo"},
+ "set.none":     {fr:"Tout décocher", en:"Clear all", es:"Desmarcar todo", de:"Alle abwählen", it:"Deseleziona tutto", pt:"Desmarcar tudo"},
+ "set.cats":     {fr:"Drapeaux inclus", en:"Flags included", es:"Banderas incluidas", de:"Enthaltene Flaggen", it:"Bandiere incluse", pt:"Bandeiras incluídas"},
+ "set.opts":     {fr:"Options", en:"Options", es:"Opciones", de:"Optionen", it:"Opzioni", pt:"Opções"},
+ "set.time":     {fr:"Temps par question", en:"Time per question", es:"Tiempo por pregunta", de:"Zeit pro Frage", it:"Tempo per domanda", pt:"Tempo por pergunta"},
+ "set.len":      {fr:"Longueur de la partie", en:"Game length", es:"Duración de la partida", de:"Spiellänge", it:"Durata della partita", pt:"Duração da partida"},
+ "len.all":      {fr:"Tous", en:"All", es:"Todas", de:"Alle", it:"Tutte", pt:"Todas"},
+ "len.endless":  {fr:"Sans fin", en:"Endless", es:"Sin fin", de:"Endlos", it:"Senza fine", pt:"Sem fim"},
+ "mode.drapeau": {fr:"Drapeaux", en:"Flags", es:"Banderas", de:"Flaggen", it:"Bandiere", pt:"Bandeiras"},
+ "mode.capitale":{fr:"Capitales", en:"Capitals", es:"Capitales", de:"Hauptstädte", it:"Capitali", pt:"Capitais"},
+ "mode.devoile": {fr:"Dévoilement", en:"Reveal", es:"Revelación", de:"Aufdecken", it:"Svelamento", pt:"Revelação"},
+ "help.drapeau": {fr:"Un drapeau s'affiche : tape le nom du pays.", en:"A flag appears: type the country's name.", es:"Aparece una bandera: escribe el nombre del país.", de:"Eine Flagge erscheint: Tippe den Namen des Landes.", it:"Appare una bandiera: scrivi il nome del paese.", pt:"Aparece uma bandeira: digite o nome do país."},
+ "help.capitale":{fr:"Le drapeau et le nom du pays s'affichent : tape la capitale.", en:"The flag and the country's name appear: type the capital.", es:"Aparecen la bandera y el nombre del país: escribe la capital.", de:"Flagge und Ländername erscheinen: Tippe die Hauptstadt.", it:"Appaiono la bandiera e il nome del paese: scrivi la capitale.", pt:"Aparecem a bandeira e o nome do país: digite a capital."},
+ "help.devoile": {fr:"Le drapeau apparaît morceau par morceau : plus tu réponds tôt, plus tu gagnes de points.", en:"The flag appears piece by piece: the sooner you answer, the more points you get.", es:"La bandera aparece por partes: cuanto antes respondas, más puntos ganas.", de:"Die Flagge erscheint Stück für Stück: Je früher du antwortest, desto mehr Punkte bekommst du.", it:"La bandiera appare pezzo per pezzo: prima rispondi, più punti guadagni.", pt:"A bandeira aparece aos poucos: quanto mais cedo responder, mais pontos ganha."},
+ "cont.af": {fr:"Afrique", en:"Africa", es:"África", de:"Afrika", it:"Africa", pt:"África"},
+ "cont.na": {fr:"Amérique du Nord et centrale", en:"North and Central America", es:"América del Norte y Central", de:"Nord- und Mittelamerika", it:"America settentrionale e centrale", pt:"América do Norte e Central"},
+ "cont.sa": {fr:"Amérique du Sud", en:"South America", es:"América del Sur", de:"Südamerika", it:"America meridionale", pt:"América do Sul"},
+ "cont.as": {fr:"Asie", en:"Asia", es:"Asia", de:"Asien", it:"Asia", pt:"Ásia"},
+ "cont.eu": {fr:"Europe", en:"Europe", es:"Europa", de:"Europa", it:"Europa", pt:"Europa"},
+ "cont.oc": {fr:"Océanie", en:"Oceania", es:"Oceanía", de:"Ozeanien", it:"Oceania", pt:"Oceania"},
+ "cont.ot": {fr:"Antarctique et ONU", en:"Antarctica and UN", es:"Antártida y ONU", de:"Antarktis und UNO", it:"Antartide e ONU", pt:"Antártida e ONU"},
+ "cat.pays":      {fr:"Pays membres de l'ONU et Vatican", en:"UN member states and Vatican City", es:"Estados miembros de la ONU y Vaticano", de:"UN-Mitgliedstaaten und Vatikanstadt", it:"Stati membri dell'ONU e Vaticano", pt:"Estados-membros da ONU e Vaticano"},
+ "cat.limite":    {fr:"États à reconnaissance limitée", en:"States with limited recognition", es:"Estados con reconocimiento limitado", de:"Staaten mit eingeschränkter Anerkennung", it:"Stati a riconoscimento limitato", pt:"Estados com reconhecimento limitado"},
+ "cat.disparu":   {fr:"Pays disparus", en:"Former countries", es:"Países desaparecidos", de:"Ehemalige Staaten", it:"Stati scomparsi", pt:"Países extintos"},
+ "cat.territoire":{fr:"Territoires, régions et organisations", en:"Territories, regions and organisations", es:"Territorios, regiones y organizaciones", de:"Gebiete, Regionen und Organisationen", it:"Territori, regioni e organizzazioni", pt:"Territórios, regiões e organizações"},
+ "opt.focus": {fr:"Insister sur mes erreurs", en:"Focus on my mistakes", es:"Insistir en mis errores", de:"Meine Fehler öfter üben", it:"Insisti sui miei errori", pt:"Insistir nos meus erros"},
+ "opt.fresh": {fr:"Jamais vus en priorité", en:"Never-seen first", es:"Primero los nunca vistos", de:"Nie gesehene zuerst", it:"Prima quelli mai visti", pt:"Nunca vistos primeiro"},
+ "opt.alike": {fr:"Seulement les drapeaux qui se ressemblent", en:"Only look-alike flags", es:"Solo banderas parecidas", de:"Nur ähnliche Flaggen", it:"Solo bandiere simili", pt:"Só bandeiras parecidas"},
+ "opt.map":   {fr:"Montrer la carte après chaque réponse", en:"Show the map after each answer", es:"Mostrar el mapa tras cada respuesta", de:"Karte nach jeder Antwort zeigen", it:"Mostra la mappa dopo ogni risposta", pt:"Mostrar o mapa após cada resposta"},
+ "st.nocats":  {fr:"Coche au moins un type de drapeaux.", en:"Tick at least one type of flag.", es:"Marca al menos un tipo de bandera.", de:"Wähle mindestens eine Flaggenart.", it:"Seleziona almeno un tipo di bandiera.", pt:"Marque pelo menos um tipo de bandeira."},
+ "st.noalike": {fr:"Aucun sosie dans cette sélection : ajoute des continents ou des types de drapeaux.", en:"No look-alikes in this selection: add continents or flag types.", es:"No hay banderas parecidas en esta selección: añade continentes o tipos de bandera.", de:"Keine ähnlichen Flaggen in dieser Auswahl: Füge Kontinente oder Flaggenarten hinzu.", it:"Nessuna bandiera simile in questa selezione: aggiungi continenti o tipi di bandiera.", pt:"Nenhuma bandeira parecida nesta seleção: adicione continentes ou tipos de bandeira."},
+ "st.nocont":  {fr:"Aucun drapeau ne correspond : coche au moins un continent.", en:"No flags match: tick at least one continent.", es:"Ninguna bandera coincide: marca al menos un continente.", de:"Keine passenden Flaggen: Wähle mindestens einen Kontinent.", it:"Nessuna bandiera corrisponde: seleziona almeno un continente.", pt:"Nenhuma bandeira corresponde: marque pelo menos um continente."},
+ "st.count":   {fr:"{len} {what} sur {n} disponibles.", en:"{len} {what} out of {n} available.", es:"{len} {what} de {n} disponibles.", de:"{len} {what} von {n} verfügbaren.", it:"{len} {what} su {n} disponibili.", pt:"{len} {what} de {n} disponíveis."},
+ "st.endless": {fr:"Partie sans fin sur {n} {what}.", en:"Endless game with {n} {what}.", es:"Partida sin fin con {n} {what}.", de:"Endlosspiel mit {n} {what}.", it:"Partita senza fine con {n} {what}.", pt:"Partida sem fim com {n} {what}."},
+ "st.record":  {fr:"Record : {n} points.", en:"Best: {n} points.", es:"Récord: {n} puntos.", de:"Rekord: {n} Punkte.", it:"Record: {n} punti.", pt:"Recorde: {n} pontos."},
+ "w.flags":    {fr:"drapeaux", en:"flags", es:"banderas", de:"Flaggen", it:"bandiere", pt:"bandeiras"},
+ "w.capitals": {fr:"capitales", en:"capitals", es:"capitales", de:"Hauptstädte", it:"capitali", pt:"capitais"},
+ "g.streak":   {fr:"Série", en:"Streak", es:"Racha", de:"Serie", it:"Serie", pt:"Sequência"},
+ "g.pts":      {fr:"pts", en:"pts", es:"pts", de:"Pkt.", it:"pt", pt:"pts"},
+ "g.stop":     {fr:"Arrêter", en:"Stop", es:"Parar", de:"Beenden", it:"Ferma", pt:"Parar"},
+ "g.flag":     {fr:"Drapeau à identifier", en:"Flag to identify", es:"Bandera a identificar", de:"Zu erkennende Flagge", it:"Bandiera da indovinare", pt:"Bandeira a identificar"},
+ "g.paused":   {fr:"Partie en pause.", en:"Game paused.", es:"Partida en pausa.", de:"Spiel pausiert.", it:"Partita in pausa.", pt:"Partida em pausa."},
+ "g.resume":   {fr:"Reprendre", en:"Resume", es:"Reanudar", de:"Fortsetzen", it:"Riprendi", pt:"Retomar"},
+ "ph.country": {fr:"Nom du pays", en:"Country name", es:"Nombre del país", de:"Name des Landes", it:"Nome del paese", pt:"Nome do país"},
+ "ph.capital": {fr:"Capitale", en:"Capital", es:"Capital", de:"Hauptstadt", it:"Capitale", pt:"Capital"},
+ "g.keys":     {fr:"<kbd>Entrée</kbd> accepte une petite faute de frappe. <kbd>Échap</kbd> ou", en:"<kbd>Enter</kbd> accepts a small typo. <kbd>Esc</kbd> or", es:"<kbd>Intro</kbd> acepta una pequeña errata. <kbd>Esc</kbd> o", de:"<kbd>Enter</kbd> akzeptiert einen kleinen Tippfehler. <kbd>Esc</kbd> oder", it:"<kbd>Invio</kbd> accetta un piccolo errore di battitura. <kbd>Esc</kbd> o", pt:"<kbd>Enter</kbd> aceita um pequeno erro de digitação. <kbd>Esc</kbd> ou"},
+ "g.skip":     {fr:"Passer", en:"Skip", es:"Saltar", de:"Überspringen", it:"Salta", pt:"Pular"},
+ "g.cont":     {fr:"<kbd>Entrée</kbd> pour continuer", en:"<kbd>Enter</kbd> to continue", es:"<kbd>Intro</kbd> para continuar", de:"<kbd>Enter</kbd> zum Fortfahren", it:"<kbd>Invio</kbd> per continuare", pt:"<kbd>Enter</kbd> para continuar"},
+ "g.progN":    {fr:"Question <b>{n}</b>", en:"Question <b>{n}</b>", es:"Pregunta <b>{n}</b>", de:"Frage <b>{n}</b>", it:"Domanda <b>{n}</b>", pt:"Pergunta <b>{n}</b>"},
+ "g.prog":     {fr:"<b>{i}</b> sur {n}", en:"<b>{i}</b> of {n}", es:"<b>{i}</b> de {n}", de:"<b>{i}</b> von {n}", it:"<b>{i}</b> di {n}", pt:"<b>{i}</b> de {n}"},
+ "g.was":      {fr:"C'était : {x}", en:"It was: {x}", es:"Era: {x}", de:"Richtig war: {x}", it:"Era: {x}", pt:"Era: {x}"},
+ "g.typed":    {fr:"Tu as tapé : {x}", en:"You typed: {x}", es:"Escribiste: {x}", de:"Du hast getippt: {x}", it:"Hai scritto: {x}", pt:"Você digitou: {x}"},
+ "e.sum":      {fr:"Trouvés : {g} sur {t}. Meilleure série : {b}.", en:"Found: {g} of {t}. Best streak: {b}.", es:"Acertadas: {g} de {t}. Mejor racha: {b}.", de:"Richtig: {g} von {t}. Beste Serie: {b}.", it:"Indovinate: {g} su {t}. Serie migliore: {b}.", pt:"Acertos: {g} de {t}. Melhor sequência: {b}."},
+ "e.none":     {fr:"Aucune question jouée.", en:"No questions played.", es:"No se jugó ninguna pregunta.", de:"Keine Fragen gespielt.", it:"Nessuna domanda giocata.", pt:"Nenhuma pergunta jogada."},
+ "e.recNew":   {fr:"Nouveau record, l'ancien était de {o} points.", en:"New best! The previous one was {o} points.", es:"¡Nuevo récord! El anterior era de {o} puntos.", de:"Neuer Rekord! Der alte lag bei {o} Punkten.", it:"Nuovo record! Il precedente era di {o} punti.", pt:"Novo recorde! O anterior era de {o} pontos."},
+ "e.recFirst": {fr:"Premier record pour ces réglages.", en:"First record for these settings.", es:"Primer récord con estos ajustes.", de:"Erster Rekord für diese Einstellungen.", it:"Primo record con queste impostazioni.", pt:"Primeiro recorde com estas configurações."},
+ "e.recOld":   {fr:"Record pour ces réglages : {o} points.", en:"Best for these settings: {o} points.", es:"Récord con estos ajustes: {o} puntos.", de:"Rekord für diese Einstellungen: {o} Punkte.", it:"Record con queste impostazioni: {o} punti.", pt:"Recorde com estas configurações: {o} pontos."},
+ "e.again":    {fr:"Rejouer", en:"Play again", es:"Jugar otra vez", de:"Nochmal spielen", it:"Gioca ancora", pt:"Jogar de novo"},
+ "e.retryN":   {fr:"Revoir les {m} ratés", en:"Review the {m} missed", es:"Repasar las {m} falladas", de:"Die {m} verpassten wiederholen", it:"Ripassa le {m} sbagliate", pt:"Rever as {m} erradas"},
+ "e.retry1":   {fr:"Revoir le raté", en:"Review the missed one", es:"Repasar la fallada", de:"Die verpasste wiederholen", it:"Ripassa quella sbagliata", pt:"Rever a errada"},
+ "e.retry0":   {fr:"Aucun raté à revoir", en:"Nothing to review", es:"Nada que repasar", de:"Nichts zu wiederholen", it:"Niente da ripassare", pt:"Nada para rever"},
+ "e.back":     {fr:"Changer les réglages", en:"Change settings", es:"Cambiar ajustes", de:"Einstellungen ändern", it:"Cambia impostazioni", pt:"Mudar configurações"},
+ "e.reviewH":  {fr:"À revoir", en:"To review", es:"Para repasar", de:"Zum Wiederholen", it:"Da ripassare", pt:"Para rever"},
+ "e.reviewF":  {fr:"Les drapeaux que tu n'as pas trouvés pendant cette partie.", en:"The flags you missed in this game.", es:"Las banderas que fallaste en esta partida.", de:"Die Flaggen, die du in diesem Spiel verpasst hast.", it:"Le bandiere che hai sbagliato in questa partita.", pt:"As bandeiras que você errou nesta partida."},
+ "e.reviewC":  {fr:"Les capitales que tu n'as pas trouvées pendant cette partie.", en:"The capitals you missed in this game.", es:"Las capitales que fallaste en esta partida.", de:"Die Hauptstädte, die du in diesem Spiel verpasst hast.", it:"Le capitali che hai sbagliato in questa partita.", pt:"As capitais que você errou nesta partida."},
+ "r.h1":       {fr:"Mes résultats", en:"My results", es:"Mis resultados", de:"Meine Ergebnisse", it:"I miei risultati", pt:"Meus resultados"},
+ "r.modes":    {fr:"Résultats à afficher", en:"Results to show", es:"Resultados a mostrar", de:"Angezeigte Ergebnisse", it:"Risultati da mostrare", pt:"Resultados a mostrar"},
+ "r.total":    {fr:"{seen} réponses sur {k} {what}, {p} de bonnes réponses, {s} en moyenne par bonne réponse.", en:"{seen} answers on {k} {what}, {p} correct, {s} on average per correct answer.", es:"{seen} respuestas sobre {k} {what}, {p} de aciertos, {s} de media por acierto.", de:"{seen} Antworten zu {k} {what}, {p} richtig, im Schnitt {s} pro richtiger Antwort.", it:"{seen} risposte su {k} {what}, {p} corrette, {s} in media per risposta corretta.", pt:"{seen} respostas sobre {k} {what}, {p} de acertos, {s} em média por acerto."},
+ "w.diffF":    {fr:"drapeaux différents", en:"different flags", es:"banderas distintas", de:"verschiedenen Flaggen", it:"bandiere diverse", pt:"bandeiras diferentes"},
+ "w.diffC":    {fr:"capitales différentes", en:"different capitals", es:"capitales distintas", de:"verschiedenen Hauptstädten", it:"capitali diverse", pt:"capitais diferentes"},
+ "r.noneF":    {fr:"Aucune partie jouée pour l'instant.", en:"No games played yet.", es:"Aún no has jugado ninguna partida.", de:"Noch keine Spiele gespielt.", it:"Nessuna partita giocata per ora.", pt:"Nenhuma partida jogada ainda."},
+ "r.noneC":    {fr:"Aucune partie de capitales jouée pour l'instant.", en:"No capitals games played yet.", es:"Aún no has jugado ninguna partida de capitales.", de:"Noch keine Hauptstadt-Spiele gespielt.", it:"Nessuna partita sulle capitali giocata per ora.", pt:"Nenhuma partida de capitais jogada ainda."},
+ "r.empty":    {fr:"Tu n'as encore joué aucun drapeau. Tes résultats apparaîtront ici après ta première partie.", en:"You haven't played any flags yet. Your results will appear here after your first game.", es:"Todavía no has jugado ninguna bandera. Tus resultados aparecerán aquí después de tu primera partida.", de:"Du hast noch keine Flagge gespielt. Deine Ergebnisse erscheinen hier nach deinem ersten Spiel.", it:"Non hai ancora giocato nessuna bandiera. I tuoi risultati appariranno qui dopo la prima partita.", pt:"Você ainda não jogou nenhuma bandeira. Seus resultados aparecerão aqui depois da primeira partida."},
+ "r.byCont":   {fr:"Par continent", en:"By continent", es:"Por continente", de:"Nach Kontinent", it:"Per continente", pt:"Por continente"},
+ "r.colCont":  {fr:"Continent", en:"Continent", es:"Continente", de:"Kontinent", it:"Continente", pt:"Continente"},
+ "r.colBar":   {fr:"Réussite en barre", en:"Success bar", es:"Barra de aciertos", de:"Erfolgsbalken", it:"Barra delle risposte corrette", pt:"Barra de acertos"},
+ "r.colRate":  {fr:"Réussite", en:"Correct", es:"Aciertos", de:"Richtig", it:"Corrette", pt:"Acertos"},
+ "r.colTime":  {fr:"Temps moyen", en:"Average time", es:"Tiempo medio", de:"Ø Zeit", it:"Tempo medio", pt:"Tempo médio"},
+ "r.colNever": {fr:"Jamais vus", en:"Never seen", es:"Nunca vistas", de:"Nie gesehen", it:"Mai viste", pt:"Nunca vistas"},
+ "r.note":     {fr:"Le temps moyen compte les bonnes réponses. « Jamais vus » compte les drapeaux des types cochés dans tes réglages que tu n'as encore jamais eus dans ce mode.", en:"Average time counts correct answers. “Never seen” counts flags of the types ticked in your settings that you haven't had yet in this mode.", es:"El tiempo medio cuenta los aciertos. «Nunca vistas» cuenta las banderas de los tipos marcados en tus ajustes que aún no te han salido en este modo.", de:"Die Ø Zeit zählt richtige Antworten. „Nie gesehen“ zählt Flaggen der in deinen Einstellungen gewählten Arten, die du in diesem Modus noch nicht hattest.", it:"Il tempo medio conta le risposte corrette. «Mai viste» conta le bandiere dei tipi selezionati nelle impostazioni che non ti sono ancora uscite in questa modalità.", pt:"O tempo médio conta os acertos. «Nunca vistas» conta as bandeiras dos tipos marcados nas configurações que ainda não saíram neste modo."},
+ "r.hardH":    {fr:"Ceux qui te posent problème", en:"Your trouble spots", es:"Las que más te cuestan", de:"Deine Problemfälle", it:"Quelle che ti mettono in difficoltà", pt:"As que mais te complicam"},
+ "r.hardF":    {fr:"Les drapeaux que tu trouves le moins souvent, du plus difficile au moins difficile.", en:"The flags you get right least often, hardest first.", es:"Las banderas que menos aciertas, de la más difícil a la menos difícil.", de:"Die Flaggen, die du am seltensten erkennst, die schwierigsten zuerst.", it:"Le bandiere che indovini meno spesso, dalla più difficile alla meno difficile.", pt:"As bandeiras que você menos acerta, da mais difícil à menos difícil."},
+ "r.hardC":    {fr:"Les capitales que tu trouves le moins souvent, de la plus difficile à la moins difficile.", en:"The capitals you get right least often, hardest first.", es:"Las capitales que menos aciertas, de la más difícil a la menos difícil.", de:"Die Hauptstädte, die du am seltensten weißt, die schwierigsten zuerst.", it:"Le capitali che indovini meno spesso, dalla più difficile alla meno difficile.", pt:"As capitais que você menos acerta, da mais difícil à menos difícil."},
+ "r.hard0":    {fr:"Aucune erreur pour l'instant : tout ce que tu as joué a été trouvé.", en:"No mistakes so far: you got everything right.", es:"Ningún error por ahora: lo has acertado todo.", de:"Bisher keine Fehler: Du hast alles richtig.", it:"Nessun errore finora: hai indovinato tutto.", pt:"Nenhum erro até agora: você acertou tudo."},
+ "r.reviewN":  {fr:"Réviser ces {n} {what}", en:"Review these {n} {what}", es:"Repasar estas {n} {what}", de:"Diese {n} {what} wiederholen", it:"Ripassa queste {n} {what}", pt:"Rever estas {n} {what}"},
+ "r.review1":  {fr:"Réviser cette question", en:"Review this one", es:"Repasar esta", de:"Diese wiederholen", it:"Ripassa questa", pt:"Rever esta"},
+ "r.rate":     {fr:"trouvé {f} fois sur {s}", en:"right {f} times out of {s}", es:"acertada {f} de {s} veces", de:"{f} von {s} Mal richtig", it:"indovinata {f} volte su {s}", pt:"acertada {f} de {s} vezes"},
+ "r.launch":   {fr:"Lancer une partie", en:"Start a game", es:"Empezar una partida", de:"Ein Spiel starten", it:"Inizia una partita", pt:"Começar uma partida"},
+ "f.terms":    {fr:"Conditions d'utilisation", en:"Terms of use", es:"Condiciones de uso", de:"Nutzungsbedingungen", it:"Condizioni d'uso", pt:"Termos de uso"},
+ "f.privacy":  {fr:"Confidentialité", en:"Privacy", es:"Privacidad", de:"Datenschutz", it:"Privacy", pt:"Privacidade"},
+ "f.legal":    {fr:"Mentions légales et crédits", en:"Legal notice and credits", es:"Aviso legal y créditos", de:"Impressum und Credits", it:"Note legali e crediti", pt:"Aviso legal e créditos"},
+ "f.info":     {fr:"Informations", en:"Information", es:"Información", de:"Informationen", it:"Informazioni", pt:"Informações"},
+ "f.lang":     {fr:"Langue", en:"Language", es:"Idioma", de:"Sprache", it:"Lingua", pt:"Idioma"},
+ "legal.note": {fr:"", en:"", es:"Esta página solo está disponible en francés e inglés. Prevalece la versión francesa.", de:"Diese Seite gibt es nur auf Französisch und Englisch. Maßgeblich ist die französische Fassung.", it:"Questa pagina è disponibile solo in francese e in inglese. Fa fede la versione francese.", pt:"Esta página só está disponível em francês e inglês. Prevalece a versão francesa."},
+ "legal.noteEn":{fr:"", en:"This is a translation. The French version prevails.", es:"", de:"", it:"", pt:""},
+ "wiped":      {fr:"Réglages, records et résultats effacés.", en:"Settings, records and results deleted.", es:"Ajustes, récords y resultados borrados.", de:"Einstellungen, Rekorde und Ergebnisse gelöscht.", it:"Impostazioni, record e risultati cancellati.", pt:"Configurações, recordes e resultados apagados."},
+ "title.resultats":       {fr:"Mes résultats", en:"My results", es:"Mis resultados", de:"Meine Ergebnisse", it:"I miei risultati", pt:"Meus resultados"},
+ "title.regles":          {fr:"Règles", en:"Rules", es:"Reglas", de:"Regeln", it:"Regole", pt:"Regras"},
+ "title.conditions":      {fr:"Conditions d'utilisation", en:"Terms of use", es:"Condiciones de uso", de:"Nutzungsbedingungen", it:"Condizioni d'uso", pt:"Termos de uso"},
+ "title.confidentialite": {fr:"Confidentialité", en:"Privacy", es:"Privacidad", de:"Datenschutz", it:"Privacy", pt:"Privacidade"},
+ "title.mentions":        {fr:"Mentions légales et crédits", en:"Legal notice and credits", es:"Aviso legal y créditos", de:"Impressum und Credits", it:"Note legali e crediti", pt:"Aviso legal e créditos"}
+};
+function t(k, v){
+  const e = T[k]; let s = e ? (e[LANG] ?? e.en ?? e.fr) : k;
+  if (v) for (const n in v) s = s.split("{" + n + "}").join(v[n]);
+  return s;
+}
+const fmtSec = x => (LANG === "en" ? x.toFixed(1) : x.toFixed(1).replace(".", ",")) + " s";
+const fmtPct = (a, b) => Math.round(100 * a / b) + (LANG === "fr" ? " %" : "%");
+
+/* Noms de pays : ceux du navigateur, sauf ces cas */
+const NAMES_L10N = {
+ hk:{fr:"Hong Kong", en:"Hong Kong", es:"Hong Kong", de:"Hongkong", it:"Hong Kong", pt:"Hong Kong"},
+ mo:{fr:"Macao", en:"Macau", es:"Macao", de:"Macau", it:"Macao", pt:"Macau"},
+ ps:{fr:"Palestine", en:"Palestine", es:"Palestina", de:"Palästina", it:"Palestina", pt:"Palestina"},
+ cd:{fr:"République démocratique du Congo", en:"Democratic Republic of the Congo", es:"República Democrática del Congo", de:"Demokratische Republik Kongo", it:"Repubblica Democratica del Congo", pt:"República Democrática do Congo"},
+ cg:{fr:"République du Congo", en:"Republic of the Congo", es:"República del Congo", de:"Republik Kongo", it:"Repubblica del Congo", pt:"República do Congo"},
+ va:{fr:"Vatican", en:"Vatican City", es:"Ciudad del Vaticano", de:"Vatikanstadt", it:"Città del Vaticano", pt:"Vaticano"},
+ tf:{fr:"Terres australes et antarctiques françaises", en:"French Southern and Antarctic Lands", es:"Tierras Australes y Antárticas Francesas", de:"Französische Süd- und Antarktisgebiete", it:"Terre australi e antartiche francesi", pt:"Terras Austrais e Antárticas Francesas"},
+ aq:{fr:"Antarctique", en:"Antarctica", es:"Antártida", de:"Antarktis", it:"Antartide", pt:"Antártida"},
+ sh:{fr:"Sainte-Hélène", en:"Saint Helena", es:"Santa Elena", de:"St. Helena", it:"Sant'Elena", pt:"Santa Helena"},
+ gs:{fr:"Géorgie du Sud-et-les îles Sandwich du Sud", en:"South Georgia and the South Sandwich Islands", es:"Islas Georgias del Sur y Sandwich del Sur", de:"Südgeorgien und die Südlichen Sandwichinseln", it:"Georgia del Sud e isole Sandwich australi", pt:"Ilhas Geórgia do Sul e Sandwich do Sul"},
+ sx:{fr:"Saint-Martin (partie néerlandaise)", en:"Sint Maarten", es:"Sint Maarten", de:"Sint Maarten", it:"Sint Maarten", pt:"São Martinho (parte neerlandesa)"},
+ mm:{fr:"Birmanie (Myanmar)", en:"Myanmar (Burma)", es:"Myanmar (Birmania)", de:"Myanmar (Birma)", it:"Myanmar (Birmania)", pt:"Mianmar (Birmânia)"},
+ tw:{fr:"Taïwan", en:"Taiwan", es:"Taiwán", de:"Taiwan", it:"Taiwan", pt:"Taiwan"},
+ abkhazie:{fr:"Abkhazie", en:"Abkhazia", es:"Abjasia", de:"Abchasien", it:"Abcasia", pt:"Abecásia"},
+ ossetie:{fr:"Ossétie du Sud", en:"South Ossetia", es:"Osetia del Sur", de:"Südossetien", it:"Ossezia del Sud", pt:"Ossétia do Sul"},
+ transnistrie:{fr:"Transnistrie", en:"Transnistria", es:"Transnistria", de:"Transnistrien", it:"Transnistria", pt:"Transnístria"},
+ somaliland:{fr:"Somaliland", en:"Somaliland", es:"Somalilandia", de:"Somaliland", it:"Somaliland", pt:"Somalilândia"},
+ "chypre-nord":{fr:"Chypre du Nord", en:"Northern Cyprus", es:"Chipre del Norte", de:"Nordzypern", it:"Cipro del Nord", pt:"Chipre do Norte"},
+ urss:{fr:"URSS", en:"Soviet Union", es:"Unión Soviética", de:"Sowjetunion", it:"Unione Sovietica", pt:"União Soviética"},
+ yougoslavie:{fr:"Yougoslavie", en:"Yugoslavia", es:"Yugoslavia", de:"Jugoslawien", it:"Jugoslavia", pt:"Jugoslávia"},
+ rda:{fr:"RDA (Allemagne de l'Est)", en:"East Germany", es:"Alemania Oriental", de:"DDR", it:"Germania Est", pt:"Alemanha Oriental"},
+ zaire:{fr:"Zaïre", en:"Zaire", es:"Zaire", de:"Zaire", it:"Zaire", pt:"Zaire"},
+ "yemen-sud":{fr:"Yémen du Sud", en:"South Yemen", es:"Yemen del Sur", de:"Südjemen", it:"Yemen del Sud", pt:"Iémen do Sul"},
+ "antilles-nl":{fr:"Antilles néerlandaises", en:"Netherlands Antilles", es:"Antillas Neerlandesas", de:"Niederländische Antillen", it:"Antille Olandesi", pt:"Antilhas Neerlandesas"},
+ artsakh:{fr:"Artsakh (Haut-Karabagh)", en:"Artsakh (Nagorno-Karabakh)", es:"Artsaj (Alto Karabaj)", de:"Arzach (Bergkarabach)", it:"Artsakh (Nagorno Karabakh)", pt:"Artsakh (Alto Carabaque)"},
+ "gb-eng":{fr:"Angleterre", en:"England", es:"Inglaterra", de:"England", it:"Inghilterra", pt:"Inglaterra"},
+ "gb-sct":{fr:"Écosse", en:"Scotland", es:"Escocia", de:"Schottland", it:"Scozia", pt:"Escócia"},
+ "gb-wls":{fr:"Pays de Galles", en:"Wales", es:"Gales", de:"Wales", it:"Galles", pt:"País de Gales"},
+ eu:{fr:"Union européenne", en:"European Union", es:"Unión Europea", de:"Europäische Union", it:"Unione europea", pt:"União Europeia"},
+ un:{fr:"Nations unies", en:"United Nations", es:"Naciones Unidas", de:"Vereinte Nationen", it:"Nazioni Unite", pt:"Nações Unidas"}
+};
+/* Quelques noms courants de plus, acceptés dans toutes les langues */
+const ALIAS_INTL = {
+ us:"estados unidos|eeuu|eua|vereinigte staaten|stati uniti", gb:"reino unido|vereinigtes konigreich|regno unito|grossbritannien|gran bretana",
+ nl:"holanda|holland|olanda|paises bajos", de:"alemania|deutschland|germania|alemanha", cd:"rdc|drc|rd congo", ci:"costa de marfil|elfenbeinkuste|costa d avorio|costa do marfim",
+ urss:"urss|ussr|udssr|cccp|sowjetunion", rda:"rda|ddr|gdr", va:"vaticano|vatikan", mm:"birmania|birma|burma|birmanie", cz:"chequia|tschechien|cechia|chequia|republica checa"
+};
+const CAP_DISPLAY_L10N = {
+ bo:{en:"Sucre and La Paz", es:"Sucre y La Paz", de:"Sucre und La Paz", it:"Sucre e La Paz", pt:"Sucre e La Paz"},
+ za:{en:"Pretoria, Cape Town and Bloemfontein", es:"Pretoria, Ciudad del Cabo y Bloemfontein", de:"Pretoria, Kapstadt und Bloemfontein", it:"Pretoria, Città del Capo e Bloemfontein", pt:"Pretória, Cidade do Cabo e Bloemfontein"},
+ lk:{en:"Sri Jayawardenepura Kotte and Colombo", es:"Sri Jayawardenapura Kotte y Colombo", de:"Sri Jayewardenepura Kotte und Colombo", it:"Sri Jayawardenepura Kotte e Colombo", pt:"Sri Jayawardenepura Kotte e Colombo"},
+ sz:{en:"Mbabane and Lobamba", es:"Mbabane y Lobamba", de:"Mbabane und Lobamba", it:"Mbabane e Lobamba", pt:"Mbabane e Lobamba"},
+ ps:{en:"Ramallah (East Jerusalem proclaimed)", es:"Ramala (Jerusalén Este proclamada)", de:"Ramallah (Ostjerusalem proklamiert)", it:"Ramallah (Gerusalemme Est proclamata)", pt:"Ramallah (Jerusalém Oriental proclamada)"},
+ nr:{en:"Yaren (no official capital)", es:"Yaren (sin capital oficial)", de:"Yaren (keine offizielle Hauptstadt)", it:"Yaren (nessuna capitale ufficiale)", pt:"Yaren (sem capital oficial)"},
+ eh:{en:"Laayoune (claimed)", es:"El Aaiún (reivindicada)", de:"El Aaiún (beansprucht)", it:"El Ayun (rivendicata)", pt:"El Aaiún (reivindicada)"}
+};
+/* Noms de capitales qui changent selon la langue (sinon : nom anglais, puis nom français) */
+const CAP_L10N = {
+ en:"af=Kabul;dz=Algiers;ad=Andorra la Vella;am=Yerevan;at=Vienna;az=Baku;bd=Dhaka;be=Brussels;bt=Thimphu;br=Brasília;td=N'Djamena;cn=Beijing;co=Bogotá;cu=Havana;cy=Nicosia;dk=Copenhagen;do=Santo Domingo;eg=Cairo;et=Addis Ababa;ge=Tbilisi;gr=Athens;gd=St. George's;gt=Guatemala City;ir=Tehran;iq=Baghdad;il=Jerusalem;kz=Astana;ki=South Tarawa;kw=Kuwait City;kg=Bishkek;lb=Beirut;mt=Valletta;mx=Mexico City;md=Chișinău;mn=Ulaanbaatar;np=Kathmandu;om=Muscat;pa=Panama City;py=Asunción;ph=Manila;pl=Warsaw;pt=Lisbon;ro=Bucharest;ru=Moscow;sm=San Marino;st=São Tomé;sa=Riyadh;sg=Singapore;so=Mogadishu;kr=Seoul;ss=Juba;ch=Bern;sy=Damascus;tj=Dushanbe;tt=Port of Spain;tm=Ashgabat;ua=Kyiv;ae=Abu Dhabi;gb=London;us=Washington, D.C.;uz=Tashkent;va=Vatican City;vn=Hanoi;ye=Sanaa;cz=Prague;ma=Rabat;mg=Antananarivo;mu=Port Louis;to=Nukuʻalofa;tw=Taipei;xk=Pristina;abkhazie=Sukhumi;chypre-nord=North Nicosia;urss=Moscow;yougoslavie=Belgrade;rda=East Berlin;fo=Tórshavn;gg=St Peter Port;je=St Helier;gb-eng=London;gb-sct=Edinburgh;fk=Stanley;gu=Hagåtña;nc=Nouméa;cm=Yaoundé;tg=Lomé;mv=Malé;hn=Tegucigalpa;sc=Victoria;bj=Porto-Novo;cr=San José",
+ es:"af=Kabul;dz=Argel;de=Berlín;am=Ereván;at=Viena;az=Bakú;be=Bruselas;bt=Timbu;br=Brasilia;cn=Pekín;kr=Seúl;kp=Pionyang;cu=La Habana;dk=Copenhague;eg=El Cairo;et=Adís Abeba;fr=París;ge=Tiflis;gr=Atenas;gt=Ciudad de Guatemala;in=Nueva Delhi;ir=Teherán;iq=Bagdad;il=Jerusalén;it=Roma;jp=Tokio;kz=Astaná;kw=Ciudad de Kuwait;kg=Biskek;lt=Vilna;mt=La Valeta;mx=Ciudad de México;md=Chisináu;mn=Ulán Bator;np=Katmandú;om=Mascate;pa=Ciudad de Panamá;ph=Manila;pl=Varsovia;pt=Lisboa;ro=Bucarest;ru=Moscú;sa=Riad;sg=Singapur;so=Mogadiscio;ss=Yuba;se=Estocolmo;ch=Berna;sy=Damasco;tj=Dusambé;tt=Puerto España;tn=Túnez;tm=Asjabad;ua=Kiev;ae=Abu Dabi;gb=Londres;us=Washington D. C.;uz=Taskent;va=Ciudad del Vaticano;vn=Hanói;ye=Saná;ie=Dublín;is=Reikiavik;cz=Praga;bg=Sofía;ee=Tallin;lu=Luxemburgo;mc=Mónaco;nl=Ámsterdam;rs=Belgrado;si=Liubliana;kh=Nom Pen;la=Vientián;id=Yakarta;ly=Trípoli;sd=Jartum;cd=Kinsasa;ci=Yamusukro;gn=Conakri;td=Yamena;ng=Abuya;gh=Acra;cm=Yaundé;dj=Yibuti;mw=Lilongüe;bs=Nasáu;bz=Belmopán;ht=Puerto Príncipe;cl=Santiago de Chile;pg=Puerto Moresby;tw=Taipéi;xk=Pristina;abkhazie=Sujumi;ossetie=Tsjinvali;transnistrie=Tiráspol;chypre-nord=Nicosia del Norte;urss=Moscú;yougoslavie=Belgrado;rda=Berlín Este;gb-eng=Londres;gb-sct=Edimburgo;bd=Daca;mv=Malé;fi=Helsinki;md=Chisináu;sm=San Marino;st=Santo Tomé;mu=Port Louis;mm=Naipyidó;lb=Beirut;co=Bogotá;py=Asunción;cy=Nicosia",
+ de:"dz=Algier;am=Jerewan;at=Wien;az=Baku;be=Brüssel;bt=Thimphu;cn=Peking;kr=Seoul;kp=Pjöngjang;cu=Havanna;dk=Kopenhagen;eg=Kairo;et=Addis Abeba;fr=Paris;ge=Tiflis;gr=Athen;gt=Guatemala-Stadt;in=Neu-Delhi;ir=Teheran;iq=Bagdad;il=Jerusalem;it=Rom;jp=Tokio;kw=Kuwait-Stadt;kg=Bischkek;lt=Vilnius;mt=Valletta;mx=Mexiko-Stadt;md=Chișinău;mn=Ulaanbaatar;np=Kathmandu;om=Maskat;pa=Panama-Stadt;ph=Manila;pl=Warschau;pt=Lissabon;ro=Bukarest;ru=Moskau;sa=Riad;sg=Singapur;so=Mogadischu;ss=Juba;ch=Bern;sy=Damaskus;tj=Duschanbe;tt=Port of Spain;tm=Aschgabat;ua=Kyjiw;ae=Abu Dhabi;gb=London;us=Washington, D.C.;uz=Taschkent;va=Vatikanstadt;vn=Hanoi;ye=Sanaa;cz=Prag;bg=Sofia;lu=Luxemburg;nl=Amsterdam;rs=Belgrad;kh=Phnom Penh;id=Jakarta;ly=Tripolis;sd=Khartum;ci=Yamoussoukro;td=N'Djamena;cy=Nikosia;mv=Malé;bd=Dhaka;lb=Beirut;co=Bogotá;py=Asunción;mm=Naypyidaw;tw=Taipeh;xk=Pristina;abkhazie=Sochumi;chypre-nord=Nord-Nikosia;urss=Moskau;yougoslavie=Belgrad;rda=Ost-Berlin;gb-eng=London;gb-sct=Edinburgh;st=São Tomé;sm=San Marino;br=Brasília;ag=Saint John's;gd=St. George's",
+ it:"af=Kabul;dz=Algeri;de=Berlino;am=Erevan;at=Vienna;az=Baku;be=Bruxelles;bt=Thimphu;cn=Pechino;kr=Seul;kp=Pyongyang;cu=L'Avana;dk=Copenaghen;eg=Il Cairo;et=Addis Abeba;fr=Parigi;ge=Tbilisi;gr=Atene;gt=Città del Guatemala;in=Nuova Delhi;ir=Teheran;iq=Baghdad;il=Gerusalemme;jp=Tokyo;kw=Kuwait City;kg=Biškek;lt=Vilnius;mt=La Valletta;mx=Città del Messico;md=Chișinău;mn=Ulan Bator;np=Katmandu;om=Mascate;pa=Panama;ph=Manila;pl=Varsavia;pt=Lisbona;ro=Bucarest;ru=Mosca;sa=Riad;sg=Singapore;so=Mogadiscio;ss=Giuba;se=Stoccolma;ch=Berna;sy=Damasco;tj=Dušanbe;tt=Port of Spain;tn=Tunisi;tm=Aşgabat;ua=Kiev;ae=Abu Dhabi;gb=Londra;us=Washington;uz=Tashkent;va=Città del Vaticano;vn=Hanoi;ye=Sana'a;cz=Praga;bg=Sofia;lu=Lussemburgo;nl=Amsterdam;rs=Belgrado;ie=Dublino;is=Reykjavík;hu=Budapest;hr=Zagabria;si=Lubiana;ee=Tallinn;lv=Riga;no=Oslo;fi=Helsinki;es=Madrid;ly=Tripoli;sd=Khartum;cy=Nicosia;cl=Santiago del Cile;br=Brasilia;tw=Taipei;xk=Pristina;abkhazie=Sukhumi;chypre-nord=Nicosia Nord;urss=Mosca;yougoslavie=Belgrado;rda=Berlino Est;gb-eng=Londra;gb-sct=Edimburgo;st=São Tomé;sm=San Marino;mc=Monaco",
+ pt:"af=Cabul;dz=Argel;de=Berlim;am=Erevã;at=Viena;az=Baku;be=Bruxelas;bt=Timbu;cn=Pequim;kr=Seul;kp=Pyongyang;cu=Havana;dk=Copenhague;eg=Cairo;et=Adis Abeba;fr=Paris;ge=Tbilisi;gr=Atenas;gt=Cidade da Guatemala;in=Nova Délhi;ir=Teerã;iq=Bagdá;il=Jerusalém;it=Roma;jp=Tóquio;kw=Cidade do Kuwait;kg=Bishkek;lt=Vilnius;mt=Valeta;mx=Cidade do México;md=Chisinau;mn=Ulan Bator;np=Katmandu;om=Mascate;pa=Cidade do Panamá;ph=Manila;pl=Varsóvia;pt=Lisboa;ro=Bucareste;ru=Moscou;sa=Riad;sg=Singapura;so=Mogadíscio;ss=Juba;se=Estocolmo;ch=Berna;sy=Damasco;tj=Duchambé;tt=Port of Spain;tn=Túnis;tm=Asgabate;ua=Kiev;ae=Abu Dhabi;gb=Londres;us=Washington, D.C.;uz=Tashkent;va=Cidade do Vaticano;vn=Hanói;ye=Sanaã;cz=Praga;bg=Sófia;lu=Luxemburgo;nl=Amsterdã;rs=Belgrado;ie=Dublin;is=Reykjavík;cy=Nicósia;ly=Trípoli;sd=Cartum;co=Bogotá;py=Assunção;br=Brasília;cl=Santiago;tw=Taipé;xk=Pristina;abkhazie=Sukhumi;chypre-nord=Nicósia do Norte;urss=Moscou;yougoslavie=Belgrado;rda=Berlim Oriental;gb-eng=Londres;gb-sct=Edimburgo;st=São Tomé;sm=San Marino;mc=Mônaco;ma=Rabat;mz=Maputo;ao=Luanda;cv=Praia;gw=Bissau;tl=Díli;gq=Malabo"
+};
+const CAPL = {};
+for (const l in CAP_L10N){ CAPL[l] = {}; for (const pair of CAP_L10N[l].split(";")){ const i = pair.indexOf("="); CAPL[l][pair.slice(0, i)] = pair.slice(i + 1); } }
+
+/* Astuces sur les sosies, dans l'ordre de ALIKE */
+const ALIKE_TIPS = {
+ en:["Chad and Romania are almost identical: Chad's blue is darker. Andorra and Moldova have a coat of arms in the centre: cows and a mitre for Andorra, an eagle for Moldova.",
+     "Monaco and Indonesia: red over white, but Monaco's flag is squarer. Poland is the other way round: white on top, red below.",
+     "Ireland: green at the pole, orange at the other end. Ivory Coast: orange at the pole, green at the other end. Italy: green, white, red.",
+     "Australia: white stars, including a large seven-pointed one under the Union Jack. New Zealand: four red stars edged in white.",
+     "Netherlands: dark blue. Luxembourg: light blue and a longer flag.",
+     "Russia: white, blue, red and nothing else. Slovakia: a coat of arms with a white double cross on three hills, towards the pole. Slovenia: a small blue coat of arms with a mountain and three stars, in the top corner by the pole.",
+     "Senegal: green, yellow, red with a green star. Mali: green, yellow, red with no star. Guinea: the reverse, red, yellow, green. Cameroon: green, red, yellow with a yellow star.",
+     "Colombia: the yellow band takes up half the flag. Ecuador: same layout with a coat of arms in the centre. Venezuela: three equal bands and an arc of white stars.",
+     "Norway: red field, blue cross edged in white. Iceland: blue field, red cross edged in white. Faroe Islands: white field, red cross edged in blue.",
+     "Jordan: white star in the red triangle. Palestine: the same flag without the star. Sudan: red band on top and a green triangle.",
+     "Red, white and black for all three. Yemen: nothing in the centre. Egypt: a golden eagle. Iraq: green Arabic writing.",
+     "Blue over red. Liechtenstein: golden crown in the top corner by the pole. Haiti: coat of arms in the centre on a white square.",
+     "Bolivia: red, yellow, green from top to bottom. Ghana: the same colours with a black star. Lithuania: yellow, green, red.",
+     "Blue, white, blue for all three. Honduras: five blue stars. Nicaragua: a triangle alone inside a ring of text. El Salvador: the triangle is surrounded by flags and a laurel wreath.",
+     "Germany: horizontal bands of black, red, gold. East Germany: the same with an emblem in the centre (hammer and compass). Belgium: vertical bands of black, yellow, red.",
+     "Qatar: maroon, with nine points. Bahrain: bright red, with five points.",
+     "Cuba: blue stripes and a red triangle. Puerto Rico: red stripes and a blue triangle.",
+     "India: a blue wheel in the centre, long flag. Niger: an orange disc, almost square flag."],
+ es:["Chad y Rumanía son casi idénticas: el azul de Chad es más oscuro. Andorra y Moldavia llevan un escudo en el centro: vacas y una mitra en Andorra, un águila en Moldavia.",
+     "Mónaco e Indonesia: rojo sobre blanco, pero la de Mónaco es más cuadrada. Polonia es al revés: blanco arriba, rojo abajo.",
+     "Irlanda: verde junto al mástil, naranja al otro lado. Costa de Marfil: naranja junto al mástil, verde al otro lado. Italia: verde, blanco, rojo.",
+     "Australia: estrellas blancas, una grande de siete puntas bajo la Union Jack. Nueva Zelanda: cuatro estrellas rojas bordeadas de blanco.",
+     "Países Bajos: azul oscuro. Luxemburgo: azul celeste y bandera más alargada.",
+     "Rusia: blanco, azul, rojo y nada más. Eslovaquia: escudo con una cruz doble blanca sobre tres colinas, hacia el mástil. Eslovenia: pequeño escudo azul con una montaña y tres estrellas, arriba junto al mástil.",
+     "Senegal: verde, amarillo, rojo con una estrella verde. Malí: verde, amarillo, rojo sin estrella. Guinea: al revés, rojo, amarillo, verde. Camerún: verde, rojo, amarillo con una estrella amarilla.",
+     "Colombia: la franja amarilla ocupa la mitad. Ecuador: la misma disposición con un escudo en el centro. Venezuela: tres franjas iguales y un arco de estrellas blancas.",
+     "Noruega: fondo rojo, cruz azul bordeada de blanco. Islandia: fondo azul, cruz roja bordeada de blanco. Islas Feroe: fondo blanco, cruz roja bordeada de azul.",
+     "Jordania: estrella blanca en el triángulo rojo. Palestina: la misma bandera sin estrella. Sudán: franja roja arriba y triángulo verde.",
+     "Rojo, blanco y negro en las tres. Yemen: nada en el centro. Egipto: un águila dorada. Irak: una inscripción verde en árabe.",
+     "Azul sobre rojo. Liechtenstein: corona dorada arriba junto al mástil. Haití: escudo en el centro sobre un cuadrado blanco.",
+     "Bolivia: rojo, amarillo, verde de arriba abajo. Ghana: los mismos colores con una estrella negra. Lituania: amarillo, verde, rojo.",
+     "Azul, blanco, azul en las tres. Honduras: cinco estrellas azules. Nicaragua: un triángulo solo dentro de un círculo de texto. El Salvador: el triángulo está rodeado de banderas y de una corona de laurel.",
+     "Alemania: franjas horizontales negro, rojo, oro. RDA: las mismas con un emblema en el centro (martillo y compás). Bélgica: franjas verticales negro, amarillo, rojo.",
+     "Catar: granate, con nueve puntas. Baréin: rojo vivo, con cinco puntas.",
+     "Cuba: franjas azules y triángulo rojo. Puerto Rico: franjas rojas y triángulo azul.",
+     "India: rueda azul en el centro, bandera alargada. Níger: disco naranja, bandera casi cuadrada."],
+ de:["Tschad und Rumänien sind fast gleich: Das Blau des Tschad ist dunkler. Andorra und Moldau haben ein Wappen in der Mitte: Kühe und eine Mitra bei Andorra, einen Adler bei Moldau.",
+     "Monaco und Indonesien: Rot über Weiß, aber Monacos Flagge ist quadratischer. Polen ist umgekehrt: oben Weiß, unten Rot.",
+     "Irland: Grün am Mast, Orange außen. Elfenbeinküste: Orange am Mast, Grün außen. Italien: Grün, Weiß, Rot.",
+     "Australien: weiße Sterne, darunter ein großer siebenzackiger unter dem Union Jack. Neuseeland: vier rote Sterne mit weißem Rand.",
+     "Niederlande: dunkles Blau. Luxemburg: hellblau und eine längere Flagge.",
+     "Russland: Weiß, Blau, Rot und sonst nichts. Slowakei: Wappen mit weißem Doppelkreuz auf drei Hügeln, zum Mast hin. Slowenien: kleines blaues Wappen mit einem Berg und drei Sternen, oben am Mast.",
+     "Senegal: Grün, Gelb, Rot mit grünem Stern. Mali: Grün, Gelb, Rot ohne Stern. Guinea: umgekehrt, Rot, Gelb, Grün. Kamerun: Grün, Rot, Gelb mit gelbem Stern.",
+     "Kolumbien: Der gelbe Streifen nimmt die halbe Flagge ein. Ecuador: gleiche Aufteilung mit Wappen in der Mitte. Venezuela: drei gleiche Streifen und ein Bogen aus weißen Sternen.",
+     "Norwegen: rotes Feld, blaues Kreuz mit weißem Rand. Island: blaues Feld, rotes Kreuz mit weißem Rand. Färöer: weißes Feld, rotes Kreuz mit blauem Rand.",
+     "Jordanien: weißer Stern im roten Dreieck. Palästina: dieselbe Flagge ohne Stern. Sudan: roter Streifen oben und grünes Dreieck.",
+     "Rot, Weiß und Schwarz bei allen drei. Jemen: nichts in der Mitte. Ägypten: ein goldener Adler. Irak: grüne arabische Schrift.",
+     "Blau über Rot. Liechtenstein: goldene Krone oben am Mast. Haiti: Wappen in der Mitte auf einem weißen Quadrat.",
+     "Bolivien: Rot, Gelb, Grün von oben nach unten. Ghana: dieselben Farben mit schwarzem Stern. Litauen: Gelb, Grün, Rot.",
+     "Blau, Weiß, Blau bei allen drei. Honduras: fünf blaue Sterne. Nicaragua: ein Dreieck allein in einem Textkreis. El Salvador: Das Dreieck ist von Fahnen und einem Lorbeerkranz umgeben.",
+     "Deutschland: waagerechte Streifen Schwarz, Rot, Gold. DDR: dieselben mit Emblem in der Mitte (Hammer und Zirkel). Belgien: senkrechte Streifen Schwarz, Gelb, Rot.",
+     "Katar: Weinrot, mit neun Zacken. Bahrain: leuchtendes Rot, mit fünf Zacken.",
+     "Kuba: blaue Streifen und rotes Dreieck. Puerto Rico: rote Streifen und blaues Dreieck.",
+     "Indien: blaues Rad in der Mitte, lange Flagge. Niger: orange Scheibe, fast quadratische Flagge."],
+ it:["Ciad e Romania sono quasi identiche: il blu del Ciad è più scuro. Andorra e Moldavia hanno uno stemma al centro: mucche e una mitra per Andorra, un'aquila per la Moldavia.",
+     "Monaco e Indonesia: rosso sopra bianco, ma la bandiera di Monaco è più quadrata. La Polonia è al contrario: bianco sopra, rosso sotto.",
+     "Irlanda: verde vicino all'asta, arancione dall'altra parte. Costa d'Avorio: arancione vicino all'asta, verde dall'altra parte. Italia: verde, bianco, rosso.",
+     "Australia: stelle bianche, tra cui una grande a sette punte sotto la Union Jack. Nuova Zelanda: quattro stelle rosse bordate di bianco.",
+     "Paesi Bassi: blu scuro. Lussemburgo: azzurro e bandiera più allungata.",
+     "Russia: bianco, blu, rosso e nient'altro. Slovacchia: stemma con una doppia croce bianca su tre colline, verso l'asta. Slovenia: piccolo stemma blu con una montagna e tre stelle, in alto vicino all'asta.",
+     "Senegal: verde, giallo, rosso con una stella verde. Mali: verde, giallo, rosso senza stella. Guinea: al contrario, rosso, giallo, verde. Camerun: verde, rosso, giallo con una stella gialla.",
+     "Colombia: la banda gialla occupa metà bandiera. Ecuador: stessa disposizione con uno stemma al centro. Venezuela: tre bande uguali e un arco di stelle bianche.",
+     "Norvegia: campo rosso, croce blu bordata di bianco. Islanda: campo blu, croce rossa bordata di bianco. Fær Øer: campo bianco, croce rossa bordata di blu.",
+     "Giordania: stella bianca nel triangolo rosso. Palestina: la stessa bandiera senza stella. Sudan: banda rossa in alto e triangolo verde.",
+     "Rosso, bianco e nero per tutte e tre. Yemen: niente al centro. Egitto: un'aquila dorata. Iraq: una scritta verde in arabo.",
+     "Blu sopra rosso. Liechtenstein: corona dorata in alto vicino all'asta. Haiti: stemma al centro su un quadrato bianco.",
+     "Bolivia: rosso, giallo, verde dall'alto in basso. Ghana: stessi colori con una stella nera. Lituania: giallo, verde, rosso.",
+     "Blu, bianco, blu per tutte e tre. Honduras: cinque stelle blu. Nicaragua: un triangolo da solo dentro un cerchio di testo. El Salvador: il triangolo è circondato da bandiere e da una corona d'alloro.",
+     "Germania: bande orizzontali nero, rosso, oro. DDR: le stesse con un emblema al centro (martello e compasso). Belgio: bande verticali nero, giallo, rosso.",
+     "Qatar: bordeaux, con nove punte. Bahrein: rosso vivo, con cinque punte.",
+     "Cuba: strisce blu e triangolo rosso. Porto Rico: strisce rosse e triangolo blu.",
+     "India: ruota blu al centro, bandiera allungata. Niger: disco arancione, bandiera quasi quadrata."],
+ pt:["Chade e Romênia são quase idênticas: o azul do Chade é mais escuro. Andorra e Moldávia têm um brasão no centro: vacas e uma mitra em Andorra, uma águia na Moldávia.",
+     "Mônaco e Indonésia: vermelho sobre branco, mas a de Mônaco é mais quadrada. A Polônia é o contrário: branco em cima, vermelho embaixo.",
+     "Irlanda: verde junto ao mastro, laranja do outro lado. Costa do Marfim: laranja junto ao mastro, verde do outro lado. Itália: verde, branco, vermelho.",
+     "Austrália: estrelas brancas, uma grande de sete pontas sob a Union Jack. Nova Zelândia: quatro estrelas vermelhas com borda branca.",
+     "Países Baixos: azul-escuro. Luxemburgo: azul-claro e bandeira mais comprida.",
+     "Rússia: branco, azul, vermelho e nada mais. Eslováquia: brasão com uma cruz dupla branca sobre três colinas, perto do mastro. Eslovênia: pequeno brasão azul com uma montanha e três estrelas, no alto junto ao mastro.",
+     "Senegal: verde, amarelo, vermelho com uma estrela verde. Mali: verde, amarelo, vermelho sem estrela. Guiné: o contrário, vermelho, amarelo, verde. Camarões: verde, vermelho, amarelo com uma estrela amarela.",
+     "Colômbia: a faixa amarela ocupa metade da bandeira. Equador: a mesma divisão com um brasão no centro. Venezuela: três faixas iguais e um arco de estrelas brancas.",
+     "Noruega: fundo vermelho, cruz azul com borda branca. Islândia: fundo azul, cruz vermelha com borda branca. Ilhas Feroe: fundo branco, cruz vermelha com borda azul.",
+     "Jordânia: estrela branca no triângulo vermelho. Palestina: a mesma bandeira sem estrela. Sudão: faixa vermelha em cima e triângulo verde.",
+     "Vermelho, branco e preto nas três. Iêmen: nada no centro. Egito: uma águia dourada. Iraque: uma inscrição verde em árabe.",
+     "Azul sobre vermelho. Liechtenstein: coroa dourada no alto junto ao mastro. Haiti: brasão no centro sobre um quadrado branco.",
+     "Bolívia: vermelho, amarelo, verde de cima para baixo. Gana: as mesmas cores com uma estrela preta. Lituânia: amarelo, verde, vermelho.",
+     "Azul, branco, azul nas três. Honduras: cinco estrelas azuis. Nicarágua: um triângulo sozinho dentro de um círculo de texto. El Salvador: o triângulo é cercado de bandeiras e de uma coroa de louros.",
+     "Alemanha: faixas horizontais preto, vermelho, dourado. Alemanha Oriental: as mesmas com um emblema no centro (martelo e compasso). Bélgica: faixas verticais preto, amarelo, vermelho.",
+     "Catar: grená, com nove pontas. Bahrein: vermelho vivo, com cinco pontas.",
+     "Cuba: listras azuis e triângulo vermelho. Porto Rico: listras vermelhas e triângulo azul.",
+     "Índia: roda azul no centro, bandeira comprida. Níger: disco laranja, bandeira quase quadrada."]
+};
+
+/* ---------- Règles (hors français, qui reste dans la page) ---------- */
+const RULES = {
+en:`<h1>Rules</h1>
+<p class="date">How a game of Flagrant works.</p>
+<h2>The idea</h2>
+<p>A flag appears at the top of a flagpole. The pole is the timer: the yellow band goes down as time passes and turns red in the last quarter. Answer before it reaches the bottom.</p>
+<h2>Game modes</h2>
+<ul>
+<li><strong>Flags</strong>: type the name of the country or territory.</li>
+<li><strong>Capitals</strong>: the flag and the country's name appear, type its capital. When a country has several capitals (Bolivia, South Africa, Sri Lanka, Eswatini), each one is accepted. Hong Kong, Macau, Antarctica, Tokelau, a few territories without a capital, the UN and the EU are not part of this mode.</li>
+<li><strong>Reveal</strong>: the flag is hidden by tiles that disappear one by one. It is fully visible at two thirds of the time. Type the country's name as early as you can.</li>
+</ul>
+<h2>Answering</h2>
+<ul>
+<li>Your answer is accepted automatically as soon as it is right, without pressing Enter.</li>
+<li>Accents, capitals, hyphens and articles don't matter. Names in French, English, Spanish, German, Italian and Portuguese are all accepted, as well as common names like “USA”, “DRC” or “Burma”.</li>
+<li>If you make a typo, press Enter: one wrong letter is tolerated (two for long names). This never applies if what you typed is exactly another answer: “Niger” does not count for Nigeria.</li>
+<li>Esc or the “Skip” button skips the question, which then counts as missed. When you miss, the game reminds you what you typed.</li>
+<li>If you switch tabs or your phone locks, the game pauses. Press Enter or “Resume” to continue.</li>
+</ul>
+<h2>Points</h2>
+<p>Each correct answer earns 10 points, plus up to 10 speed points depending on the time left. In Reveal mode, the bonus goes up to 20 points depending on how much of the flag was still hidden. Your answer time is shown after each correct answer. Your streak counts correct answers in a row and resets at the first miss. A record is kept for each combination of settings.</p>
+<h2>Settings</h2>
+<p>On the home page, choose the mode, the continents, the types of flags, the time per question (5 to 30 seconds) and the game length: 10, 20 or 50 questions, the whole selection, or an endless game you stop whenever you like. Your settings are kept for your next visit.</p>
+<h2>Options</h2>
+<ul>
+<li><strong>Focus on my mistakes</strong>: what you missed comes back more often in later games. Each correct answer makes it come back a little less, until it is back to normal.</li>
+<li><strong>Never-seen first</strong>: flags, or capitals, you have never had in this mode come first. Handy to go through everything.</li>
+<li><strong>Show the map after each answer</strong>: a small world map shows where the country is. Very small countries and islands are circled. On by default.</li>
+<li><strong>Only look-alike flags</strong>: only flags that are easy to mix up (Chad and Romania, Ireland and Ivory Coast, Australia and New Zealand…). When you miss one of them, in any game, its look-alikes are shown with what tells them apart. Not available in Capitals mode.</li>
+</ul>
+<p>The number next to each option shows how many questions in your selection it affects.</p>
+<h2>My results</h2>
+<p>The “My results” page shows, separately for flags and capitals, your success rate and average time by continent, the number of flags you have never seen, and what you get right least often. The button at the bottom starts a game with those questions. Flags and Reveal modes count together.</p>
+<h2>The flags</h2>
+<ul>
+<li><strong>UN member states and Vatican City</strong>: the 193 UN member states and Vatican City.</li>
+<li><strong>States with limited recognition</strong>: Kosovo, Taiwan, Palestine, Western Sahara, Abkhazia, South Ossetia, Transnistria, Somaliland and Northern Cyprus.</li>
+<li><strong>Former countries</strong>: Soviet Union, Yugoslavia, East Germany, Zaire, South Yemen, Netherlands Antilles and Artsakh.</li>
+<li><strong>Territories, regions and organisations</strong>: Greenland, Hong Kong, Puerto Rico, England, Scotland, the European Union, the UN and more. Territories that use the same flag as their country, like Réunion, are not included.</li>
+</ul>
+<p>A few flags are almost identical, like Chad and Romania or Monaco and Indonesia. That's on purpose: they are part of the training.</p>`,
+
+es:`<h1>Reglas</h1>
+<p class="date">Cómo se juega una partida de Flagrant.</p>
+<h2>La idea</h2>
+<p>Aparece una bandera en lo alto de un mástil. El mástil es el cronómetro: la franja amarilla baja a medida que pasa el tiempo y se vuelve roja en el último cuarto. Responde antes de que llegue abajo.</p>
+<h2>Modos de juego</h2>
+<ul>
+<li><strong>Banderas</strong>: escribe el nombre del país o territorio.</li>
+<li><strong>Capitales</strong>: aparecen la bandera y el nombre del país, escribe su capital. Si un país tiene varias capitales (Bolivia, Sudáfrica, Sri Lanka, Esuatini), se acepta cualquiera. Hong Kong, Macao, la Antártida, Tokelau, algunos territorios sin capital, la ONU y la UE no forman parte de este modo.</li>
+<li><strong>Revelación</strong>: la bandera está tapada por fichas que desaparecen una a una. Se ve entera a los dos tercios del tiempo. Escribe el nombre del país lo antes posible.</li>
+</ul>
+<h2>Responder</h2>
+<ul>
+<li>La respuesta se valida sola en cuanto es correcta, sin pulsar Intro.</li>
+<li>No cuentan las tildes, las mayúsculas, los guiones ni los artículos. Se aceptan los nombres en español, francés, inglés, alemán, italiano y portugués, y nombres habituales como «EEUU» o «Birmania».</li>
+<li>Si te equivocas al teclear, pulsa Intro: se tolera una letra de diferencia (dos en los nombres largos). Nunca se aplica si lo que escribiste es exactamente otra respuesta: «Níger» no vale por Nigeria.</li>
+<li>Esc o el botón «Saltar» pasa la pregunta, que cuenta como fallada. Cuando fallas, el juego te recuerda lo que escribiste.</li>
+<li>Si cambias de pestaña o se bloquea el móvil, la partida se pausa. Pulsa Intro o «Reanudar» para seguir.</li>
+</ul>
+<h2>Los puntos</h2>
+<p>Cada acierto da 10 puntos, más hasta 10 puntos de rapidez según el tiempo que quedaba. En el modo Revelación, el bonus llega a 20 puntos según la parte de la bandera aún tapada. Tu tiempo de respuesta aparece tras cada acierto. La racha cuenta los aciertos seguidos y vuelve a cero al primer fallo. Se guarda un récord por cada combinación de ajustes.</p>
+<h2>Los ajustes</h2>
+<p>En la página de inicio, elige el modo, los continentes, los tipos de bandera, el tiempo por pregunta (de 5 a 30 segundos) y la duración: 10, 20 o 50 preguntas, toda la selección o una partida sin fin que paras cuando quieras. Tus ajustes se guardan para la próxima visita.</p>
+<h2>Las opciones</h2>
+<ul>
+<li><strong>Insistir en mis errores</strong>: lo que fallaste vuelve más a menudo en las partidas siguientes. Cada acierto hace que vuelva un poco menos, hasta recuperar la frecuencia normal.</li>
+<li><strong>Primero los nunca vistos</strong>: las banderas, o capitales, que nunca te han salido en este modo van primero. Útil para recorrerlo todo.</li>
+<li><strong>Mostrar el mapa tras cada respuesta</strong>: un pequeño mapa del mundo sitúa el país. Los países muy pequeños y las islas aparecen rodeados por un círculo. Activada por defecto.</li>
+<li><strong>Solo banderas parecidas</strong>: solo las banderas fáciles de confundir (Chad y Rumanía, Irlanda y Costa de Marfil, Australia y Nueva Zelanda…). Cuando fallas una, en cualquier partida, aparecen sus parecidas con lo que las distingue. No existe en el modo Capitales.</li>
+</ul>
+<p>El número junto a cada opción indica cuántas preguntas de tu selección afecta.</p>
+<h2>Mis resultados</h2>
+<p>La página «Mis resultados» muestra, por separado para banderas y capitales, tu porcentaje de aciertos y tu tiempo medio por continente, cuántas banderas nunca has visto y lo que menos aciertas. El botón de abajo inicia una partida con esas preguntas. Los modos Banderas y Revelación cuentan juntos.</p>
+<h2>Las banderas</h2>
+<ul>
+<li><strong>Estados miembros de la ONU y Vaticano</strong>: los 193 Estados miembros de la ONU y el Vaticano.</li>
+<li><strong>Estados con reconocimiento limitado</strong>: Kosovo, Taiwán, Palestina, Sáhara Occidental, Abjasia, Osetia del Sur, Transnistria, Somalilandia y Chipre del Norte.</li>
+<li><strong>Países desaparecidos</strong>: Unión Soviética, Yugoslavia, Alemania Oriental, Zaire, Yemen del Sur, Antillas Neerlandesas y Artsaj.</li>
+<li><strong>Territorios, regiones y organizaciones</strong>: Groenlandia, Hong Kong, Puerto Rico, Inglaterra, Escocia, la Unión Europea, la ONU y otros. No aparecen los territorios que usan la misma bandera que su país, como Reunión.</li>
+</ul>
+<p>Algunas banderas son casi idénticas, como Chad y Rumanía o Mónaco e Indonesia. Es a propósito: forman parte del entrenamiento.</p>`,
+
+de:`<h1>Regeln</h1>
+<p class="date">So läuft ein Spiel bei Flagrant.</p>
+<h2>Das Prinzip</h2>
+<p>Oben an einem Fahnenmast erscheint eine Flagge. Der Mast ist die Uhr: Der gelbe Streifen sinkt mit der Zeit und wird im letzten Viertel rot. Antworte, bevor er unten ankommt.</p>
+<h2>Spielmodi</h2>
+<ul>
+<li><strong>Flaggen</strong>: Tippe den Namen des Landes oder Gebiets.</li>
+<li><strong>Hauptstädte</strong>: Flagge und Ländername erscheinen, tippe die Hauptstadt. Hat ein Land mehrere Hauptstädte (Bolivien, Südafrika, Sri Lanka, Eswatini), zählt jede davon. Hongkong, Macau, die Antarktis, Tokelau, einige Gebiete ohne Hauptstadt, die UNO und die EU sind in diesem Modus nicht dabei.</li>
+<li><strong>Aufdecken</strong>: Die Flagge ist unter Kacheln versteckt, die nacheinander verschwinden. Nach zwei Dritteln der Zeit ist sie ganz sichtbar. Tippe den Ländernamen so früh wie möglich.</li>
+</ul>
+<h2>Antworten</h2>
+<ul>
+<li>Deine Antwort zählt automatisch, sobald sie stimmt, ohne Enter zu drücken.</li>
+<li>Akzente, Groß- und Kleinschreibung, Bindestriche und Artikel spielen keine Rolle. Namen auf Deutsch, Französisch, Englisch, Spanisch, Italienisch und Portugiesisch werden alle akzeptiert, dazu gängige Namen wie „USA“ oder „Burma“.</li>
+<li>Bei einem Tippfehler drücke Enter: Ein falscher Buchstabe wird toleriert (zwei bei langen Namen). Das gilt nie, wenn du genau eine andere Antwort getippt hast: „Niger“ zählt nicht für Nigeria.</li>
+<li>Esc oder der Knopf „Überspringen“ überspringt die Frage, die dann als verpasst zählt. Bei einem Fehler zeigt das Spiel, was du getippt hattest.</li>
+<li>Wechselst du den Tab oder sperrt sich dein Handy, pausiert das Spiel. Drücke Enter oder „Fortsetzen“, um weiterzuspielen.</li>
+</ul>
+<h2>Punkte</h2>
+<p>Jede richtige Antwort bringt 10 Punkte plus bis zu 10 Tempopunkte, je nach verbleibender Zeit. Im Modus Aufdecken gibt es bis zu 20 Bonuspunkte, je nachdem, wie viel der Flagge noch verdeckt war. Deine Antwortzeit erscheint nach jeder richtigen Antwort. Die Serie zählt richtige Antworten in Folge und beginnt beim ersten Fehler von vorn. Für jede Kombination von Einstellungen wird ein Rekord gespeichert.</p>
+<h2>Einstellungen</h2>
+<p>Wähle auf der Startseite den Modus, die Kontinente, die Flaggenarten, die Zeit pro Frage (5 bis 30 Sekunden) und die Spiellänge: 10, 20 oder 50 Fragen, die ganze Auswahl oder ein Endlosspiel, das du jederzeit beendest. Deine Einstellungen bleiben für den nächsten Besuch gespeichert.</p>
+<h2>Optionen</h2>
+<ul>
+<li><strong>Meine Fehler öfter üben</strong>: Was du verpasst hast, kommt in späteren Spielen öfter. Jede richtige Antwort lässt es etwas seltener kommen, bis es wieder normal ist.</li>
+<li><strong>Nie gesehene zuerst</strong>: Flaggen oder Hauptstädte, die du in diesem Modus noch nie hattest, kommen zuerst. Praktisch, um alles einmal durchzugehen.</li>
+<li><strong>Karte nach jeder Antwort zeigen</strong>: Eine kleine Weltkarte zeigt, wo das Land liegt. Sehr kleine Länder und Inseln werden eingekreist. Standardmäßig an.</li>
+<li><strong>Nur ähnliche Flaggen</strong>: nur leicht verwechselbare Flaggen (Tschad und Rumänien, Irland und Elfenbeinküste, Australien und Neuseeland…). Verpasst du eine davon, in jedem Spiel, siehst du ihre Doppelgänger und was sie unterscheidet. Im Modus Hauptstädte nicht verfügbar.</li>
+</ul>
+<p>Die Zahl neben jeder Option zeigt, wie viele Fragen deiner Auswahl betroffen sind.</p>
+<h2>Meine Ergebnisse</h2>
+<p>Die Seite „Meine Ergebnisse“ zeigt getrennt für Flaggen und Hauptstädte deine Trefferquote und deine Durchschnittszeit pro Kontinent, die Zahl der nie gesehenen Flaggen und was du am seltensten richtig hast. Der Knopf unten startet ein Spiel mit genau diesen Fragen. Die Modi Flaggen und Aufdecken zählen zusammen.</p>
+<h2>Die Flaggen</h2>
+<ul>
+<li><strong>UN-Mitgliedstaaten und Vatikanstadt</strong>: die 193 Mitgliedstaaten der UNO und die Vatikanstadt.</li>
+<li><strong>Staaten mit eingeschränkter Anerkennung</strong>: Kosovo, Taiwan, Palästina, Westsahara, Abchasien, Südossetien, Transnistrien, Somaliland und Nordzypern.</li>
+<li><strong>Ehemalige Staaten</strong>: Sowjetunion, Jugoslawien, DDR, Zaire, Südjemen, Niederländische Antillen und Arzach.</li>
+<li><strong>Gebiete, Regionen und Organisationen</strong>: Grönland, Hongkong, Puerto Rico, England, Schottland, die Europäische Union, die UNO und weitere. Gebiete mit derselben Flagge wie ihr Land, etwa Réunion, sind nicht dabei.</li>
+</ul>
+<p>Einige Flaggen sind fast identisch, etwa Tschad und Rumänien oder Monaco und Indonesien. Das ist Absicht: Sie gehören zum Training.</p>`,
+
+it:`<h1>Regole</h1>
+<p class="date">Come si gioca una partita di Flagrant.</p>
+<h2>Il principio</h2>
+<p>In cima a un'asta appare una bandiera. L'asta è il cronometro: la banda gialla scende con il passare del tempo e diventa rossa nell'ultimo quarto. Rispondi prima che arrivi in fondo.</p>
+<h2>Modalità di gioco</h2>
+<ul>
+<li><strong>Bandiere</strong>: scrivi il nome del paese o del territorio.</li>
+<li><strong>Capitali</strong>: appaiono la bandiera e il nome del paese, scrivi la capitale. Se un paese ha più capitali (Bolivia, Sudafrica, Sri Lanka, eSwatini), vale ognuna. Hong Kong, Macao, l'Antartide, Tokelau, alcuni territori senza capitale, l'ONU e l'UE non fanno parte di questa modalità.</li>
+<li><strong>Svelamento</strong>: la bandiera è coperta da tessere che spariscono una alla volta. È del tutto visibile ai due terzi del tempo. Scrivi il nome del paese il prima possibile.</li>
+</ul>
+<h2>Rispondere</h2>
+<ul>
+<li>La risposta viene accettata da sola appena è giusta, senza premere Invio.</li>
+<li>Accenti, maiuscole, trattini e articoli non contano. Sono accettati i nomi in italiano, francese, inglese, spagnolo, tedesco e portoghese, oltre a nomi comuni come «USA» o «Birmania».</li>
+<li>Se sbagli a digitare, premi Invio: è tollerata una lettera di differenza (due per i nomi lunghi). Non vale mai se hai scritto esattamente un'altra risposta: «Niger» non vale per la Nigeria.</li>
+<li>Esc o il pulsante «Salta» salta la domanda, che conta come sbagliata. Quando sbagli, il gioco ti ricorda cosa avevi scritto.</li>
+<li>Se cambi scheda o il telefono si blocca, la partita va in pausa. Premi Invio o «Riprendi» per continuare.</li>
+</ul>
+<h2>I punti</h2>
+<p>Ogni risposta corretta vale 10 punti, più fino a 10 punti di velocità secondo il tempo rimasto. In modalità Svelamento il bonus arriva a 20 punti secondo quanta parte della bandiera era ancora coperta. Il tuo tempo di risposta appare dopo ogni risposta corretta. La serie conta le risposte corrette di fila e si azzera al primo errore. Viene salvato un record per ogni combinazione di impostazioni.</p>
+<h2>Le impostazioni</h2>
+<p>Nella pagina iniziale scegli la modalità, i continenti, i tipi di bandiera, il tempo per domanda (da 5 a 30 secondi) e la durata: 10, 20 o 50 domande, tutta la selezione o una partita senza fine che fermi quando vuoi. Le impostazioni restano salvate per la prossima visita.</p>
+<h2>Le opzioni</h2>
+<ul>
+<li><strong>Insisti sui miei errori</strong>: ciò che hai sbagliato torna più spesso nelle partite successive. Ogni risposta corretta lo fa tornare un po' meno, fino alla frequenza normale.</li>
+<li><strong>Prima quelli mai visti</strong>: le bandiere, o le capitali, che non ti sono mai uscite in questa modalità vengono prima. Utile per fare il giro di tutto.</li>
+<li><strong>Mostra la mappa dopo ogni risposta</strong>: una piccola mappa del mondo indica dove si trova il paese. I paesi molto piccoli e le isole sono cerchiati. Attiva di default.</li>
+<li><strong>Solo bandiere simili</strong>: solo le bandiere facili da confondere (Ciad e Romania, Irlanda e Costa d'Avorio, Australia e Nuova Zelanda…). Quando ne sbagli una, in qualsiasi partita, compaiono le sue simili con ciò che le distingue. Non disponibile in modalità Capitali.</li>
+</ul>
+<p>Il numero accanto a ogni opzione indica quante domande della selezione riguarda.</p>
+<h2>I miei risultati</h2>
+<p>La pagina «I miei risultati» mostra, separatamente per bandiere e capitali, la percentuale di risposte corrette e il tempo medio per continente, il numero di bandiere mai viste e ciò che indovini meno spesso. Il pulsante in fondo avvia una partita con quelle domande. Le modalità Bandiere e Svelamento contano insieme.</p>
+<h2>Le bandiere</h2>
+<ul>
+<li><strong>Stati membri dell'ONU e Vaticano</strong>: i 193 Stati membri dell'ONU e il Vaticano.</li>
+<li><strong>Stati a riconoscimento limitato</strong>: Kosovo, Taiwan, Palestina, Sahara Occidentale, Abcasia, Ossezia del Sud, Transnistria, Somaliland e Cipro del Nord.</li>
+<li><strong>Stati scomparsi</strong>: Unione Sovietica, Jugoslavia, Germania Est, Zaire, Yemen del Sud, Antille Olandesi e Artsakh.</li>
+<li><strong>Territori, regioni e organizzazioni</strong>: Groenlandia, Hong Kong, Porto Rico, Inghilterra, Scozia, l'Unione europea, l'ONU e altri. I territori che usano la stessa bandiera del loro paese, come Riunione, non ci sono.</li>
+</ul>
+<p>Alcune bandiere sono quasi identiche, come Ciad e Romania o Monaco e Indonesia. È voluto: fanno parte dell'allenamento.</p>`,
+
+pt:`<h1>Regras</h1>
+<p class="date">Como funciona uma partida de Flagrant.</p>
+<h2>A ideia</h2>
+<p>Uma bandeira aparece no alto de um mastro. O mastro é o cronômetro: a faixa amarela desce conforme o tempo passa e fica vermelha no último quarto. Responda antes que ela chegue embaixo.</p>
+<h2>Modos de jogo</h2>
+<ul>
+<li><strong>Bandeiras</strong>: digite o nome do país ou território.</li>
+<li><strong>Capitais</strong>: aparecem a bandeira e o nome do país, digite a capital. Quando um país tem várias capitais (Bolívia, África do Sul, Sri Lanka, Essuatíni), qualquer uma vale. Hong Kong, Macau, a Antártida, Tokelau, alguns territórios sem capital, a ONU e a UE não fazem parte deste modo.</li>
+<li><strong>Revelação</strong>: a bandeira fica escondida sob peças que desaparecem uma a uma. Ela fica toda visível aos dois terços do tempo. Digite o nome do país o quanto antes.</li>
+</ul>
+<h2>Responder</h2>
+<ul>
+<li>A resposta é validada sozinha assim que estiver certa, sem apertar Enter.</li>
+<li>Acentos, maiúsculas, hífens e artigos não contam. São aceitos nomes em português, francês, inglês, espanhol, alemão e italiano, e nomes comuns como «EUA» ou «Birmânia».</li>
+<li>Se errar a digitação, aperte Enter: uma letra de diferença é tolerada (duas nos nomes longos). Isso nunca vale se você digitou exatamente outra resposta: «Níger» não vale pela Nigéria.</li>
+<li>Esc ou o botão «Pular» pula a pergunta, que conta como errada. Quando você erra, o jogo lembra o que você tinha digitado.</li>
+<li>Se você mudar de aba ou o celular bloquear, a partida pausa. Aperte Enter ou «Retomar» para continuar.</li>
+</ul>
+<h2>Os pontos</h2>
+<p>Cada acerto vale 10 pontos, mais até 10 pontos de rapidez conforme o tempo restante. No modo Revelação, o bônus chega a 20 pontos conforme a parte da bandeira ainda escondida. Seu tempo de resposta aparece após cada acerto. A sequência conta os acertos seguidos e zera no primeiro erro. Um recorde é guardado para cada combinação de configurações.</p>
+<h2>As configurações</h2>
+<p>Na página inicial, escolha o modo, os continentes, os tipos de bandeira, o tempo por pergunta (de 5 a 30 segundos) e a duração: 10, 20 ou 50 perguntas, toda a seleção ou uma partida sem fim que você para quando quiser. Suas configurações ficam salvas para a próxima visita.</p>
+<h2>As opções</h2>
+<ul>
+<li><strong>Insistir nos meus erros</strong>: o que você errou volta com mais frequência nas partidas seguintes. Cada acerto faz voltar um pouco menos, até a frequência normal.</li>
+<li><strong>Nunca vistos primeiro</strong>: as bandeiras, ou capitais, que nunca saíram para você neste modo vêm primeiro. Prático para passar por tudo.</li>
+<li><strong>Mostrar o mapa após cada resposta</strong>: um pequeno mapa-múndi mostra onde fica o país. Países muito pequenos e ilhas aparecem circulados. Ativada por padrão.</li>
+<li><strong>Só bandeiras parecidas</strong>: só as bandeiras fáceis de confundir (Chade e Romênia, Irlanda e Costa do Marfim, Austrália e Nova Zelândia…). Quando você erra uma delas, em qualquer partida, aparecem as parecidas com o que as diferencia. Não existe no modo Capitais.</li>
+</ul>
+<p>O número ao lado de cada opção indica quantas perguntas da sua seleção ela afeta.</p>
+<h2>Meus resultados</h2>
+<p>A página «Meus resultados» mostra, separadamente para bandeiras e capitais, sua taxa de acertos e seu tempo médio por continente, quantas bandeiras você nunca viu e o que você menos acerta. O botão embaixo inicia uma partida com essas perguntas. Os modos Bandeiras e Revelação contam juntos.</p>
+<h2>As bandeiras</h2>
+<ul>
+<li><strong>Estados-membros da ONU e Vaticano</strong>: os 193 Estados-membros da ONU e o Vaticano.</li>
+<li><strong>Estados com reconhecimento limitado</strong>: Kosovo, Taiwan, Palestina, Saara Ocidental, Abecásia, Ossétia do Sul, Transnístria, Somalilândia e Chipre do Norte.</li>
+<li><strong>Países extintos</strong>: União Soviética, Jugoslávia, Alemanha Oriental, Zaire, Iémen do Sul, Antilhas Neerlandesas e Artsakh.</li>
+<li><strong>Territórios, regiões e organizações</strong>: Groenlândia, Hong Kong, Porto Rico, Inglaterra, Escócia, a União Europeia, a ONU e outros. Territórios que usam a mesma bandeira do seu país, como Reunião, não aparecem.</li>
+</ul>
+<p>Algumas bandeiras são quase idênticas, como Chade e Romênia ou Mônaco e Indonésia. É de propósito: fazem parte do treino.</p>`
+};
+
+/* ---------- Pages légales en anglais (le français fait foi) ---------- */
+const LEGAL_EN = {
+conditions:`<h1>Terms of use</h1>
+<p class="date">In force since 13 November 2026.</p>
+<h2>1. Purpose</h2>
+<p>These terms govern the use of Flagrant, a free game for practising flag recognition. Using the site means you accept these terms.</p>
+<h2>2. Access</h2>
+<p>The site is free and requires no account or sign-up. It is provided as is: the publisher may change, suspend or stop it at any time, without notice or compensation.</p>
+<h2>3. Use</h2>
+<p>You may use Flagrant for personal use, alone or in class. You agree not to disrupt how it works or try to access what is not meant for you.</p>
+<h2>3a. Multiplayer</h2>
+<p>In multiplayer, pick a decent name: offensive or discriminatory names, or names impersonating someone else, are not allowed. Rooms are not moderated: only share your room link with people you know.</p>
+<h2>4. Content and accuracy</h2>
+<p>Flags and names are provided for educational purposes. Despite the care taken, a mistake or an outdated flag is still possible. Including a flag, how it is categorised or the name chosen for a territory is not a position on its political or international status.</p>
+<h2>5. Intellectual property</h2>
+<p>The Flagrant name, the layout and the site's code belong to its publisher. Flag images and the typeface remain under their own licences, listed in the <a href="#mentions">legal notice and credits</a>.</p>
+<h2>6. Data</h2>
+<p>In solo games, Flagrant collects no personal data: your settings and records stay in your browser. Multiplayer uses your name and an anonymous ID. Details are in the <a href="#confidentialite">privacy policy</a>.</p>
+<h2>7. Liability</h2>
+<p>The publisher cannot be held liable for the site being unavailable, for the loss of your local records or for a mistake in the content.</p>
+<h2>8. Changes</h2>
+<p>These terms may change. The date at the top of the page shows the last update.</p>
+<h2>9. Governing law</h2>
+<p>These terms are governed by French law.</p>`,
+confidentialite:`<h1>Privacy policy</h1>
+<p class="date">Updated on 15 November 2026.</p>
+<h2>What Flagrant collects</h2>
+<p>In solo games, nothing. There is no account, no form, no cookie, no analytics and no advertising, and the site uses no outside service: the flags, the map and the typeface are served by the site itself. Multiplayer is the only case where information leaves your device, as explained below.</p>
+<h2>What stays on your device</h2>
+<p>To save you time, Flagrant keeps in your browser (local storage):</p>
+<ul>
+<li>your settings: language, mode, continents, flag types, options, time and game length;</li>
+<li>the name you chose for multiplayer, so you don't have to type it again;</li>
+<li>your records, one per combination of settings;</li>
+<li>your results per flag and per capital (how many times you have seen it, got it right, recently missed it, and your answer time), for the “My results” page and the “Focus on my mistakes” and “Never-seen first” options.</li>
+</ul>
+<p>This information never leaves your device and nobody else can access it. It disappears if you clear your browser data, or with this button:</p>
+<p><button class="ghost" id="wipe" type="button">Delete my Flagrant data</button><span class="done hidden" id="wiped">Settings, records and results deleted.</span></p>
+<h2>Multiplayer</h2>
+<p>When you play with friends, the information the game needs goes through Firebase Realtime Database, a Google service, and is stored in a data centre in Belgium:</p>
+<ul>
+<li>your name;</li>
+<li>an anonymous ID created for your game session, with no account, email or password;</li>
+<li>your score and the time of each of your correct answers;</li>
+<li>the settings and state of the game.</li>
+</ul>
+<p>This information is visible to players in the same room. A room is deleted when the host leaves it last with the “Leave room” button. Otherwise, it is erased as soon as a new room is created more than 24 hours later. Unused anonymous IDs are deleted automatically after 30 days. Google also processes technical connection data, such as IP addresses, under its <a href="https://policies.google.com/privacy">privacy policy</a> and <a href="https://firebase.google.com/support/privacy">Firebase's commitments</a>.</p>
+<p>This data is only used to run the game (legal basis: providing the service you request by joining a room). If you don't want to share it, play solo.</p>
+<h2>Hosting</h2>
+<p>The site is hosted by GitHub Pages (GitHub, Inc.). As GitHub states, each visitor's IP address is logged and stored for security purposes. This is covered by <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>.</p>
+<h2>Your rights</h2>
+<p>In solo games, Flagrant holds no personal data about you. In multiplayer, leaving the room with the button removes your name and score from that room; for any other request, use <a href="https://github.com/flagrant-game/flagrant-game.github.io/issues">the project's GitHub page</a>. For a question about hosting, you can contact GitHub or the French data protection authority, the CNIL (cnil.fr).</p>`,
+mentions:`<h1>Legal notice and credits</h1>
+<p class="date">Updated on 15 November 2026.</p>
+<h2>Publisher</h2>
+<p>Flagrant is a personal, non-professional and non-profit website published by a private individual. Under Article 1-1, II of French law no. 2004-575 of 21 June 2004 on confidence in the digital economy, as amended by the law of 21 May 2024, the publisher has chosen not to make their contact details public; they are known to the host.</p>
+<h2>Host</h2>
+<dl>
+<dt>Company</dt><dd>GitHub, Inc. (GitHub Pages service)</dd>
+<dt>Address</dt><dd>88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, United States</dd>
+<dt>Phone</dt><dd>+1 877 448 4820</dd>
+<dt>Website</dt><dd><a href="https://pages.github.com">pages.github.com</a></dd>
+</dl>
+<h2>Multiplayer data</h2>
+<p>Multiplayer games go through Firebase Realtime Database, a Google service, with storage in Belgium. Details in the <a href="#confidentialite">privacy policy</a>.</p>
+<h2>Report a mistake</h2>
+<p>A wrong flag, or a name that is refused but should be accepted? Report it on <a href="https://github.com/flagrant-game/flagrant-game.github.io/issues">the project's GitHub page</a>.</p>
+<h2>Flags</h2>
+<ul>
+<li>Country and territory flags: the <a href="https://github.com/hampusborgos/country-flags">country-flags</a> collection by Hampus Borgos, in the public domain.</li>
+<li>Flags of states with limited recognition, former countries, the UN and Saint Helena: the <a href="https://github.com/niemela/flags">flags</a> collection by Fredrik Niemelä, based on Wikimedia Commons files, in the public domain or under a CC BY-SA licence depending on the file. Each flag's source is listed in that collection.</li>
+</ul>
+<h2>Country names</h2>
+<p>Country names come from the Unicode CLDR data provided by your browser, completed by hand with common names. Capital names were written by hand.</p>
+<h2>Map</h2>
+<p>World map based on <a href="https://www.naturalearthdata.com">Natural Earth</a> data (public domain), in the <a href="https://github.com/topojson/world-atlas">world-atlas</a> version by Mike Bostock (ISC licence). Borders are simplified and take no position on disputed territories.</p>
+<h2>Typeface</h2>
+<p>Archivo, designed by Omnibus-Type, under the SIL Open Font License 1.1.</p>
+<h2>Inspiration</h2>
+<p>Flagrant's idea is inspired by PopSauce, a game on JKLM.fun. Flagrant is an independent project, not affiliated with JKLM.fun or its authors.</p>`
+};
+
+Object.assign(T, {
+ "mp.create":   {fr:"Jouer avec des amis", en:"Play with friends", es:"Jugar con amigos", de:"Mit Freunden spielen", it:"Gioca con gli amici", pt:"Jogar com amigos"},
+ "mp.lobbyH":   {fr:"Salon", en:"Room", es:"Sala", de:"Raum", it:"Stanza", pt:"Sala"},
+ "mp.leadNew":  {fr:"Choisis un pseudo pour créer ton salon. Tu enverras ensuite le lien à tes amis.", en:"Pick a name to create your room. You'll then send the link to your friends.", es:"Elige un nombre para crear tu sala. Luego enviarás el enlace a tus amigos.", de:"Wähle einen Namen, um deinen Raum zu erstellen. Danach schickst du den Link an deine Freunde.", it:"Scegli un nome per creare la tua stanza. Poi invierai il link ai tuoi amici.", pt:"Escolha um apelido para criar sua sala. Depois você envia o link para seus amigos."},
+ "mp.leadJoin": {fr:"Choisis un pseudo pour rejoindre le salon.", en:"Pick a name to join the room.", es:"Elige un nombre para unirte a la sala.", de:"Wähle einen Namen, um dem Raum beizutreten.", it:"Scegli un nome per entrare nella stanza.", pt:"Escolha um apelido para entrar na sala."},
+ "mp.name":     {fr:"Ton pseudo", en:"Your name", es:"Tu nombre", de:"Dein Name", it:"Il tuo nome", pt:"Seu apelido"},
+ "mp.createBtn":{fr:"Créer le salon", en:"Create room", es:"Crear sala", de:"Raum erstellen", it:"Crea la stanza", pt:"Criar sala"},
+ "mp.join":     {fr:"Rejoindre", en:"Join", es:"Unirse", de:"Beitreten", it:"Entra", pt:"Entrar"},
+ "mp.share":    {fr:"Envoie ce lien à tes amis :", en:"Send this link to your friends:", es:"Envía este enlace a tus amigos:", de:"Schick diesen Link an deine Freunde:", it:"Invia questo link ai tuoi amici:", pt:"Envie este link para seus amigos:"},
+ "mp.copy":     {fr:"Copier", en:"Copy", es:"Copiar", de:"Kopieren", it:"Copia", pt:"Copiar"},
+ "mp.copied":   {fr:"Copié", en:"Copied", es:"Copiado", de:"Kopiert", it:"Copiato", pt:"Copiado"},
+ "mp.players":  {fr:"Joueurs", en:"Players", es:"Jugadores", de:"Spieler", it:"Giocatori", pt:"Jogadores"},
+ "mp.you":      {fr:"toi", en:"you", es:"tú", de:"du", it:"tu", pt:"você"},
+ "mp.host":     {fr:"hôte", en:"host", es:"anfitrión", de:"Gastgeber", it:"host", pt:"anfitrião"},
+ "mp.leave":    {fr:"Quitter le salon", en:"Leave room", es:"Salir de la sala", de:"Raum verlassen", it:"Esci dalla stanza", pt:"Sair da sala"},
+ "mp.waitHost": {fr:"En attente de l'hôte pour lancer la partie.", en:"Waiting for the host to start the game.", es:"Esperando a que el anfitrión empiece la partida.", de:"Warten, bis der Gastgeber das Spiel startet.", it:"In attesa che l'host avvii la partita.", pt:"Aguardando o anfitrião começar a partida."},
+ "mp.hostSet":  {fr:"Tu es l'hôte : choisis les réglages, puis lance la partie quand tout le monde est là.", en:"You're the host: choose the settings, then start when everyone is here.", es:"Eres el anfitrión: elige los ajustes y empieza cuando estén todos.", de:"Du bist Gastgeber: Wähle die Einstellungen und starte, wenn alle da sind.", it:"Sei l'host: scegli le impostazioni e avvia quando ci sono tutti.", pt:"Você é o anfitrião: escolha as configurações e comece quando todos estiverem aqui."},
+ "mp.sum":      {fr:"Réglages : {mode}, {n} questions, {t} s par question.", en:"Settings: {mode}, {n} questions, {t} s per question.", es:"Ajustes: {mode}, {n} preguntas, {t} s por pregunta.", de:"Einstellungen: {mode}, {n} Fragen, {t} s pro Frage.", it:"Impostazioni: {mode}, {n} domande, {t} s per domanda.", pt:"Configurações: {mode}, {n} perguntas, {t} s por pergunta."},
+ "mp.noRoom":   {fr:"Ce salon n'existe pas ou est terminé.", en:"This room doesn't exist or has ended.", es:"Esta sala no existe o ya terminó.", de:"Dieser Raum existiert nicht oder ist beendet.", it:"Questa stanza non esiste o è terminata.", pt:"Esta sala não existe ou já terminou."},
+ "mp.error":    {fr:"Connexion au multijoueur impossible. Vérifie ta connexion et réessaie.", en:"Couldn't connect to multiplayer. Check your connection and try again.", es:"No se pudo conectar al multijugador. Revisa tu conexión e inténtalo de nuevo.", de:"Keine Verbindung zum Mehrspielermodus. Prüfe deine Verbindung und versuche es erneut.", it:"Impossibile connettersi al multigiocatore. Controlla la connessione e riprova.", pt:"Não foi possível conectar ao multijogador. Verifique sua conexão e tente novamente."},
+ "mp.nameErr":  {fr:"Choisis un pseudo de 1 à 20 caractères.", en:"Pick a name of 1 to 20 characters.", es:"Elige un nombre de 1 a 20 caracteres.", de:"Wähle einen Namen mit 1 bis 20 Zeichen.", it:"Scegli un nome da 1 a 20 caratteri.", pt:"Escolha um apelido de 1 a 20 caracteres."},
+ "mp.got":      {fr:"Trouvé en {t}. En attente des autres.", en:"Got it in {t}. Waiting for the others.", es:"Acertada en {t}. Esperando a los demás.", de:"In {t} gefunden. Warten auf die anderen.", it:"Trovata in {t}. In attesa degli altri.", pt:"Acertou em {t}. Aguardando os outros."},
+ "mp.timeUp":   {fr:"Temps écoulé.", en:"Time's up.", es:"Se acabó el tiempo.", de:"Zeit abgelaufen.", it:"Tempo scaduto.", pt:"Tempo esgotado."},
+ "mp.gaveUp":   {fr:"Tu as passé. En attente des autres.", en:"You skipped. Waiting for the others.", es:"Has saltado. Esperando a los demás.", de:"Übersprungen. Warten auf die anderen.", it:"Hai saltato. In attesa degli altri.", pt:"Você pulou. Aguardando os outros."},
+ "mp.found":    {fr:"Trouvé par : {list}", en:"Found by: {list}", es:"Acertada por: {list}", de:"Gefunden von: {list}", it:"Indovinata da: {list}", pt:"Acertada por: {list}"},
+ "mp.nobody":   {fr:"Personne n'a trouvé.", en:"Nobody got it.", es:"Nadie acertó.", de:"Niemand hatte es.", it:"Nessuno l'ha indovinata.", pt:"Ninguém acertou."},
+ "mp.board":    {fr:"Scores", en:"Scores", es:"Puntuación", de:"Punkte", it:"Punteggi", pt:"Placar"},
+ "mp.rankH":    {fr:"Classement", en:"Ranking", es:"Clasificación", de:"Rangliste", it:"Classifica", pt:"Classificação"},
+ "mp.place1":   {fr:"Tu gagnes la partie, sur {n} joueurs.", en:"You win, out of {n} players.", es:"Ganas la partida, de {n} jugadores.", de:"Du gewinnst, von {n} Spielern.", it:"Vinci la partita, su {n} giocatori.", pt:"Você venceu, entre {n} jogadores."},
+ "mp.place":    {fr:"Tu termines {r}e sur {n} joueurs.", en:"You finish #{r} out of {n} players.", es:"Terminas en el puesto {r} de {n} jugadores.", de:"Du bist Platz {r} von {n} Spielern.", it:"Arrivi {r}º su {n} giocatori.", pt:"Você termina em {r}º de {n} jogadores."},
+ "mp.again":    {fr:"Nouvelle partie", en:"New game", es:"Nueva partida", de:"Neues Spiel", it:"Nuova partita", pt:"Nova partida"},
+ "mp.waitAgain":{fr:"L'hôte peut lancer une nouvelle partie dans ce salon.", en:"The host can start a new game in this room.", es:"El anfitrión puede empezar una nueva partida en esta sala.", de:"Der Gastgeber kann in diesem Raum ein neues Spiel starten.", it:"L'host può avviare una nuova partita in questa stanza.", pt:"O anfitrião pode começar uma nova partida nesta sala."},
+ "mp.late":     {fr:"Une partie est en cours : tu joues à partir de la prochaine question.", en:"A game is in progress: you'll play from the next question.", es:"Hay una partida en curso: juegas desde la próxima pregunta.", de:"Ein Spiel läuft: Du spielst ab der nächsten Frage mit.", it:"C'è una partita in corso: giochi dalla prossima domanda.", pt:"Há uma partida em andamento: você joga a partir da próxima pergunta."},
+ "mp.full":     {fr:"Le multijoueur est complet pour le moment. Réessaie dans quelques minutes.", en:"Multiplayer is full right now. Try again in a few minutes.", es:"El multijugador está lleno ahora mismo. Vuelve a intentarlo en unos minutos.", de:"Der Mehrspielermodus ist gerade voll. Versuche es in ein paar Minuten erneut.", it:"Il multigiocatore è pieno al momento. Riprova tra qualche minuto.", pt:"O multijogador está cheio agora. Tente de novo em alguns minutos."}
+});
+const RULES_MP = {
+ fr:`<h2>Jouer avec des amis</h2>
+<p>Sur la page d'accueil, « Jouer avec des amis » crée un salon. Choisis un pseudo, puis envoie le lien du salon à tes amis : ils choisissent un pseudo à leur tour et arrivent dans le salon. L'hôte, celui qui a créé le salon, choisit les réglages et lance la partie.</p>
+<ul>
+<li>Tout le monde voit le même drapeau au même moment. La question se termine quand tout le monde a trouvé ou quand le temps est écoulé, puis la réponse s'affiche avec la liste de ceux qui ont trouvé.</li>
+<li>Une bonne réponse rapporte 10 points, plus jusqu'à 10 points selon ta rapidité. Le premier à trouver gagne 5 points de plus.</li>
+<li>Le classement s'affiche en direct pendant la partie, puis à la fin. L'hôte peut ensuite lancer une nouvelle partie dans le même salon.</li>
+<li>Si l'hôte quitte le salon, un autre joueur prend sa place automatiquement.</li>
+</ul>`,
+ en:`<h2>Play with friends</h2>
+<p>On the home page, “Play with friends” creates a room. Pick a name, then send the room link to your friends: they pick a name too and join the room. The host, who created the room, chooses the settings and starts the game.</p>
+<ul>
+<li>Everyone sees the same flag at the same time. A question ends when everyone has found it or time is up, then the answer is shown with the list of who got it.</li>
+<li>A correct answer earns 10 points, plus up to 10 points for speed. The first to find it gets 5 extra points.</li>
+<li>The ranking is shown live during the game, then at the end. The host can then start a new game in the same room.</li>
+<li>If the host leaves the room, another player takes over automatically.</li>
+</ul>`,
+ es:`<h2>Jugar con amigos</h2>
+<p>En la página de inicio, «Jugar con amigos» crea una sala. Elige un nombre y envía el enlace de la sala a tus amigos: ellos eligen un nombre y entran en la sala. El anfitrión, quien creó la sala, elige los ajustes y empieza la partida.</p>
+<ul>
+<li>Todos ven la misma bandera a la vez. La pregunta termina cuando todos han acertado o se acaba el tiempo; luego aparece la respuesta con quién acertó.</li>
+<li>Un acierto da 10 puntos, más hasta 10 puntos por rapidez. El primero en acertar gana 5 puntos más.</li>
+<li>La clasificación se ve en directo durante la partida y al final. Después, el anfitrión puede empezar otra partida en la misma sala.</li>
+<li>Si el anfitrión sale de la sala, otro jugador ocupa su lugar automáticamente.</li>
+</ul>`,
+ de:`<h2>Mit Freunden spielen</h2>
+<p>Auf der Startseite erstellt „Mit Freunden spielen“ einen Raum. Wähle einen Namen und schick den Link deinen Freunden: Sie wählen ebenfalls einen Namen und kommen in den Raum. Der Gastgeber, der den Raum erstellt hat, wählt die Einstellungen und startet das Spiel.</p>
+<ul>
+<li>Alle sehen gleichzeitig dieselbe Flagge. Eine Frage endet, wenn alle sie gefunden haben oder die Zeit abläuft; dann erscheint die Antwort und wer sie hatte.</li>
+<li>Eine richtige Antwort bringt 10 Punkte plus bis zu 10 Tempopunkte. Wer zuerst richtig liegt, bekommt 5 Punkte extra.</li>
+<li>Die Rangliste läuft während des Spiels live mit und erscheint am Ende. Danach kann der Gastgeber im selben Raum ein neues Spiel starten.</li>
+<li>Verlässt der Gastgeber den Raum, übernimmt automatisch ein anderer Spieler.</li>
+</ul>`,
+ it:`<h2>Gioca con gli amici</h2>
+<p>Nella pagina iniziale, «Gioca con gli amici» crea una stanza. Scegli un nome e invia il link della stanza ai tuoi amici: anche loro scelgono un nome ed entrano nella stanza. L'host, chi ha creato la stanza, sceglie le impostazioni e avvia la partita.</p>
+<ul>
+<li>Tutti vedono la stessa bandiera nello stesso momento. La domanda finisce quando tutti l'hanno indovinata o il tempo scade; poi appare la risposta con chi l'ha indovinata.</li>
+<li>Una risposta corretta vale 10 punti, più fino a 10 punti per la velocità. Il primo a indovinare guadagna 5 punti in più.</li>
+<li>La classifica è mostrata in diretta durante la partita e alla fine. Poi l'host può avviare una nuova partita nella stessa stanza.</li>
+<li>Se l'host esce dalla stanza, un altro giocatore prende il suo posto automaticamente.</li>
+</ul>`,
+ pt:`<h2>Jogar com amigos</h2>
+<p>Na página inicial, «Jogar com amigos» cria uma sala. Escolha um apelido e envie o link da sala para seus amigos: eles escolhem um apelido e entram na sala. O anfitrião, quem criou a sala, escolhe as configurações e começa a partida.</p>
+<ul>
+<li>Todos veem a mesma bandeira ao mesmo tempo. A pergunta termina quando todos acertaram ou o tempo acaba; depois aparece a resposta com quem acertou.</li>
+<li>Um acerto vale 10 pontos, mais até 10 pontos por rapidez. O primeiro a acertar ganha 5 pontos extras.</li>
+<li>A classificação aparece ao vivo durante a partida e no final. Depois, o anfitrião pode começar uma nova partida na mesma sala.</li>
+<li>Se o anfitrião sair da sala, outro jogador assume automaticamente.</li>
+</ul>`
+};
+
 const FLAGS = [{"c":"rda","k":"disparu","r":1.6667,"o":"eu","n":["RDA (Allemagne de l'Est)"],"a":["RDA","Allemagne de l'Est","East Germany","GDR","DDR"]},{"c":"abkhazie","k":"limite","r":2.0,"o":"as","n":["Abkhazie"],"a":["Abkhazia","Abkhazie"]},{"c":"ossetie","k":"limite","r":2.0,"o":"as","n":["Ossétie du Sud"],"a":["South Ossetia","Ossetie","Ossétie du Sud-Alanie"]},{"c":"sh","k":"territoire","r":2.0},{"c":"urss","k":"disparu","r":2.0,"o":"eu","n":["URSS"],"a":["Union soviétique","USSR","Soviet Union","CCCP","Union des républiques socialistes soviétiques"]},{"c":"un","k":"territoire","r":1.5,"o":"ot","n":["Nations unies"],"a":["ONU","United Nations","Organisation des Nations unies"]},{"c":"yemen-sud","k":"disparu","r":1.5,"o":"as","n":["Yémen du Sud"],"a":["South Yemen","Yemen du Sud"]},{"c":"yougoslavie","k":"disparu","r":2.0,"o":"eu","n":["Yougoslavie"],"a":["Yugoslavia","RFSY","SFRY"]},{"c":"zaire","k":"disparu","r":1.5,"o":"af","n":["Zaïre"],"a":["Zaire"]},{"c":"ad","k":"pays","r":1.4286},{"c":"ae","k":"pays","r":2.0},{"c":"af","k":"pays","r":1.5},{"c":"ag","k":"pays","r":1.5},{"c":"ai","k":"territoire","r":2.0},{"c":"al","k":"pays","r":1.4},{"c":"am","k":"pays","r":2.0},{"c":"antilles-nl","k":"disparu","r":1.5,"o":"na","n":["Antilles néerlandaises"],"a":["Netherlands Antilles","Antilles neerlandaises"]},{"c":"ao","k":"pays","r":1.5},{"c":"aq","k":"territoire","r":1.5},{"c":"ar","k":"pays","r":1.6},{"c":"artsakh","k":"disparu","r":2.0,"o":"as","n":["Artsakh (Haut-Karabagh)"],"a":["Artsakh","Haut-Karabagh","Haut Karabakh","Nagorno-Karabakh","Karabakh"]},{"c":"as","k":"territoire","r":2.0},{"c":"at","k":"pays","r":1.5},{"c":"au","k":"pays","r":2.0},{"c":"aw","k":"territoire","r":1.5},{"c":"ax","k":"territoire","r":1.5294},{"c":"az","k":"pays","r":2.0},{"c":"ba","k":"pays","r":2.0},{"c":"bb","k":"pays","r":1.5},{"c":"bd","k":"pays","r":1.6667},{"c":"be","k":"pays","r":1.1538},{"c":"bf","k":"pays","r":1.5},{"c":"bg","k":"pays","r":1.6667},{"c":"bh","k":"pays","r":1.6667},{"c":"bi","k":"pays","r":1.6667},{"c":"bj","k":"pays","r":1.5},{"c":"bl","k":"territoire","r":1.5},{"c":"bm","k":"territoire","r":2.0},{"c":"bn","k":"pays","r":2.0},{"c":"bo","k":"pays","r":1.4666},{"c":"br","k":"pays","r":1.4286},{"c":"bs","k":"pays","r":2.0},{"c":"bt","k":"pays","r":1.5},{"c":"bw","k":"pays","r":1.5},{"c":"by","k":"pays","r":2.0},{"c":"bz","k":"pays","r":1.6667},{"c":"ca","k":"pays","r":2.0},{"c":"cc","k":"territoire","r":2.0},{"c":"cd","k":"pays","r":1.3333},{"c":"cf","k":"pays","r":1.5},{"c":"cg","k":"pays","r":1.5},{"c":"ch","k":"pays","r":1.0},{"c":"ci","k":"pays","r":1.5},{"c":"ck","k":"territoire","r":2.0},{"c":"cl","k":"pays","r":1.5},{"c":"cm","k":"pays","r":1.5},{"c":"cn","k":"pays","r":1.5},{"c":"co","k":"pays","r":1.5},{"c":"cr","k":"pays","r":1.6667},{"c":"cu","k":"pays","r":2.0},{"c":"cv","k":"pays","r":1.7},{"c":"cw","k":"territoire","r":1.5},{"c":"cx","k":"territoire","r":2.0},{"c":"cy","k":"pays","r":1.5},{"c":"cz","k":"pays","r":1.5},{"c":"de","k":"pays","r":1.6667},{"c":"dj","k":"pays","r":1.5},{"c":"dk","k":"pays","r":1.3214},{"c":"dm","k":"pays","r":2.0},{"c":"do","k":"pays","r":1.5},{"c":"dz","k":"pays","r":1.5},{"c":"ec","k":"pays","r":1.5},{"c":"ee","k":"pays","r":1.5714},{"c":"eg","k":"pays","r":1.5},{"c":"eh","k":"limite","r":2.0,"o":"af"},{"c":"er","k":"pays","r":2.0},{"c":"es","k":"pays","r":1.5},{"c":"et","k":"pays","r":2.0},{"c":"eu","k":"territoire","r":1.5,"o":"eu","n":["Union européenne"],"a":["UE","European Union"]},{"c":"fi","k":"pays","r":1.6364},{"c":"fj","k":"pays","r":2.0},{"c":"fk","k":"territoire","r":2.0},{"c":"fm","k":"pays","r":1.9},{"c":"fo","k":"territoire","r":1.375},{"c":"fr","k":"pays","r":1.5},{"c":"ga","k":"pays","r":1.3333},{"c":"gb-eng","k":"territoire","r":1.6667,"o":"eu","n":["Angleterre"],"a":["England"]},{"c":"gb-sct","k":"territoire","r":1.6667,"o":"eu","n":["Écosse"],"a":["Scotland"]},{"c":"gb-wls","k":"territoire","r":1.6667,"o":"eu","n":["Pays de Galles"],"a":["Wales"]},{"c":"gb","k":"pays","r":2.0},{"c":"gd","k":"pays","r":1.6667},{"c":"ge","k":"pays","r":1.5},{"c":"gg","k":"territoire","r":1.5},{"c":"gh","k":"pays","r":1.5},{"c":"gi","k":"territoire","r":2.0},{"c":"gl","k":"territoire","r":1.5},{"c":"gm","k":"pays","r":1.5},{"c":"gn","k":"pays","r":1.5},{"c":"gq","k":"pays","r":1.5},{"c":"gr","k":"pays","r":1.5},{"c":"gs","k":"territoire","r":2.0},{"c":"gt","k":"pays","r":1.6},{"c":"gu","k":"territoire","r":1.8636},{"c":"gw","k":"pays","r":2.0},{"c":"gy","k":"pays","r":1.6667},{"c":"hk","k":"territoire","r":1.5},{"c":"hn","k":"pays","r":2.0},{"c":"hr","k":"pays","r":2.0},{"c":"ht","k":"pays","r":1.6667},{"c":"hu","k":"pays","r":2.0},{"c":"id","k":"pays","r":1.5},{"c":"ie","k":"pays","r":2.0},{"c":"il","k":"pays","r":1.375},{"c":"im","k":"territoire","r":2.0},{"c":"in","k":"pays","r":1.5},{"c":"io","k":"territoire","r":2.0},{"c":"iq","k":"pays","r":1.5},{"c":"ir","k":"pays","r":1.75},{"c":"is","k":"pays","r":1.3889},{"c":"it","k":"pays","r":1.5},{"c":"je","k":"territoire","r":1.6667},{"c":"jm","k":"pays","r":2.0},{"c":"jo","k":"pays","r":2.0},{"c":"jp","k":"pays","r":1.5},{"c":"ke","k":"pays","r":1.5},{"c":"kg","k":"pays","r":1.6667},{"c":"kh","k":"pays","r":1.5625},{"c":"ki","k":"pays","r":2.0},{"c":"km","k":"pays","r":1.6667},{"c":"kn","k":"pays","r":1.5},{"c":"kp","k":"pays","r":2.0},{"c":"kr","k":"pays","r":1.5},{"c":"kw","k":"pays","r":2.0},{"c":"ky","k":"territoire","r":2.0},{"c":"kz","k":"pays","r":2.0},{"c":"la","k":"pays","r":1.5},{"c":"lb","k":"pays","r":1.5},{"c":"lc","k":"pays","r":2.0},{"c":"li","k":"pays","r":1.6667},{"c":"lk","k":"pays","r":2.0},{"c":"lr","k":"pays","r":1.9},{"c":"ls","k":"pays","r":1.5},{"c":"lt","k":"pays","r":1.6667},{"c":"lu","k":"pays","r":1.6667},{"c":"lv","k":"pays","r":2.0},{"c":"ly","k":"pays","r":2.0},{"c":"ma","k":"pays","r":1.5},{"c":"mc","k":"pays","r":1.25},{"c":"md","k":"pays","r":2.0},{"c":"me","k":"pays","r":2.0},{"c":"mg","k":"pays","r":1.5},{"c":"mh","k":"pays","r":1.9},{"c":"mk","k":"pays","r":2.0},{"c":"ml","k":"pays","r":1.5},{"c":"mm","k":"pays","r":1.5},{"c":"mn","k":"pays","r":2.0},{"c":"mo","k":"territoire","r":1.5},{"c":"mp","k":"territoire","r":2.0},{"c":"mr","k":"pays","r":1.5},{"c":"ms","k":"territoire","r":2.0},{"c":"mt","k":"pays","r":1.5},{"c":"mu","k":"pays","r":1.5},{"c":"mv","k":"pays","r":1.5},{"c":"mw","k":"pays","r":1.5},{"c":"mx","k":"pays","r":1.75},{"c":"my","k":"pays","r":2.0},{"c":"mz","k":"pays","r":1.5},{"c":"na","k":"pays","r":1.5},{"c":"nc","k":"territoire","r":2.0},{"c":"ne","k":"pays","r":1.1667},{"c":"nf","k":"territoire","r":2.0},{"c":"ng","k":"pays","r":2.0},{"c":"ni","k":"pays","r":1.6667},{"c":"nl","k":"pays","r":1.5},{"c":"no","k":"pays","r":1.375},{"c":"chypre-nord","k":"limite","r":1.5,"o":"eu","n":["Chypre du Nord"],"a":["Northern Cyprus","RTCN","TRNC","Republique turque de Chypre du Nord"]},{"c":"np","k":"pays","r":0.8203},{"c":"nr","k":"pays","r":2.0},{"c":"nu","k":"territoire","r":2.0},{"c":"nz","k":"pays","r":2.0},{"c":"om","k":"pays","r":2.0},{"c":"pa","k":"pays","r":1.5},{"c":"pe","k":"pays","r":1.5},{"c":"pf","k":"territoire","r":1.5},{"c":"pg","k":"pays","r":1.3333},{"c":"ph","k":"pays","r":2.0},{"c":"pk","k":"pays","r":1.5},{"c":"pl","k":"pays","r":1.6},{"c":"pn","k":"territoire","r":2.0},{"c":"pr","k":"territoire","r":1.5},{"c":"ps","k":"limite","r":2.0,"o":"as"},{"c":"pt","k":"pays","r":1.5},{"c":"pw","k":"pays","r":1.6},{"c":"py","k":"pays","r":1.8182},{"c":"qa","k":"pays","r":2.5455},{"c":"ro","k":"pays","r":1.5},{"c":"rs","k":"pays","r":1.5},{"c":"ru","k":"pays","r":1.5},{"c":"rw","k":"pays","r":1.5},{"c":"sa","k":"pays","r":1.5},{"c":"sb","k":"pays","r":2.0},{"c":"sc","k":"pays","r":2.0},{"c":"sd","k":"pays","r":2.0},{"c":"se","k":"pays","r":1.6},{"c":"sg","k":"pays","r":1.5},{"c":"si","k":"pays","r":2.0},{"c":"sk","k":"pays","r":1.5},{"c":"sl","k":"pays","r":1.5},{"c":"sm","k":"pays","r":1.3333},{"c":"sn","k":"pays","r":1.5},{"c":"so","k":"pays","r":1.5},{"c":"somaliland","k":"limite","r":2.0,"o":"af","n":["Somaliland"]},{"c":"sr","k":"pays","r":1.5},{"c":"ss","k":"pays","r":2.0},{"c":"st","k":"pays","r":2.0},{"c":"sv","k":"pays","r":1.7725},{"c":"sx","k":"territoire","r":1.5},{"c":"sy","k":"pays","r":1.5},{"c":"sz","k":"pays","r":1.5},{"c":"tc","k":"territoire","r":2.0},{"c":"td","k":"pays","r":1.5},{"c":"tf","k":"territoire","r":1.5},{"c":"tg","k":"pays","r":1.618},{"c":"th","k":"pays","r":1.5},{"c":"tj","k":"pays","r":2.0},{"c":"tk","k":"territoire","r":2.0},{"c":"tl","k":"pays","r":2.0},{"c":"tm","k":"pays","r":1.5},{"c":"tn","k":"pays","r":1.5},{"c":"to","k":"pays","r":2.0},{"c":"tr","k":"pays","r":1.5},{"c":"transnistrie","k":"limite","r":2.0,"o":"eu","n":["Transnistrie"],"a":["Transnistria","Pridnestrovie"]},{"c":"tt","k":"pays","r":1.6667},{"c":"tv","k":"pays","r":2.0},{"c":"tw","k":"limite","r":1.5,"o":"as"},{"c":"tz","k":"pays","r":1.5},{"c":"ua","k":"pays","r":1.5},{"c":"ug","k":"pays","r":1.5},{"c":"us","k":"pays","r":1.9},{"c":"uy","k":"pays","r":1.5},{"c":"uz","k":"pays","r":2.0},{"c":"va","k":"pays","r":1.0},{"c":"vc","k":"pays","r":1.5},{"c":"ve","k":"pays","r":1.5},{"c":"vg","k":"territoire","r":2.0},{"c":"vi","k":"territoire","r":1.5},{"c":"vn","k":"pays","r":1.5},{"c":"vu","k":"pays","r":1.6667},{"c":"wf","k":"territoire","r":1.5},{"c":"ws","k":"pays","r":2.0},{"c":"xk","k":"limite","r":1.4,"o":"eu","n":["Kosovo"]},{"c":"ye","k":"pays","r":1.5},{"c":"za","k":"pays","r":1.5},{"c":"zm","k":"pays","r":1.5},{"c":"zw","k":"pays","r":2.0}];
 
 /* ---------- Données ---------- */
-const CONT = {af:"Afrique", na:"Amérique du Nord et centrale", sa:"Amérique du Sud", as:"Asie", eu:"Europe", oc:"Océanie", ot:"Antarctique et ONU"};
+const CONT = Object.fromEntries(["af","na","sa","as","eu","oc","ot"].map(k => [k, t("cont." + k)]));
 const C_LISTS = {
  af:"dz ao bj bw bf bi cv cm cf td km cg cd ci dj eg gq er sz et ga gm gh gn gw ke ls lr ly mg mw ml mr mu ma mz na ne ng rw st sn sc sl so za ss sd tz tg tn ug zm zw eh sh io",
  na:"ag bs bb bz ca cr cu dm do sv gd gt ht hn jm mx ni pa kn lc vc tt us ai aw bm vg ky cw gl ms pr sx tc vi bl",
@@ -449,7 +1189,7 @@ const C_LISTS = {
 const CONT_OF = {};
 for (const k in C_LISTS) for (const c of C_LISTS[k].split(" ")) CONT_OF[c] = k;
 
-const CATS = {pays:"Pays membres de l'ONU et Vatican", limite:"États à reconnaissance limitée", disparu:"Pays disparus", territoire:"Territoires, régions et organisations"};
+const CATS = Object.fromEntries(["pays","limite","disparu","territoire"].map(k => [k, t("cat." + k)]));
 
 const DISPLAY = {hk:"Hong Kong", mo:"Macao", ps:"Palestine", cd:"République démocratique du Congo", cg:"République du Congo",
   va:"Vatican", tf:"Terres australes et antarctiques françaises", aq:"Antarctique", sh:"Sainte-Hélène", gs:"Géorgie du Sud-et-les îles Sandwich du Sud",
@@ -491,11 +1231,16 @@ function norm(s){
 }
 const key = s => norm(s).replace(/ /g,"");
 
+const DN = {}; for (const l in LANGS){ try { DN[l] = new Intl.DisplayNames([l], {type:"region"}); } catch(e){} }
 for (const f of FLAGS){
   const iso = /^[a-z]{2}$/.test(f.c);
   const fr = (f.n || []).slice(), other = (f.a || []).slice();
-  if (iso){ const a = regionName(dnFr, f.c), b = regionName(dnEn, f.c); if (a) fr.push(a); if (b) other.push(b); }
-  f.name = DISPLAY[f.c] || fr[0] || other[0] || f.c.toUpperCase();
+  if (iso) for (const l in DN){ const n = regionName(DN[l], f.c); if (n) (l === "fr" ? fr : other).push(n); }
+  const loc = NAMES_L10N[f.c] || {};
+  for (const l in loc) other.push(loc[l]);
+  const own = iso ? regionName(DN[LANG] || DN.en, f.c) : null;
+  f.name = loc[LANG] || (LANG === "fr" ? DISPLAY[f.c] : null) || own || fr[0] || other[0] || f.c.toUpperCase();
+  if (ALIAS_INTL[f.c]) other.push(...ALIAS_INTL[f.c].split("|"));
   const acc = new Set();
   const add = s => { if (!s) return; const k = key(s); if (k) acc.add(k);
     const m = s.match(/^(.*?)\s*\((.*)\)\s*$/); if (m){ add(m[1]); add(m[2]); } };
@@ -564,8 +1309,11 @@ const CAP_KEY = new Map();
 for (const f of FLAGS){
   const c = CAPITALS[f.c]; if (!c) continue;
   const names = c.split("|");
-  f.capName = CAP_DISPLAY[f.c] || names[0];
-  f.capAcc = [...new Set(names.map(key))];
+  const loc = [];
+  for (const l in CAPL) if (CAPL[l][f.c]) loc.push(CAPL[l][f.c]);
+  f.capName = LANG === "fr" ? (CAP_DISPLAY[f.c] || names[0])
+    : ((CAP_DISPLAY_L10N[f.c] || {})[LANG] || (CAPL[LANG] || {})[f.c] || CAPL.en[f.c] || names[0]);
+  f.capAcc = [...new Set([...names, ...loc].map(key).filter(Boolean))];
   for (const k of f.capAcc) if (!CAP_KEY.has(k)) CAP_KEY.set(k, f);
 }
 const BY_KEY = new Map();
@@ -605,22 +1353,23 @@ const ALIKE = [
 ];
 const BY_CODE = new Map(FLAGS.map(f => [f.c, f]));
 const ALIKE_OF = {};
-for (const [codes, tip] of ALIKE){
+ALIKE.forEach(([codes, tipFr], i) => {
   const g = codes.split(" ").filter(c => BY_CODE.has(c));
+  const tip = LANG === "fr" ? tipFr : (ALIKE_TIPS[LANG] || ALIKE_TIPS.en)[i];
   for (const c of g) ALIKE_OF[c] = {g, tip};
-}
+});
 
 /* ---------- Stockage local ---------- */
 const store = {
   get(k, d){ try { const v = localStorage.getItem("flagrant:" + k); return v ? JSON.parse(v) : d } catch(e){ return d } },
   set(k, v){ try { localStorage.setItem("flagrant:" + k, JSON.stringify(v)) } catch(e){} },
-  wipe(){ try { ["settings","records","stats"].forEach(k => localStorage.removeItem("flagrant:" + k)) } catch(e){} }
+  wipe(){ try { ["settings","records","stats","name"].forEach(k => localStorage.removeItem("flagrant:" + k)) } catch(e){} }
 };
-const DEF = {mode:"drapeau", cont:Object.keys(CONT), cats:["pays"], time:15, len:20, focus:false, fresh:false, alike:false};
-const MODES = {drapeau:"Drapeaux", capitale:"Capitales", devoile:"Dévoilement"};
-const MODE_HELP = {drapeau:"Un drapeau s'affiche : tape le nom du pays.", capitale:"Le drapeau et le nom du pays s'affichent : tape la capitale.", devoile:"Le drapeau apparaît morceau par morceau : plus tu réponds tôt, plus tu gagnes de points."};
+const DEF = {map:true, mode:"drapeau", cont:Object.keys(CONT), cats:["pays"], time:15, len:20, focus:false, fresh:false, alike:false};
+const MODES = Object.fromEntries(["drapeau","capitale","devoile"].map(k => [k, t("mode." + k)]));
+const MODE_HELP = Object.fromEntries(["drapeau","capitale","devoile"].map(k => [k, t("help." + k)]));
 let S = Object.assign({}, DEF, store.get("settings", {}));
-const saveS = () => store.set("settings", S);
+const saveS = () => { store.set("settings", S); if (typeof mpPushSettings === "function") mpPushSettings(); };
 const isCap = () => S.mode === "capitale";
 const useAlike = () => S.alike && !isCap();
 const configKey = () => (S.mode === "drapeau" ? "" : S.mode + "|") + [S.cont.slice().sort().join("+"), S.cats.slice().sort().join("+"), S.time, S.len].join("|") + (S.focus ? "|erreurs" : "") + (S.fresh ? "|nouveaux" : "") + (useAlike() ? "|sosies" : "");
@@ -674,22 +1423,23 @@ function renderSettings(){
   $("mode-help").textContent = MODE_HELP[S.mode];
   const bp = basePool().filter(f => !isCap() || f.capName);
   const opts = [
-    ["focus", "Insister sur mes erreurs", bp.filter(f => recentMisses(sk(f)) > 0).length],
-    ["fresh", isCap() ? "Les pays jamais vus en priorité" : "Les drapeaux jamais vus en priorité", bp.filter(f => !STATS[sk(f)]).length]
+    ["focus", t("opt.focus"), bp.filter(f => recentMisses(sk(f)) > 0).length],
+    ["fresh", t("opt.fresh"), bp.filter(f => !STATS[sk(f)]).length]
   ];
-  if (!isCap()) opts.push(["alike", "Seulement les drapeaux qui se ressemblent", bp.filter(f => ALIKE_OF[f.c]).length]);
+  if (!isCap()) opts.push(["alike", t("opt.alike"), bp.filter(f => ALIKE_OF[f.c]).length]);
+  opts.push(["map", t("opt.map"), ""]);
   checkList($("f-opt"), opts, opts.map(o => o[0]).filter(k => S[k]), v => S[v] = !S[v]);
-  segment($("f-time"), [5,8,10,15,20,30].map(t => [t, t + " s"]), S.time, v => S.time = v);
-  segment($("f-len"), [[10,"10"],[20,"20"],[50,"50"],[0,"Tous"],[-1,"Sans fin"]], S.len, v => S.len = v);
-  $("all-cont").textContent = S.cont.length === Object.keys(CONT).length ? "Tout décocher" : "Tout cocher";
+  segment($("f-time"), [5,8,10,15,20,30].map(x => [x, x + " s"]), S.time, v => S.time = v);
+  segment($("f-len"), [[10,"10"],[20,"20"],[50,"50"],[0,t("len.all")],[-1,t("len.endless")]], S.len, v => S.len = v);
+  $("all-cont").textContent = S.cont.length === Object.keys(CONT).length ? t("set.none") : t("set.all");
   const n = pool().length;
   const rec = store.get("records", {})[configKey()];
   if (!n){
-    $("status").textContent = !S.cats.length ? "Coche au moins un type de drapeaux." : S.alike && basePool().length ? "Aucun sosie dans cette sélection : ajoute des continents ou des types de drapeaux." : "Aucun drapeau ne correspond : coche au moins un continent.";
+    $("status").textContent = !S.cats.length ? t("st.nocats") : useAlike() && basePool().length ? t("st.noalike") : t("st.nocont");
   } else {
     const len = S.len > 0 ? Math.min(S.len, n) : n;
-    const w = isCap() ? "capitales" : "drapeaux";
-    $("status").textContent = (S.len === -1 ? `Partie sans fin sur ${n} ${w}.` : `${len} ${w} sur ${n} disponibles.`) + (rec ? ` Record : ${rec} points.` : "");
+    const w = t(isCap() ? "w.capitals" : "w.flags");
+    $("status").textContent = (S.len === -1 ? t("st.endless", {n, what:w}) : t("st.count", {len, n, what:w})) + (rec ? " " + t("st.record", {n:rec}) : "");
   }
   $("start").disabled = n === 0;
 }
@@ -698,19 +1448,29 @@ $("all-cont").addEventListener("click", () => {
 });
 
 /* ---------- Vues ---------- */
-const VIEWS = ["home","game","end","resultats","regles","conditions","confidentialite","mentions"];
+const VIEWS = ["home","lobby","game","end","resultats","regles","conditions","confidentialite","mentions"];
 function show(v){
   for (const x of VIEWS) $("v-" + x).classList.toggle("hidden", x !== v);
   document.querySelectorAll("header nav a").forEach(a => {
     const on = (a.dataset.route === "" && (v === "home")) || a.dataset.route === v;
     on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current");
   });
-  const titles = {resultats:"Mes résultats", regles:"Règles", conditions:"Conditions d'utilisation", confidentialite:"Confidentialité", mentions:"Mentions légales et crédits"};
-  document.title = titles[v] ? titles[v] + " | Flagrant" : "Flagrant";
+  document.title = T["title." + v] ? t("title." + v) + " | Flagrant" : "Flagrant";
 }
 function route(){
-  stopGame();
   const h = location.hash.slice(1);
+  if (h.startsWith("salon-")){
+    const code = h.slice(6).toLowerCase();
+    if (MP && MP.code === code){ mpRender(); return; }
+    stopGame(); if (MP) mpLeave();
+    const n = myName();
+    if (!n){ mpShowForm("join", code); return; }
+    show("lobby"); $("mp-form").classList.add("hidden");
+    mpJoin(code, n).catch(err => { mpShowForm("join", code); $("mp-err").textContent = t(String(err && err.message) === "noroom" ? "mp.noRoom" : String(err && err.message) === "timeout" ? "mp.full" : "mp.error"); });
+    return;
+  }
+  if (MP) mpLeave();
+  stopGame();
   if (h === "resultats"){ RMODE = isCap() ? "capitale" : "drapeau"; renderResults(); show(h); window.scrollTo(0, 0); }
   else if (["regles","conditions","confidentialite","mentions"].includes(h)){ show(h); window.scrollTo(0, 0); }
   else { show("home"); renderSettings(); }
@@ -721,12 +1481,12 @@ document.querySelector('nav a[data-route=""]').addEventListener("click", e => { 
 
 /* ---------- Mes résultats ---------- */
 const found = s => s.length < 3 ? Math.max(0, s[0] - s[1]) : s[2];
-const pct = (a, b) => Math.round(100 * a / b) + " %";
-const secsTxt = (t, n) => n ? (t / n).toFixed(1).replace(".", ",") + " s" : "–";
+const pct = fmtPct;
+const secsTxt = (x, n) => n ? fmtSec(x / n) : "–";
 let HARD = [], RMODE = "drapeau";
 function renderResults(){
   STATS = store.get("stats", {});   // relit, au cas où un autre onglet a joué
-  segment($("r-mode"), [["drapeau", "Drapeaux"], ["capitale", "Capitales"]], RMODE, v => { RMODE = v; renderResults(); }, true);
+  segment($("r-mode"), [["drapeau", t("mode.drapeau")], ["capitale", t("mode.capitale")]], RMODE, v => { RMODE = v; renderResults(); }, true);
   const cap = RMODE === "capitale", pre = cap ? "cap:" : "";
   const st = f => STATS[pre + f.c];
   const eligible = f => !cap || f.capName;
@@ -736,8 +1496,8 @@ function renderResults(){
   $("r-empty").classList.toggle("hidden", seen > 0);
   $("r-body").classList.toggle("hidden", seen === 0);
   $("r-total").textContent = seen
-    ? `${seen} réponse${seen > 1 ? "s" : ""} sur ${played.length} ${cap ? "capitale" : "drapeau"}${played.length > 1 ? (cap ? "s" : "x") : ""} différent${cap ? "e" : ""}${played.length > 1 ? "s" : ""}, ${pct(ok, seen)} de bonnes réponses, ${secsTxt(sum(played, 3), sum(played, 4))} en moyenne par bonne réponse.`
-    : cap ? "Aucune partie de capitales jouée pour l'instant." : "Aucune partie jouée pour l'instant.";
+    ? t("r.total", {seen, k:played.length, what:t(cap ? "w.diffC" : "w.diffF"), p:pct(ok, seen), s:secsTxt(sum(played, 3), sum(played, 4))})
+    : t(cap ? "r.noneC" : "r.noneF");
   if (!seen) return;
   const tb = $("r-conts"); tb.innerHTML = "";
   for (const [k, label] of Object.entries(CONT)){
@@ -756,10 +1516,10 @@ function renderResults(){
     .sort((a, b) => rate(a) - rate(b) || st(b)[0] - st(a)[0])
     .slice(0, 24);
   $("r-hard-lead").textContent = HARD.length
-    ? (cap ? "Les capitales que tu trouves le moins souvent, de la plus difficile à la moins difficile." : "Les drapeaux que tu trouves le moins souvent, du plus difficile au moins difficile.")
-    : "Aucune erreur pour l'instant : tout ce que tu as joué a été trouvé.";
+    ? t(cap ? "r.hardC" : "r.hardF")
+    : t("r.hard0");
   $("r-hard-act").classList.toggle("hidden", !HARD.length);
-  $("r-review").textContent = HARD.length > 1 ? `Réviser ces ${HARD.length} ${cap ? "capitales" : "drapeaux"}` : (cap ? "Réviser cette capitale" : "Réviser ce drapeau");
+  $("r-review").textContent = HARD.length > 1 ? t("r.reviewN", {n:HARD.length, what:t(cap ? "w.capitals" : "w.flags")}) : t("r.review1");
   const ul = $("r-hard"); ul.innerHTML = "";
   for (const f of HARD){
     const s = st(f), li = document.createElement("li");
@@ -767,7 +1527,7 @@ function renderResults(){
     const im = li.querySelector("img"); im.src = f.img;
     const h = Math.min(64, 150 / f.r); im.width = Math.round(h * f.r); im.height = Math.round(h);
     li.querySelector("span").textContent = cap ? `${f.name} : ${f.capName}` : f.name;
-    li.querySelector(".rate").textContent = `trouvé${cap ? "e" : ""} ${found(s)} fois sur ${s[0]}`;
+    li.querySelector(".rate").textContent = t("r.rate", {f:found(s), s:s[0]});
     ul.appendChild(li);
   }
 }
@@ -775,6 +1535,41 @@ $("r-review").addEventListener("click", () => {
   if (RMODE === "capitale") S.mode = "capitale"; else if (S.mode === "capitale") S.mode = "drapeau";
   saveS(); startGame(HARD.slice(), true);
 });
+
+/* ---------- Carte ---------- */
+// Pays disparus et groupes : quels pays actuels colorier
+const MAP_GROUP = {urss:"ru ua by md ee lv lt ge am az kz uz tm kg tj", yougoslavie:"si hr ba rs me mk xk", zaire:"cd",
+  eu:"at be bg hr cy cz dk ee fi fr de gr hu ie it lv lt lu mt nl pl pt ro sk si es se"};
+let MAPD = null, mapLoading = null;
+function loadMap(){
+  if (!mapLoading) mapLoading = fetch("map.json").then(r => r.json()).then(d => {
+    MAPD = d; MAPD.smallSet = new Set(d.small);
+    let svg = `<svg viewBox="${d.vb}" xmlns="http://www.w3.org/2000/svg"><path class="sea" d="${d.sphere}"/>`;
+    for (const c in d.p) svg += `<path class="l" data-c="${c}" d="${d.p[c]}"/>`;
+    $("map").innerHTML = svg + `<g id="map-mark"></g></svg>`;
+  }).catch(() => { mapLoading = null; });
+  return mapLoading;
+}
+function showMap(f){
+  const box = $("map");
+  if (!S.map || f.c === "un"){ box.classList.add("hidden"); return; }
+  loadMap().then(() => {
+    if (!MAPD || !G || G.cur !== f || !G.waiting) return;
+    box.querySelectorAll("path.on").forEach(x => x.classList.remove("on"));
+    const codes = (MAP_GROUP[f.c] || f.c).split(" ");
+    let mark = "";
+    for (const c of codes){
+      const el = box.querySelector(`path[data-c="${c}"]`);
+      if (el) el.classList.add("on");
+      if ((!el || MAPD.smallSet.has(c)) && MAPD.c[c] && !MAP_GROUP[f.c]){
+        const [x, y] = MAPD.c[c];
+        mark += `<circle cx="${x}" cy="${y}" r="9"/><circle class="dot" cx="${x}" cy="${y}" r="2.5"/>`;
+      }
+    }
+    $("map-mark").innerHTML = mark;
+    box.classList.remove("hidden");
+  });
+}
 
 /* ---------- Partie ---------- */
 let G = null, raf = 0, nextTimer = 0;
@@ -790,12 +1585,14 @@ const label = f => isCap() ? f.capName : f.name;
 
 function startGame(list, isReview){
   if (!list.length) return;
+  $("mp-board").classList.add("hidden");
   let deck = deal(list);
   const endless = !isReview && S.len === -1;
   if (!isReview && S.len > 0) deck = deck.slice(0, S.len);
   G = {deck, base:list.slice(), endless, review:!!isReview, i:-1, score:0, streak:0, best:0, good:0, missed:[], cur:null, locked:true, tEnd:0};
   if (location.hash) history.replaceState(null, "", location.pathname + location.search);
   show("game"); next();
+  if (S.map) loadMap();
 }
 function stopGame(){
   cancelAnimationFrame(raf); clearTimeout(nextTimer);
@@ -827,12 +1624,13 @@ function next(){
   if (!fl.complete){
     G.locked = true;
     fl.onload = fl.onerror = () => { fl.onload = fl.onerror = null;
-      if (G && G.cur && fl.src.endsWith(G.cur.img) && !G.waiting){ G.locked = false; G.tEnd = performance.now() + S.time * 1000; G.t0 = performance.now(); } };
+      if (G && G.cur && fl.src.endsWith(G.cur.img) && !G.waiting){ G.locked = false; G.tEnd = performance.now() + S.time * 1000; G.t0 = performance.now();
+        const v = key($("ans").value); if (v && answers(G.cur).includes(v)) resolve(true); } };
   }
-  $("typed").textContent = ""; G.tried = "";
+  $("typed").textContent = ""; G.tried = ""; $("map").classList.add("hidden");
   const cn = $("g-country"); cn.classList.toggle("hidden", !isCap()); cn.textContent = isCap() ? G.cur.name : "";
-  $("ans").placeholder = isCap() ? "Capitale" : "Nom du pays";
-  $("ans").setAttribute("aria-label", isCap() ? "Capitale" : "Nom du pays");
+  $("ans").placeholder = t(isCap() ? "ph.capital" : "ph.country");
+  $("ans-label").textContent = $("ans").placeholder;
   // Dévoilement : 24 tuiles retirées dans un ordre aléatoire
   const veil = $("veil");
   if (S.mode === "devoile"){
@@ -842,7 +1640,7 @@ function next(){
   const fb = $("fb"); fb.textContent = ""; fb.className = "fb";
   const a = $("ans"); a.value = ""; a.className = ""; a.disabled = false; a.focus();
   const done = G.good + G.missed.length;
-  $("g-prog").innerHTML = G.endless ? `Drapeau <b>${done + 1}</b>` : `<b>${G.i + 1}</b> sur ${G.deck.length}`;
+  $("g-prog").innerHTML = G.endless ? t("g.progN", {n:done + 1}) : t("g.prog", {i:G.i + 1, n:G.deck.length});
   const nx = G.deck[G.i + 1]; if (nx) new Image().src = nx.img;   // précharge le suivant
   G.tEnd = performance.now() + S.time * 1000; G.t0 = performance.now();
   cancelAnimationFrame(raf); tick();
@@ -862,6 +1660,7 @@ function tick(){
   raf = requestAnimationFrame(tick);
 }
 function resolve(ok){
+  if (G && G.mp) return mpResolve(ok);
   if (!G || G.locked) return;
   G.locked = true; cancelAnimationFrame(raf);
   const secs = Math.max(0, (performance.now() - G.t0) / 1000);
@@ -873,24 +1672,26 @@ function resolve(ok){
     const left = Math.max(0, G.tEnd - performance.now()) / 1000;
     const pts = S.mode === "devoile" ? 10 + Math.ceil(hid * 20) : 10 + Math.ceil(left / S.time * 10);
     G.score += pts; G.streak++; G.good++; G.best = Math.max(G.best, G.streak);
-    fb.textContent = `${label(G.cur)}, +${pts}, ${secs.toFixed(1).replace(".", ",")} s`; fb.className = "fb good"; a.className = "good";
+    fb.textContent = `${label(G.cur)}, +${pts}, ${fmtSec(secs)}`; fb.className = "fb good"; a.className = "good";
   } else {
     G.streak = 0; G.missed.push(G.cur);
-    fb.textContent = `C'était : ${label(G.cur)}`; fb.className = "fb bad";
+    fb.textContent = t("g.was", {x:label(G.cur)}); fb.className = "fb bad";
     const typed = a.value.trim() || G.tried;
-    $("typed").textContent = typed ? `Tu as tapé : ${typed}` : "";
+    $("typed").textContent = typed ? t("g.typed", {x:typed}) : "";
   }
   a.disabled = true;
   $("g-score").textContent = G.score; $("g-streak").textContent = G.streak;
   const al = !ok && !isCap() && ALIKE_OF[G.cur.c];
   if (al) showAlike(G.cur, al);
   G.waiting = true;
-  nextTimer = setTimeout(goNext, ok ? 850 : al ? 6000 : 1900);
+  showMap(G.cur);
+  const withMap = S.map && G.cur.c !== "un";
+  nextTimer = setTimeout(goNext, ok ? (withMap ? 1500 : 850) : al ? 6000 : (withMap ? 2600 : 1900));
 }
 function goNext(){
-  if (!G || !G.waiting) return;
+  if (!G || !G.waiting || G.mp) return;
   G.waiting = false; clearTimeout(nextTimer);
-  $("alike").classList.add("hidden");
+  $("alike").classList.add("hidden"); $("map").classList.add("hidden");
   next();
 }
 function showAlike(cur, al){
@@ -908,19 +1709,20 @@ function showAlike(cur, al){
 }
 function finish(){
   stopGame();
+  $("mp-end").classList.add("hidden"); $("solo-end").classList.remove("hidden");
   const total = G.good + G.missed.length;
   $("e-score").innerHTML = `${G.score}<small>pts</small>`;
-  $("e-sum").textContent = total ? `${G.good} trouvé${G.good > 1 ? "s" : ""} sur ${total}, meilleure série de ${G.best}.` : "Aucun drapeau joué.";
-  $("e-missed").querySelector("p").textContent = isCap() ? "Les capitales que tu n'as pas trouvées pendant cette partie." : "Les drapeaux que tu n'as pas trouvés pendant cette partie.";
+  $("e-sum").textContent = total ? t("e.sum", {g:G.good, t:total, b:G.best}) : t("e.none");
+  $("e-missed").querySelector("p").textContent = t(isCap() ? "e.reviewC" : "e.reviewF");
   let recText = "";
   if (!G.review && !G.endless && total === G.deck.length){
     const recs = store.get("records", {}), k = configKey(), old = recs[k] || 0;
-    if (G.score > old){ recs[k] = G.score; store.set("records", recs); recText = old ? `Nouveau record, l'ancien était de ${old} points.` : "Premier record pour ces réglages."; }
-    else recText = `Record pour ces réglages : ${old} points.`;
+    if (G.score > old){ recs[k] = G.score; store.set("records", recs); recText = old ? t("e.recNew", {o:old}) : t("e.recFirst"); }
+    else recText = t("e.recOld", {o:old});
   }
   $("e-rec").textContent = recText;
   const m = G.missed.length;
-  $("retry").textContent = m > 1 ? `Revoir les ${m} ratés` : m ? "Revoir le raté" : "Aucun raté à revoir";
+  $("retry").textContent = m > 1 ? t("e.retryN", {m}) : m ? t("e.retry1") : t("e.retry0");
   $("retry").disabled = !m;
   $("e-missed").classList.toggle("hidden", !m);
   const ul = $("e-list"); ul.innerHTML = "";
@@ -943,7 +1745,7 @@ $("ans").addEventListener("input", e => {
 });
 $("ans").addEventListener("keydown", e => {
   if (!G || G.locked) return;
-  if (e.key === "Escape"){ e.preventDefault(); return resolve(false); }
+  if (e.key === "Escape"){ e.preventDefault(); return G.mp ? mpResolve(false, "skip") : resolve(false); }
   if (e.key !== "Enter") return;
   const v = key(e.target.value);
   if (!v) return;
@@ -960,17 +1762,25 @@ $("start").addEventListener("click", () => startGame(pool()));
 $("again").addEventListener("click", () => G && G.review ? startGame(G.base, true) : startGame(pool()));
 $("retry").addEventListener("click", () => startGame(G.missed.slice(), true));
 $("back").addEventListener("click", route);
-$("g-stop").addEventListener("click", finish);
-$("wipe").addEventListener("click", () => { store.wipe(); STATS = {}; S = Object.assign({}, DEF); $("wiped").classList.remove("hidden"); });
+$("g-stop").addEventListener("click", () => { if (G && G.mp){ mpLeave(); history.replaceState(null, "", location.pathname); route(); } else finish(); });
+$("mp-create").addEventListener("click", () => { stopGame(); mpShowForm("new"); });
+$("mp-start").addEventListener("click", () => mpStart().catch(() => {}));
+$("mp-again").addEventListener("click", () => mpAgain().catch(() => {}));
+const mpQuit = () => { mpLeave(); history.replaceState(null, "", location.pathname); route(); };
+$("mp-leave").addEventListener("click", mpQuit);
+$("mp-leave2").addEventListener("click", mpQuit);
+document.addEventListener("click", e => {
+  if (e.target && e.target.id === "wipe"){ store.wipe(); try { localStorage.removeItem("flagrant:lang"); } catch(x){} STATS = {}; S = Object.assign({}, DEF); $("wiped").textContent = t("wiped"); $("wiped").classList.remove("hidden"); }
+});
 document.addEventListener("keydown", e => {
   if (G && G.paused && e.key === "Enter"){ e.preventDefault(); return resumeGame(); }
   if (G && G.waiting && (e.key === "Enter" || e.key === " ") && !$("v-game").classList.contains("hidden")){ e.preventDefault(); goNext(); }
 });
 $("alike").addEventListener("click", goNext);
-$("skip").addEventListener("click", () => { if (G && G.waiting) goNext(); else if (G && !G.locked) resolve(false); });
+$("skip").addEventListener("click", () => { if (G && G.mp){ mpResolve(false, "skip"); return; } if (G && G.waiting) goNext(); else if (G && !G.locked) resolve(false); });
 // Pause automatique quand la page n'est plus visible (changement d'onglet, téléphone verrouillé…)
 function pauseGame(){
-  if (!G || G.locked || G.paused || $("v-game").classList.contains("hidden")) return;
+  if (!G || G.mp || G.locked || G.paused || $("v-game").classList.contains("hidden")) return;
   G.paused = true; G.pausedAt = performance.now(); G.left = G.tEnd - G.pausedAt;
   cancelAnimationFrame(raf);
   $("ans").disabled = true; $("mast").classList.add("hidden"); $("paused").classList.remove("hidden");
@@ -987,6 +1797,314 @@ document.addEventListener("visibilitychange", () => { if (document.hidden) pause
 $("resume").addEventListener("click", resumeGame);
 window.addEventListener("resize", () => { if (G && !$("v-game").classList.contains("hidden")) sizeFlag(G.cur); });
 
+/* ---------- Multijoueur ---------- */
+// Configuration publique du projet Firebase (cette clé est faite pour être dans le site ;
+// la sécurité repose sur les règles de la base de données)
+const FB_CONFIG = {
+  apiKey: "AIzaSyBhTVnxXMzO09G_scgQlivDVDzFU3uh2_E",
+  authDomain: "flagrant-game.firebaseapp.com",
+  databaseURL: "https://flagrant-game-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "flagrant-game",
+  appId: "1:716922392367:web:fd9fe360350531fcdb1bda"
+};
+let FB = null, DB = null, ME = null, MPOFF = 0, MP = null, hostTimer = 0;
+const mpNow = () => Date.now() + MPOFF;
+const R = p => FB.ref(DB, p);
+const myName = () => { try { return localStorage.getItem("flagrant:name") || ""; } catch(e){ return ""; } };
+
+async function mpInit(){
+  if (DB && ME) return;
+  if (!FB_CONFIG) throw new Error("config");
+  FB = await import("./fb.js");
+  const app = FB.initializeApp(FB_CONFIG);
+  const auth = FB.initializeAuth(app, {persistence:FB.browserSessionPersistence});   // une session par onglet
+  const cred = await Promise.race([FB.signInAnonymously(auth), new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 12000))]);
+  ME = cred.user.uid;
+  DB = FB.getDatabase(app);
+  FB.onValue(R(".info/serverTimeOffset"), s => { MPOFF = s.val() || 0; });
+}
+function mpCode(){ const a = "abcdefghjkmnpqrstuvwxyz23456789"; let s = ""; for (let i = 0; i < 5; i++) s += a[Math.random() * a.length | 0]; return s; }
+function mpSettings(){ return {mode:S.mode, cont:S.cont, cats:S.cats, time:S.time, len:S.len === -1 ? 20 : S.len, alike:!!S.alike}; }
+const isHost = () => MP && MP.meta && MP.meta.host === ME;
+
+/* --- écran du salon --- */
+function mpShowForm(mode, code){
+  show("lobby");
+  $("mp-form").classList.remove("hidden"); $("mp-room").classList.add("hidden");
+  $("mp-lead").textContent = t(mode === "new" ? "mp.leadNew" : "mp.leadJoin");
+  $("mp-go").textContent = t(mode === "new" ? "mp.createBtn" : "mp.join");
+  $("mp-err").textContent = "";
+  const inp = $("mp-name"); inp.value = myName(); inp.focus();
+  $("mp-go").onclick = () => {
+    const n = inp.value.trim().slice(0, 20);
+    if (!n){ $("mp-err").textContent = t("mp.nameErr"); return; }
+    try { localStorage.setItem("flagrant:name", n); } catch(e){}
+    $("mp-go").disabled = true;
+    (mode === "new" ? mpCreate(n) : mpJoin(code, n)).catch(err => {
+      $("mp-err").textContent = t(String(err && err.message) === "noroom" ? "mp.noRoom" : String(err && err.message) === "timeout" ? "mp.full" : "mp.error");
+    }).finally(() => { $("mp-go").disabled = false; });
+  };
+  inp.onkeydown = e => { if (e.key === "Enter") $("mp-go").click(); };
+}
+async function mpCreate(name){
+  await mpInit();
+  // Ménage : les salons abandonnés depuis plus de 24 h
+  try {
+    const old = await FB.get(FB.query(R("stamps"), FB.orderByValue(), FB.endAt(mpNow() - 86400000), FB.limitToFirst(20)));
+    const up = {}; old.forEach(c => { up["rooms/" + c.key] = null; up["stamps/" + c.key] = null; });
+    if (Object.keys(up).length) await FB.update(R(""), up);
+  } catch(e){}
+  const code = mpCode();
+  await FB.set(R("rooms/" + code), {
+    meta:{host:ME, created:FB.serverTimestamp(), state:"lobby", set:mpSettings(), rev:-1},
+    players:{[ME]:{name, joined:FB.serverTimestamp(), on:true, score:0}}
+  });
+  await FB.set(R("stamps/" + code), FB.serverTimestamp());
+  history.replaceState(null, "", "#salon-" + code);
+  await mpEnter(code, name);
+}
+async function mpJoin(code, name){
+  await mpInit();
+  const ex = await FB.get(R(`rooms/${code}/meta`));
+  if (!ex.exists()) throw new Error("noroom");
+  const me = await FB.get(R(`rooms/${code}/players/${ME}`));
+  await FB.update(R(`rooms/${code}/players/${ME}`), me.exists() ? {name, on:true} : {name, joined:FB.serverTimestamp(), on:true, score:0});
+  await mpEnter(code, name);
+}
+async function mpEnter(code, name){
+  if (MP && MP.code === code) return;
+  if (MP) mpDetach();
+  MP = {code, meta:null, players:{}, ans:{}, unsub:[], qi:-1, revShown:-1, ansRef:null};
+  FB.onDisconnect(R(`rooms/${code}/players/${ME}/on`)).set(false);
+  FB.update(R(`rooms/${code}/players/${ME}`), {on:true});
+  MP.unsub.push(FB.onValue(R(`rooms/${code}/meta`), s => { if (!MP) return; MP.meta = s.val(); mpRender(); }));
+  MP.unsub.push(FB.onValue(R(`rooms/${code}/players`), s => { if (!MP) return; MP.players = s.val() || {}; mpCheckHost(); mpRender(); }));
+  $("mp-form").classList.add("hidden"); $("mp-room").classList.remove("hidden");
+  const link = location.origin + location.pathname + "#salon-" + code;
+  $("mp-link").textContent = link;
+  $("mp-copy").onclick = () => { navigator.clipboard.writeText(link).then(() => { $("mp-copy").textContent = t("mp.copied"); setTimeout(() => $("mp-copy").textContent = t("mp.copy"), 1500); }).catch(() => {}); };
+  clearInterval(hostTimer); hostTimer = setInterval(hostTick, 250);
+}
+function mpDetach(){
+  if (!MP) return;
+  MP.unsub.forEach(u => { try { u(); } catch(e){} });
+  if (MP.ansUnsub) MP.ansUnsub();
+  try { FB.onDisconnect(R(`rooms/${MP.code}/players/${ME}/on`)).cancel(); } catch(e){}
+  clearInterval(hostTimer);
+  MP = null;
+  if (G && G.mp){ cancelAnimationFrame(raf); G = null; }
+  S = Object.assign({}, DEF, store.get("settings", {}));   // réglages solo
+  mpMoveSettings(false);
+}
+async function mpLeave(){
+  if (!MP) return;
+  const code = MP.code, others = Object.entries(MP.players).filter(([u, p]) => u !== ME && p.on).sort((a, b) => (a[1].joined || 0) - (b[1].joined || 0));
+  const wasHost = isHost();
+  mpDetach();
+  try {
+    if (wasHost && !others.length) await FB.update(R(""), {["rooms/" + code]:null, ["stamps/" + code]:null});
+    else {
+      if (wasHost) await FB.update(R(`rooms/${code}/meta`), {host:others[0][0]});
+      await FB.remove(R(`rooms/${code}/players/${ME}`));
+    }
+  } catch(e){}
+}
+// Si l'hôte est parti, le joueur arrivé le plus tôt prend sa place
+function mpCheckHost(){
+  if (!MP || !MP.meta) return;
+  const h = MP.players[MP.meta.host];
+  if (h && h.on !== false) return;
+  const online = Object.entries(MP.players).filter(([u, p]) => p.on).sort((a, b) => (a[1].joined || 0) - (b[1].joined || 0));
+  if (online.length && online[0][0] === ME) FB.update(R(`rooms/${MP.code}/meta`), {host:ME}).catch(() => {});
+}
+function mpMoveSettings(toLobby){
+  const form = document.querySelector("form.settings");
+  if (toLobby){ if (form.parentElement !== $("mp-setslot")) $("mp-setslot").appendChild(form); }
+  else if (form.parentElement !== $("v-home")) $("v-home").appendChild(form);
+}
+function mpPushSettings(){
+  if (MP && isHost() && MP.meta && MP.meta.state !== "playing") FB.update(R(`rooms/${MP.code}/meta`), {set:mpSettings()}).catch(() => {});
+}
+function mpBoard(el, final){
+  const list = Object.entries(MP.players).filter(([u, p]) => p.on || p.score > 0 || u === ME)
+    .sort((a, b) => (b[1].score || 0) - (a[1].score || 0) || (a[1].joined || 0) - (b[1].joined || 0));
+  el.innerHTML = "";
+  const qa = MP.ans || {};
+  list.forEach(([u, p], i) => {
+    const li = document.createElement("li");
+    if (u === ME) li.className = "me";
+    const done = !final && qa[u] && qa[u].ms >= 0;
+    li.innerHTML = `<span class="pos">${i + 1}</span><span class="nm"></span><span class="sc">${p.score || 0}</span>`;
+    li.querySelector(".nm").textContent = p.name + (done ? " ✓" : "") + (u === MP.meta.host ? ` (${t("mp.host")})` : "") + (u === ME ? ` (${t("mp.you")})` : "");
+    el.appendChild(li);
+  });
+  return list;
+}
+function mpRender(){
+  if (!MP) return;
+  const m = MP.meta;
+  if (!m){ const c = MP.code; mpDetach(); mpShowForm("join", c); $("mp-err").textContent = t("mp.noRoom"); return; }
+  if (m.state === "lobby"){
+    if (G && G.mp){ cancelAnimationFrame(raf); G = null; }
+    show("lobby");
+    $("mp-form").classList.add("hidden"); $("mp-room").classList.remove("hidden");
+    mpBoard($("mp-players"), true);
+    const host = isHost();
+    mpMoveSettings(host);
+    $("mp-setslot").classList.toggle("hidden", !host);
+    $("mp-start").classList.toggle("hidden", !host);
+    const st = m.set || {};
+    const len = st.len > 0 ? st.len : t("len.all");
+    $("mp-wait").textContent = host ? t("mp.hostSet") : t("mp.waitHost") + " " + t("mp.sum", {mode:t("mode." + (st.mode || "drapeau")), n:len, t:st.time || 15});
+    if (host) renderSettings();
+  } else if (m.state === "playing"){
+    mpMoveSettings(false);
+    if (m.q && m.q.i !== MP.qi) mpQuestion(m);
+    if (m.q && m.rev === m.q.i && MP.revShown !== m.q.i) mpReveal(m);
+    if (G && G.mp){ mpBoard($("mp-board")); $("g-score").textContent = (MP.players[ME] || {}).score || 0; }
+  } else if (m.state === "done"){
+    mpDone();
+  }
+}
+function mpQuestion(m){
+  const q = m.q; MP.qi = q.i; MP.ans = {};
+  Object.assign(S, m.set || {});
+  const cur = BY_CODE.get(m.deck[q.i]);
+  if (!cur) return;
+  if (MP.ansUnsub) MP.ansUnsub();
+  MP.ansUnsub = FB.onValue(R(`rooms/${MP.code}/answers/${q.i}`), s => { if (!MP) return; MP.ans = s.val() || {}; if (G && G.mp) mpBoard($("mp-board")); });
+  show("game");
+  $("mp-board").classList.remove("hidden");
+  G = {mp:true, deck:m.deck.map(c => BY_CODE.get(c)), i:q.i, cur, score:0, streak:0, best:0, good:0, missed:[], locked:false, waiting:false, tried:""};
+  sizeFlag(cur);
+  $("flag").src = cur.img;
+  $("typed").textContent = ""; $("map").classList.add("hidden"); $("alike").classList.add("hidden");
+  const cn = $("g-country"); cn.classList.toggle("hidden", !isCap()); cn.textContent = isCap() ? cur.name : "";
+  $("ans").placeholder = t(isCap() ? "ph.capital" : "ph.country"); $("ans-label").textContent = $("ans").placeholder;
+  const veil = $("veil");
+  if (S.mode === "devoile"){ veil.innerHTML = "<i></i>".repeat(24); G.tiles = shuffle([...veil.children]); G.shown = 0; veil.classList.remove("hidden"); }
+  else { veil.classList.add("hidden"); G.tiles = null; }
+  const fb = $("fb"); fb.textContent = ""; fb.className = "fb";
+  const a = $("ans"); a.value = ""; a.className = ""; a.disabled = false; a.focus();
+  $("g-prog").innerHTML = t("g.prog", {i:q.i + 1, n:m.deck.length});
+  $("g-score").textContent = (MP.players[ME] || {}).score || 0; $("g-streak").textContent = "–";
+  // Le chrono suit l'heure du serveur : tout le monde a le même temps
+  const startLocal = (q.start || mpNow()) - MPOFF;
+  G.t0 = performance.now() - (Date.now() - startLocal);
+  G.tEnd = G.t0 + S.time * 1000;
+  const nx = G.deck[q.i + 1]; if (nx) new Image().src = nx.img;
+  cancelAnimationFrame(raf); tick();
+}
+function mpResolve(ok, how){
+  if (!G || !G.mp || G.locked) return;
+  G.locked = true; cancelAnimationFrame(raf);
+  const secs = Math.max(0, (performance.now() - G.t0) / 1000);
+  G.myOk = ok; G.mySecs = secs;
+  if (G.tiles && ok){ G.tiles.forEach(x => x.classList.add("off")); }
+  const fb = $("fb"), a = $("ans");
+  a.disabled = true;
+  if (ok){
+    FB.set(R(`rooms/${MP.code}/answers/${G.i}/${ME}`), {ms:Math.round(secs * 1000)}).catch(() => {});
+    fb.textContent = t("mp.got", {t:fmtSec(secs)}); fb.className = "fb good"; a.className = "good";
+  } else if (how === "skip"){
+    FB.set(R(`rooms/${MP.code}/answers/${G.i}/${ME}`), {ms:-1}).catch(() => {});
+    fb.textContent = t("mp.gaveUp"); fb.className = "fb";
+  } else { fb.textContent = t("mp.timeUp"); fb.className = "fb"; }
+}
+const mpPoints = (ms, rank, time) => ms < 0 ? 0 : 10 + Math.ceil(Math.max(0, 1 - ms / (time * 1000)) * 10) + (rank === 0 ? 5 : 0);
+function mpReveal(m){
+  MP.revShown = m.q.i;
+  if (!G || !G.mp) return;
+  if (!G.locked){ G.locked = true; cancelAnimationFrame(raf); $("ans").disabled = true; }
+  if (G.tiles){ G.tiles.forEach(x => x.classList.add("off")); G.tiles = null; }
+  const found = Object.entries(MP.ans || {}).filter(([u, a]) => a.ms >= 0).sort((a, b) => a[1].ms - b[1].ms);
+  const mine = found.findIndex(([u]) => u === ME);
+  const fb = $("fb");
+  if (mine >= 0){ fb.textContent = `${label(G.cur)}, +${mpPoints(found[mine][1].ms, mine, S.time)}, ${fmtSec(found[mine][1].ms / 1000)}`; fb.className = "fb good"; }
+  else { fb.textContent = t("g.was", {x:label(G.cur)}); fb.className = "fb bad"; const ty = $("ans").value.trim() || G.tried; $("typed").textContent = ty ? t("g.typed", {x:ty}) : ""; }
+  const names = found.map(([u, a]) => `${(MP.players[u] || {}).name || "?"} (${fmtSec(a.ms / 1000)})`);
+  $("typed").textContent = ($("typed").textContent ? $("typed").textContent + " · " : "") + (names.length ? t("mp.found", {list:names.join(", ")}) : t("mp.nobody"));
+  recordResult(sk(G.cur), mine >= 0, mine >= 0 ? found[mine][1].ms / 1000 : 0);
+  G.waiting = true; showMap(G.cur);
+}
+function mpDone(){
+  if (MP.doneShown === MP.meta.deck?.join()) return;
+  MP.doneShown = MP.meta.deck?.join();
+  cancelAnimationFrame(raf);
+  if (G && G.mp){ G.locked = true; G.waiting = false; }
+  show("end");
+  $("mp-end").classList.remove("hidden"); $("solo-end").classList.add("hidden");
+  const list = mpBoard($("mp-rank"), true);
+  const r = list.findIndex(([u]) => u === ME) + 1, n = list.length;
+  $("e-score").innerHTML = `${(MP.players[ME] || {}).score || 0}<small>${t("g.pts")}</small>`;
+  $("e-sum").textContent = n < 2 ? "" : r === 1 ? t("mp.place1", {n}) : t("mp.place", {r, n});
+  $("e-rec").textContent = isHost() ? "" : t("mp.waitAgain");
+  $("mp-again").classList.toggle("hidden", !isHost());
+}
+async function mpStart(){
+  if (!isHost()) return;
+  const deck = deal(pool()).slice(0, S.len > 0 ? S.len : (S.len === -1 ? 20 : 300)).map(f => f.c);
+  if (!deck.length) return;
+  const up = {"meta/state":"playing", "meta/deck":deck, "meta/set":mpSettings(), "meta/q":{i:0, start:FB.serverTimestamp()}, "meta/rev":-1, "answers":null};
+  for (const u in MP.players) up[`players/${u}/score`] = 0;
+  MP.doneShown = null; MP.qi = -1; MP.revShown = -1;
+  await FB.update(R(`rooms/${MP.code}`), up);
+}
+async function mpAgain(){
+  if (!isHost()) return;
+  const up = {"meta/state":"lobby", "answers":null};
+  for (const u in MP.players) up[`players/${u}/score`] = 0;
+  MP.doneShown = null;
+  await FB.update(R(`rooms/${MP.code}`), up);
+  $("mp-end").classList.add("hidden"); $("solo-end").classList.remove("hidden");
+}
+// L'hôte fait avancer la partie : fin de question, points, question suivante
+let hostBusy = false;
+async function hostTick(){
+  if (!MP || !isHost() || hostBusy) return;
+  const m = MP.meta;
+  if (!m || m.state !== "playing" || !m.q || typeof m.q.start !== "number") return;
+  const time = (m.set && m.set.time || 15) * 1000, i = m.q.i;
+  hostBusy = true;
+  try {
+    if (m.rev !== i){
+      const ans = MP.qi === i ? (MP.ans || {}) : {};
+      const online = Object.entries(MP.players).filter(([u, p]) => p.on).map(([u]) => u);
+      const allDone = online.length && online.every(u => ans[u]);
+      if (mpNow() >= m.q.start + time + 300 || allDone){
+        const found = Object.entries(ans).filter(([u, a]) => a.ms >= 0).sort((a, b) => a[1].ms - b[1].ms);
+        const up = {"meta/rev":i, "meta/revAt":FB.serverTimestamp()};
+        found.forEach(([u, a], rank) => { if (MP.players[u]) up[`players/${u}/score`] = (MP.players[u].score || 0) + mpPoints(a.ms, rank, time / 1000); });
+        await FB.update(R(`rooms/${MP.code}`), up);
+      }
+    } else if (typeof m.revAt === "number" && mpNow() >= m.revAt + (S.map ? 4200 : 3200)){
+      if (i + 1 < m.deck.length) await FB.update(R(`rooms/${MP.code}/meta`), {q:{i:i + 1, start:FB.serverTimestamp()}});
+      else await FB.update(R(`rooms/${MP.code}/meta`), {state:"done"});
+    }
+  } catch(e){}
+  hostBusy = false;
+}
+
+/* ---------- Traduction de la page ---------- */
+function applyLang(){
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-html]").forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
+  document.querySelectorAll("[data-i18n-alt]").forEach(el => el.alt = t(el.dataset.i18nAlt));
+  if (LANG === "fr") $("v-regles").innerHTML = $("v-regles").innerHTML.replace("<!--RULESMP-->", RULES_MP.fr);
+  if (LANG !== "fr"){
+    const rh = RULES[LANG] || RULES.en, k = rh.lastIndexOf("<h2>");
+    $("v-regles").innerHTML = rh.slice(0, k) + (RULES_MP[LANG] || RULES_MP.en) + rh.slice(k);
+    for (const k in LEGAL_EN){
+      const note = LANG === "en" ? t("legal.noteEn") : t("legal.note");
+      $("v-" + k).innerHTML = LEGAL_EN[k].replace("</p>", "</p>" + (note ? `<p class="legal-note">${note}</p>` : ""));
+    }
+  }
+  const sel = $("lang");
+  for (const [code, name] of Object.entries(LANGS)){ const o = document.createElement("option"); o.value = code; o.textContent = name; o.selected = code === LANG; sel.appendChild(o); }
+  sel.addEventListener("change", () => { try { localStorage.setItem("flagrant:lang", sel.value); } catch(e){} location.reload(); });
+}
+applyLang();
 route();
 </script>
 </body>

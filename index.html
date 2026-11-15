@@ -1809,7 +1809,7 @@ const FB_CONFIG = {
 };
 let FB = null, DB = null, ME = null, MPOFF = 0, MP = null, hostTimer = 0;
 const mpNow = () => Date.now() + MPOFF;
-const R = p => FB.ref(DB, p);
+const R = p => p ? FB.ref(DB, p) : FB.ref(DB);   // sans chemin : la racine
 const myName = () => { try { return localStorage.getItem("flagrant:name") || ""; } catch(e){ return ""; } };
 
 async function mpInit(){
